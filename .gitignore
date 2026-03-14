@@ -1,0 +1,26 @@
+# Environment
+.env
+config.php
+
+# Dependencies
+vendor/
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+application/logs/*.log
+!application/logs/index.html
+
+# Storage
+storage/uploads/*
+!storage/uploads/index.html
+storage/sessions/*
+
+# Claude
+.claude/

@@ -54,6 +54,8 @@ class Booking extends EA_Controller
         'id_users_provider',
         'id_users_customer',
         'id_services',
+        'id_pets',
+        'seats_required',
     ];
 
     /**
@@ -73,11 +75,14 @@ class Booking extends EA_Controller
         $this->load->model('settings_model');
         $this->load->model('consents_model');
 
+        $this->load->model('pets_model');
+
         $this->load->library('timezones');
         $this->load->library('synchronization');
         $this->load->library('notifications');
         $this->load->library('availability');
         $this->load->library('webhooks_client');
+        $this->load->library('salon_capacity');
     }
 
     /**
@@ -438,6 +443,61 @@ class Booking extends EA_Controller
             $appointment['is_unavailability'] = false;
             $appointment['color'] = $service['color'];
 
+            // Handle pet data from the booking form.
+            $pet_data = $post_data['pet'] ?? null;
+
+            if ($pet_data && !empty($pet_data['name'])) {
+                $pet = [
+                    'id_users_customer' => $customer_id,
+                    'name' => $pet_data['name'],
+                    'breed' => $pet_data['breed'] ?? '',
+                    'size' => $pet_data['size'] ?? 'small',
+                ];
+
+                // Check if this customer already has a pet with this name.
+                $existing_pets = $this->pets_model->get_by_customer($customer_id);
+                $found_pet = null;
+
+                foreach ($existing_pets as $existing_pet) {
+                    if (strtolower(trim($existing_pet['name'])) === strtolower(trim($pet['name']))) {
+                        $found_pet = $existing_pet;
+                        break;
+                    }
+                }
+
+                if ($found_pet) {
+                    // Update breed/size if changed.
+                    $found_pet['breed'] = $pet['breed'];
+                    $found_pet['size'] = $pet['size'];
+                    $this->pets_model->save($found_pet);
+                    $pet_id = $found_pet['id'];
+                } else {
+                    $pet_id = $this->pets_model->save($pet);
+                }
+
+                $appointment['id_pets'] = $pet_id;
+
+                // Calculate seats required based on pet size and time slot.
+                $appointment_start = new DateTime($appointment['start_datetime']);
+                $time = $appointment_start->format('H:i');
+                $pet_size = $pet_data['size'] ?? 'small';
+                $appointment['seats_required'] = $this->salon_capacity->calculate_seats_required($time, $pet_size);
+
+                // Validate large dog restrictions if salon mode is enabled.
+                if ($this->salon_capacity->is_enabled() && $pet_size === 'large') {
+                    $date = $appointment_start->format('Y-m-d');
+                    $exclude_id = $manage_mode ? ($appointment['id'] ?? null) : null;
+                    $large_dog_result = $this->salon_capacity->validate_large_dog($date, $time, $pet_size, $exclude_id);
+
+                    if (!$large_dog_result['allowed'] && !$large_dog_result['requires_approval']) {
+                        throw new RuntimeException($large_dog_result['reason']);
+                    }
+
+                    // Use the seats from the large dog validation.
+                    $appointment['seats_required'] = $large_dog_result['seats_required'];
+                }
+            }
+
             $appointment_status_options_json = setting('appointment_status_options', '[]');
             $appointment_status_options = json_decode($appointment_status_options_json, true) ?? [];
             $appointment['status'] = $appointment_status_options[0] ?? null;
@@ -770,5 +830,37 @@ class Booking extends EA_Controller
         }
 
         return $provider_list;
+    }
+
+    /**
+     * Get pets for a customer by email address.
+     *
+     * This AJAX endpoint allows returning customers to load their existing pets
+     * on the booking page so they can select one instead of re-entering details.
+     */
+    public function get_customer_pets(): void
+    {
+        try {
+            $email = request('email');
+
+            if (empty($email)) {
+                json_response([]);
+                return;
+            }
+
+            $customers = $this->customers_model->get(['email' => $email]);
+
+            if (empty($customers)) {
+                json_response([]);
+                return;
+            }
+
+            $customer = $customers[0];
+            $pets = $this->pets_model->get_by_customer($customer['id']);
+
+            json_response($pets);
+        } catch (Throwable $e) {
+            json_response([]);
+        }
     }
 }

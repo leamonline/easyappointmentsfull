@@ -42,6 +42,7 @@ class Availability
         $this->CI->load->model('blocked_periods_model');
 
         $this->CI->load->library('ics_file');
+        $this->CI->load->library('salon_capacity');
     }
 
     /**
@@ -76,7 +77,44 @@ class Availability
 
         $available_hours = $this->consider_book_advance_timeout($date, $available_hours, $provider);
 
-        return $this->consider_future_booking_limit($date, $available_hours, $provider);
+        $available_hours = $this->consider_future_booking_limit($date, $available_hours, $provider);
+
+        // Apply salon capacity rules (2-2-1 rule and daily dog limit) if salon mode is enabled.
+        if ($this->CI->salon_capacity->is_enabled()) {
+            $available_hours = $this->consider_salon_capacity($date, $available_hours, $exclude_appointment_id);
+        }
+
+        return $available_hours;
+    }
+
+    /**
+     * Filter available hours through salon capacity rules.
+     *
+     * Removes slots that are at capacity per the 2-2-1 rule or daily dog limit.
+     * Uses seats_required=1 as minimum (large dog restrictions are checked at booking time).
+     *
+     * @param string $date Selected date (Y-m-d).
+     * @param array $available_hours Already generated available hours.
+     * @param int|null $exclude_appointment_id Appointment ID to exclude.
+     *
+     * @return array Returns filtered available hours.
+     */
+    protected function consider_salon_capacity(
+        string $date,
+        array $available_hours,
+        ?int $exclude_appointment_id = null,
+    ): array {
+        $filtered = [];
+
+        foreach ($available_hours as $hour) {
+            $result = $this->CI->salon_capacity->is_slot_available($date, $hour, 1, $exclude_appointment_id);
+
+            if ($result['available']) {
+                $filtered[] = $hour;
+            }
+        }
+
+        return $filtered;
     }
 
     /**

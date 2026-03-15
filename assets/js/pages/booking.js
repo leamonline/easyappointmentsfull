@@ -33,6 +33,9 @@ App.Pages.Booking = (function () {
     const $availableHours = $('#available-hours');
     const $bookAppointmentSubmit = $('#book-appointment-submit');
     const $deletePersonalInformation = $('#delete-personal-information');
+    const $petName = $('#pet-name');
+    const $petBreed = $('#pet-breed');
+    const $petSize = $('#pet-size');
     const $customField1 = $('#custom-field-1');
     const $customField2 = $('#custom-field-2');
     const $customField3 = $('#custom-field-3');
@@ -572,6 +575,98 @@ App.Pages.Booking = (function () {
         }
 
         /**
+         * Event: Email field "blur" — load existing pets for returning customers.
+         */
+        $email.on('blur', () => {
+            const emailVal = $email.val();
+
+            if (!emailVal || !App.Utils.Validation.email(emailVal)) {
+                return;
+            }
+
+            $.post(App.Utils.Url.siteUrl('booking/get_customer_pets'), {
+                csrf_token: vars('csrf_token'),
+                email: emailVal,
+            }).done((response) => {
+                if (!response || !response.length) {
+                    return;
+                }
+
+                // Show a pet selector if the customer has existing pets.
+                let $existingPets = $('#existing-pets-select');
+
+                if (!$existingPets.length) {
+                    const $petSection = $('.pet-info-section');
+                    $('<div class="mb-3" id="existing-pets-wrapper">' +
+                        '<label class="form-label"><i class="fas fa-dog me-1"></i> Select a saved dog:</label>' +
+                        '<select id="existing-pets-select" class="form-select">' +
+                        '<option value="">— Enter new dog details —</option>' +
+                        '</select></div>').prependTo($petSection.find('.row'));
+                    $existingPets = $('#existing-pets-select');
+                }
+
+                // Clear and repopulate.
+                $existingPets.find('option:not(:first)').remove();
+
+                response.forEach((pet) => {
+                    const label = `${pet.name}${pet.breed ? ' (' + pet.breed + ')' : ''} — ${pet.size}`;
+                    $existingPets.append(new Option(label, JSON.stringify(pet)));
+                });
+
+                $existingPets.off('change').on('change', function () {
+                    const val = $(this).val();
+
+                    if (!val) {
+                        $petName.val('').prop('readonly', false);
+                        $petBreed.val('').prop('readonly', false);
+                        $petSize.val('medium').prop('disabled', false).trigger('change');
+                        return;
+                    }
+
+                    const pet = JSON.parse(val);
+                    $petName.val(pet.name).prop('readonly', true);
+                    $petBreed.val(pet.breed || '').prop('readonly', true);
+                    $petSize.val(pet.size || 'small').prop('disabled', true).trigger('change');
+                });
+            });
+        });
+
+        /**
+         * Event: Pet Size "Change" — show large dog slot restriction warning.
+         */
+        $petSize.on('change', () => {
+            let $warning = $('#pet-size-warning');
+
+            if (!$warning.length) {
+                $warning = $('<div/>', {id: 'pet-size-warning', class: 'mt-2 small rounded-2 p-2'});
+                $petSize.closest('.mb-3').append($warning);
+            }
+
+            const size = $petSize.val();
+
+            if (size === 'large') {
+                $warning
+                    .html(
+                        '<i class="fas fa-exclamation-triangle me-1"></i>' +
+                        '<strong>Large dogs</strong> have limited slot availability:<br>' +
+                        '&bull; <strong>8:30am</strong> — 1 seat, can share with another dog<br>' +
+                        '&bull; <strong>9:00am</strong> — conditional (8:30 must be free)<br>' +
+                        '&bull; <strong>12:00–1:00pm</strong> — 2 seats, private grooming<br>' +
+                        '&bull; Other slots require owner approval',
+                    )
+                    .css({background: 'rgba(255, 152, 0, 0.12)', border: '1px solid rgba(255, 152, 0, 0.3)', color: '#7a4a00'})
+                    .show();
+            } else if (size === 'small') {
+                $warning
+                    .html('<i class="fas fa-check-circle me-1" style="color:#4CAF50;"></i> Small dogs can book any available slot.')
+                    .css({background: 'rgba(76, 175, 80, 0.08)', border: '1px solid rgba(76, 175, 80, 0.2)', color: '#2e7d32'})
+                    .show();
+            } else {
+                $warning.hide();
+            }
+        });
+
+        /**
          * Event: Book Appointment Form "Submit"
          *
          * Before the form is submitted to the server we need to make sure that in the meantime the selected appointment
@@ -706,18 +801,26 @@ App.Pages.Booking = (function () {
 
         const timezoneOptionText = $selectTimezone.find('option:selected').text();
 
+        const petName = App.Utils.String.escapeHtml($petName.val());
+        const petBreed = App.Utils.String.escapeHtml($petBreed.val());
+        const petSizeText = $petSize.find('option:selected').text();
+
         $('#appointment-details').html(`
             <div>
                 <div class="mb-2 fw-bold fs-3">
                     ${serviceOptionText}
-                </div> 
+                </div>
                 <div class="mb-2 fw-bold text-muted">
                     ${providerOptionText}
+                </div>
+                <div class="mb-2" ${!petName ? 'hidden' : ''}>
+                    <i class="fas fa-paw me-2"></i>
+                    ${petName}${petBreed ? ' (' + petBreed + ')' : ''} — ${petSizeText}
                 </div>
                 <div class="mb-2">
                     <i class="fas fa-calendar-day me-2"></i>
                     ${formattedSelectedDate}
-                </div> 
+                </div>
                 <div class="mb-2">
                     <i class="fas fa-clock me-2"></i>
                     ${service.duration} ${lang('minutes')}
@@ -725,12 +828,12 @@ App.Pages.Booking = (function () {
                 <div class="mb-2">
                     <i class="fas fa-globe me-2"></i>
                     ${timezoneOptionText}
-                </div> 
+                </div>
                 <div class="mb-2" ${!Number(service.price) ? 'hidden' : ''}>
                     <i class="fas fa-cash-register me-2"></i>
                     ${Number(service.price).toFixed(2)} ${service.currency}
                 </div>
-            </div>     
+            </div>
         `);
 
         // Render the customer information
@@ -808,6 +911,12 @@ App.Pages.Booking = (function () {
             is_unavailability: false,
             id_users_provider: $selectProvider.val(),
             id_services: $selectService.val(),
+        };
+
+        data.pet = {
+            name: $petName.val(),
+            breed: $petBreed.val(),
+            size: $petSize.val(),
         };
 
         data.manage_mode = Number(manageMode);

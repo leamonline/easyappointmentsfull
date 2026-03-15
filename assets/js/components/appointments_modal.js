@@ -277,6 +277,9 @@ App.Components.AppointmentsModal = (function () {
                 $customField3.val(customer.custom_field_3);
                 $customField4.val(customer.custom_field_4);
                 $customField5.val(customer.custom_field_5);
+
+                // Load customer's pets into the pet selector.
+                loadCustomerPets(customer.id);
             }
 
             $selectCustomer.trigger('click'); // Hide the list.
@@ -583,6 +586,44 @@ App.Components.AppointmentsModal = (function () {
     }
 
     /**
+     * Load a customer's pets into the pet selector dropdown.
+     *
+     * @param {Number} customerId The customer ID.
+     */
+    function loadCustomerPets(customerId) {
+        $selectPet.empty().append(new Option('-- Select Dog --', ''));
+        $petInfoHint.text('');
+
+        if (!customerId) {
+            return;
+        }
+
+        $.post(App.Utils.Url.siteUrl('pets/get_by_customer'), {
+            csrf_token: vars('csrf_token'),
+            customer_id: customerId,
+        }).done((response) => {
+            if (!response || !response.length) {
+                $petInfoHint.text('No dogs registered for this customer.');
+                return;
+            }
+
+            response.forEach((pet) => {
+                const sizeLabel = pet.size ? ` — ${pet.size}` : '';
+                const breedLabel = pet.breed ? ` (${pet.breed})` : '';
+                const label = `${pet.name}${breedLabel}${sizeLabel}`;
+                $selectPet.append(new Option(label, pet.id));
+            });
+
+            // Auto-select if only one pet.
+            if (response.length === 1) {
+                $selectPet.val(response[0].id);
+            }
+
+            $petInfoHint.text(response.length + ' dog(s) registered.');
+        });
+    }
+
+    /**
      * Initialize the module.
      */
     function initialize() {
@@ -594,5 +635,6 @@ App.Components.AppointmentsModal = (function () {
     return {
         resetModal,
         validateAppointmentForm,
+        loadCustomerPets,
     };
 })();

@@ -26,6 +26,40 @@
 
         <h2 class="frame-title"><?= lang('customer_information') ?></h2>
 
+        <div class="row frame-content mb-3">
+            <div class="col-12 col-md-8 mx-auto">
+                <div class="pet-info-section p-3 rounded-3" style="background: rgba(71, 181, 224, 0.08); border: 2px solid rgba(71, 181, 224, 0.2);">
+                    <h5 class="mb-3" style="font-family: 'Baloo 2', cursive; color: #1B2D4B;">
+                        <i class="fas fa-paw me-2" style="color: #E8788A;"></i>Your Dog's Details
+                    </h5>
+                    <div class="row">
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="pet-name" class="form-label">
+                                Dog's Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" id="pet-name" class="required form-control" maxlength="128"
+                                   placeholder="e.g. Buddy"/>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="pet-breed" class="form-label">Breed</label>
+                            <input type="text" id="pet-breed" class="form-control" maxlength="128"
+                                   placeholder="e.g. Cockapoo"/>
+                        </div>
+                        <div class="col-12 col-md-4 mb-3">
+                            <label for="pet-size" class="form-label">
+                                Size <span class="text-danger">*</span>
+                            </label>
+                            <select id="pet-size" class="required form-select">
+                                <option value="small">Small (under 10kg)</option>
+                                <option value="medium" selected>Medium (10-25kg)</option>
+                                <option value="large">Large (over 25kg)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row frame-content">
             <div class="col-12 col-md-6 field-col mx-auto">
                 <?php if ($display_first_name): ?>

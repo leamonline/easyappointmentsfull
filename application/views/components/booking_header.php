@@ -18,7 +18,7 @@
 
         <div class="d-flex justify-content-center justify-content-md-start">
             <span class="display-booking-selection">
-                <?= lang('service') ?> │ <?= lang('provider') ?>
+                <?= lang('service') ?>
             </span>
         </div>
     </div>

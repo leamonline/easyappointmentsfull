@@ -10,8 +10,8 @@
 <nav id="header" class="navbar navbar-expand-md navbar-dark">
     <div id="header-logo" class="navbar-brand">
         <img src="<?= base_url('assets/img/logo.png') ?>" alt="logo">
-        <h6>EASY!APPOINTMENTS</h6>
-        <small>Online Appointment Scheduler</small>
+        <h6>SMARTER DOG</h6>
+        <small>Dog Grooming Salon</small>
     </div>
 
     <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#header-menu">
@@ -73,23 +73,12 @@
 
             <?php $hidden = can('view', PRIV_USERS) ? '' : 'd-none'; ?>
             <?php $active = $active_menu == PRIV_USERS ? 'active' : ''; ?>
-            <li class="nav-item dropdown <?= $active . $hidden ?>">
-                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
+            <li class="nav-item <?= $active . $hidden ?>">
+                <a href="<?= site_url('admins') ?>" class="nav-link"
                    data-tippy-content="<?= lang('manage_users_hint') ?>">
                     <i class="fas fa-users me-2"></i>
                     <?= lang('users') ?>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="<?= site_url('providers') ?>">
-                        <?= lang('providers') ?>
-                    </a>
-                    <a class="dropdown-item" href="<?= site_url('secretaries') ?>">
-                        <?= lang('secretaries') ?>
-                    </a>
-                    <a class="dropdown-item" href="<?= site_url('admins') ?>">
-                        <?= lang('admins') ?>
-                    </a>
-                </div>
             </li>
 
             <?php slot('before_user_nav_item'); ?>

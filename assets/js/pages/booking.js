@@ -762,14 +762,9 @@ App.Pages.Booking = (function () {
         const serviceId = $selectService.val();
         const providerId = $selectProvider.val();
 
-        $displayBookingSelection.text(`${lang('service')} │ ${lang('provider')}`); // Notice: "│" is a custom ASCII char
-
         const serviceOptionText = serviceId ? $selectService.find('option:selected').text() : lang('service');
-        const providerOptionText = providerId ? $selectProvider.find('option:selected').text() : lang('provider');
 
-        if (serviceId || providerId) {
-            $displayBookingSelection.text(`${serviceOptionText} │ ${providerOptionText}`);
-        }
+        $displayBookingSelection.text(serviceOptionText);
 
         if (!$availableHours.find('.selected-hour').text()) {
             return; // No time is selected, skip the rest of this function...

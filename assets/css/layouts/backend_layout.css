@@ -9,16 +9,44 @@
  * @since       v1.5.0
  * ---------------------------------------------------------------------------- */
 /**
- * BACKEND CSS FILE FOR EASY!APPOINTMENTS
+ * BACKEND CSS FILE — Smarter Dog Grooming Salon
  */
-root {
-  display: block;
+
+/* === BRAND TOKENS (matched to smarterdog.co.uk) === */
+:root {
+  --sd-sky-blue: #00C2FF;
+  --sd-sky-blue-dark: #00A3D9;
+  --sd-coral: #E8506A;
+  --sd-coral-dark: #C4445A;
+  --sd-yellow: #FFCC00;
+  --sd-green: #00D94A;
+  --sd-green-dark: #00B83E;
+  --sd-purple: #2D004B;
+  --sd-navy: #2D004B;
+  --sd-white: #FFFFFF;
+  --sd-teal: #2A6F6B;
+  --sd-off-white: #FAF9F6;
+  --sd-font-heading: 'Quicksand', sans-serif;
+  --sd-font-script: 'Caveat', cursive;
+  --sd-font-body: 'Montserrat', sans-serif;
+  --sd-radius-soft: 14px;
+}
+
+body {
+  font-family: var(--sd-font-body);
+}
+
+.backend-page h3,
+.backend-page h4,
+.backend-page h5 {
+  font-family: var(--sd-font-heading);
+  font-weight: 700;
 }
 
 /* BACKEND GENERAL ELEMENTS
    -------------------------------------------------------------------- */
 #header {
-  background-color: #429a82;
+  background-color: var(--sd-purple);
   box-shadow: none;
   border-radius: 0;
   padding: 0;
@@ -31,7 +59,7 @@ root {
 
 #header #header-logo small {
   font-size: 10.5px;
-  color: #004c39;
+  color: var(--sd-yellow);
 }
 
 #header #header-logo img {
@@ -44,7 +72,9 @@ root {
 #header #header-logo h6 {
   margin-top: 6px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 700;
+  font-family: var(--sd-font-heading);
+  letter-spacing: 1px;
   color: white;
 }
 
@@ -64,17 +94,26 @@ root {
 }
 
 #header #header-menu .nav-item:hover {
-  background: #3a8873;
+  background: rgba(255, 255, 255, 0.12);
 }
 
 #header #header-menu .nav-item.active {
-  background: #2e6a5b;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 #footer {
-  background-color: var(--bs-body-bg);
-  border-top: 1px solid #ddd;
+  background-color: var(--sd-purple);
+  border-top: none;
   font-size: 11px;
+  color: var(--sd-off-white);
+}
+
+#footer a {
+  color: var(--sd-yellow);
+}
+
+#footer a:hover {
+  color: var(--sd-white);
 }
 
 #notification strong {
@@ -133,7 +172,7 @@ body .modal .modal-title {
 
 body .modal-header {
   padding: 20px 15px;
-  background: #429a82;
+  background: var(--sd-purple);
 }
 
 body .modal-header h3 {
@@ -143,7 +182,7 @@ body .modal-header h3 {
 }
 
 body .modal-header .close {
-  color: #12482a;
+  color: var(--sd-off-white);
 }
 
 body .modal-content {
@@ -239,7 +278,7 @@ body legend {
 
 .backend-page .filter-records .results .entry.selected {
   background-color: #f4f4f4;
-  border-right: 5px solid #429a82;
+  border-right: 5px solid var(--sd-sky-blue);
 }
 
 .backend-page .filter-records .results hr {
@@ -299,7 +338,7 @@ body legend {
 #calendar-page #calendar-toolbar {
   margin-bottom: 15px;
   color: white;
-  background: #353535;
+  background: var(--sd-purple);
   padding: 15px 0;
 }
 
@@ -495,7 +534,7 @@ body legend {
 }
 
 #existing-customers-list div:hover {
-  background: #429a82;
+  background: var(--sd-teal);
   font-weight: bold;
   color: #fff;
   cursor: pointer;
@@ -597,7 +636,7 @@ body .form-horizontal .controls {
 }
 
 #calendar .calendar-view .date-column .provider-column .event.unavailability {
-  background: #409482;
+  background: var(--sd-teal);
   color: #fff;
 }
 

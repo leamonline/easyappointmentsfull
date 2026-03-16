@@ -23,8 +23,9 @@ if (!defined('BASEPATH')) {
     define('BASEPATH', __DIR__ . '/../../system/');
 }
 
-// Minimal CI_Controller stub.
+// Minimal CI_Controller stub with dynamic property support (models/libraries).
 if (!class_exists('CI_Controller')) {
+    #[\AllowDynamicProperties]
     class CI_Controller
     {
         public $db;
@@ -42,6 +43,11 @@ if (!class_exists('EA_Controller')) {
 // Global CI instance for get_instance().
 if (!isset($GLOBALS['_ci_instance'])) {
     $GLOBALS['_ci_instance'] = null;
+}
+
+// Application constants.
+if (!defined('AVAILABILITIES_TYPE_FIXED')) {
+    define('AVAILABILITIES_TYPE_FIXED', 'fixed');
 }
 
 if (!function_exists('get_instance')) {

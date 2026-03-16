@@ -82,7 +82,7 @@ class Pets_model extends EA_Model
             }
         }
 
-        if (empty($pet['name'])) {
+        if (empty($pet['name']) || trim($pet['name']) === '') {
             throw new InvalidArgumentException('The pet name is required.');
         }
 

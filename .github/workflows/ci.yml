@@ -36,5 +36,8 @@ jobs:
         run: |
           find application system -name "*.php" -print0 | xargs -0 -n1 php -l | (! grep -v "No syntax errors")
 
+      - name: PHPStan Static Analysis
+        run: vendor/bin/phpstan analyse --no-progress
+
       - name: Run PHPUnit
         run: composer test

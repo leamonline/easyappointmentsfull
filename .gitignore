@@ -22,5 +22,8 @@ storage/uploads/*
 !storage/uploads/index.html
 storage/sessions/*
 
+# Testing
+.phpunit.result.cache
+
 # Claude
 .claude/

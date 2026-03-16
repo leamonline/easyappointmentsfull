@@ -165,6 +165,32 @@ class Appointments_model extends EA_Model
             if (!$count) {
                 throw new InvalidArgumentException('Appointment service id is invalid.');
             }
+
+            // Validate pet ID: must exist in pets table and belong to the appointment's customer.
+            if (!empty($appointment['id_pets'])) {
+                $pet = $this->db->get_where('pets', ['id' => $appointment['id_pets']])->row_array();
+
+                if (!$pet) {
+                    throw new InvalidArgumentException(
+                        'The appointment pet ID was not found in the database: ' . $appointment['id_pets'],
+                    );
+                }
+
+                if ((int) $pet['id_users_customer'] !== (int) $appointment['id_users_customer']) {
+                    throw new InvalidArgumentException(
+                        'The pet does not belong to the appointment customer.',
+                    );
+                }
+            }
+
+            // Validate seats_required: must be 1 or 2 (defaults to 1 if missing).
+            $seats_required = $appointment['seats_required'] ?? 1;
+
+            if (!in_array((int) $seats_required, [1, 2], true)) {
+                throw new InvalidArgumentException(
+                    'The seats_required value must be 1 or 2, got: ' . $seats_required,
+                );
+            }
         }
     }
 

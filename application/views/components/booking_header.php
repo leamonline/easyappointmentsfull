@@ -14,7 +14,7 @@
             <?= e($company_name) ?>
         </span>
 
-        <p class="welcome-tagline">Ready for their pamper? &#10022;</p>
+        <p class="welcome-tagline">Come scruffy. Leave gorgeous. &#10022;</p>
 
         <div class="d-flex justify-content-center justify-content-md-start">
             <span class="display-booking-selection">

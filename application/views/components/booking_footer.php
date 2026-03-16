@@ -9,12 +9,12 @@
 <div id="frame-footer">
     <small>
         <span class="footer-tagline">
-            We can't wait to see your furry friend! &#128062;
+            Over 40 years of calm, careful grooming &#128062;
         </span>
 
         <span class="footer-powered-by small">
-            Powered By
-            <a href="https://easyappointments.org" target="_blank">Smarter Dog</a>
+            <a href="https://smarterdog.co.uk" target="_blank">smarterdog.co.uk</a>
+            &middot; 183 Kings Road, OL6 8HD
         </span>
 
         <span class="footer-options">

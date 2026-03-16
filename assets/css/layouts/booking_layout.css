@@ -7,20 +7,23 @@
  * @since       v1.5.0
  * ---------------------------------------------------------------------------- */
 
-/* === BRAND TOKENS === */
+/* === BRAND TOKENS (matched to smarterdog.co.uk) === */
 :root {
-  --sd-sky-blue: #47B5E0;
-  --sd-sky-blue-dark: #3A9AC4;
-  --sd-coral: #E8788A;
-  --sd-coral-dark: #D5677A;
-  --sd-yellow: #F5C842;
-  --sd-navy: #1B2D4B;
+  --sd-sky-blue: #00C2FF;
+  --sd-sky-blue-dark: #00A3D9;
+  --sd-coral: #E8506A;
+  --sd-coral-dark: #C4445A;
+  --sd-yellow: #FFCC00;
+  --sd-green: #00D94A;
+  --sd-green-dark: #00B83E;
+  --sd-purple: #2D004B;
+  --sd-navy: #2D004B;
   --sd-white: #FFFFFF;
-  --sd-teal: #7AB8A0;
-  --sd-off-white: #FDF8F4;
-  --sd-font-heading: 'Baloo 2', cursive;
+  --sd-teal: #2A6F6B;
+  --sd-off-white: #FAF9F6;
+  --sd-font-heading: 'Quicksand', sans-serif;
   --sd-font-script: 'Caveat', cursive;
-  --sd-font-body: 'Nunito', sans-serif;
+  --sd-font-body: 'Montserrat', sans-serif;
   --sd-radius-pill: 50px;
   --sd-radius-card: 20px;
   --sd-radius-soft: 14px;
@@ -35,12 +38,12 @@ html,
 body {
   height: 100%;
   font-family: var(--sd-font-body);
-  color: var(--sd-navy);
+  color: var(--sd-purple);
 }
 
 body {
   background-color: var(--sd-off-white);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%231B2D4B' fill-opacity='0.03'%3E%3Ccircle cx='20' cy='20' r='4'/%3E%3Ccircle cx='28' cy='12' r='3'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Ccircle cx='24' cy='6' r='2.5'/%3E%3Ccircle cx='16' cy='6' r='2.5'/%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Ccircle cx='68' cy='52' r='3'/%3E%3Ccircle cx='52' cy='52' r='3'/%3E%3Ccircle cx='64' cy='46' r='2.5'/%3E%3Ccircle cx='56' cy='46' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%232D004B' fill-opacity='0.03'%3E%3Ccircle cx='20' cy='20' r='4'/%3E%3Ccircle cx='28' cy='12' r='3'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Ccircle cx='24' cy='6' r='2.5'/%3E%3Ccircle cx='16' cy='6' r='2.5'/%3E%3Ccircle cx='60' cy='60' r='4'/%3E%3Ccircle cx='68' cy='52' r='3'/%3E%3Ccircle cx='52' cy='52' r='3'/%3E%3Ccircle cx='64' cy='46' r='2.5'/%3E%3Ccircle cx='56' cy='46' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 #main {
@@ -277,53 +280,54 @@ body {
   margin-right: 0;
 }
 
-/* Next button — coral pink, WCAG AA contrast (4.5:1+ with white) */
+/* Next button — green CTA (matches smarterdog.co.uk) */
 #book-appointment-wizard .wizard-frame .command-buttons .btn-dark,
 #book-appointment-wizard .wizard-frame .command-buttons .button-next {
-  background-color: #B94D60 !important;
-  border-color: #B94D60 !important;
-  color: var(--sd-white) !important;
+  background-color: var(--sd-green) !important;
+  border-color: var(--sd-green) !important;
+  color: var(--sd-purple) !important;
+  font-weight: 700;
 }
 #book-appointment-wizard .wizard-frame .command-buttons .btn-dark:hover,
 #book-appointment-wizard .wizard-frame .command-buttons .button-next:hover {
-  background-color: #A24253 !important;
-  border-color: #A24253 !important;
+  background-color: var(--sd-green-dark) !important;
+  border-color: var(--sd-green-dark) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(185, 77, 96, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 217, 74, 0.35);
 }
 
-/* Back button — outline navy */
+/* Back button — outline teal */
 #book-appointment-wizard .wizard-frame .command-buttons .btn-outline-secondary,
 #book-appointment-wizard .wizard-frame .command-buttons .button-back {
   background: transparent !important;
-  border-color: var(--sd-navy) !important;
-  color: var(--sd-navy) !important;
+  border-color: var(--sd-teal) !important;
+  color: var(--sd-teal) !important;
 }
 #book-appointment-wizard .wizard-frame .command-buttons .btn-outline-secondary:hover,
 #book-appointment-wizard .wizard-frame .command-buttons .button-back:hover {
-  background-color: var(--sd-navy) !important;
+  background-color: var(--sd-teal) !important;
   color: var(--sd-white) !important;
 }
 
-/* Submit button — sky blue */
+/* Submit button — green CTA (matches smarterdog.co.uk "Book your visit") */
 #book-appointment-wizard #book-appointment-form #book-appointment-submit {
   width: 100%;
   margin-right: 0;
-  background-color: var(--sd-sky-blue) !important;
-  border-color: var(--sd-sky-blue) !important;
+  background-color: var(--sd-green) !important;
+  border-color: var(--sd-green) !important;
   border-radius: var(--sd-radius-pill) !important;
   font-family: var(--sd-font-heading);
   font-weight: 700;
   font-size: 18px;
   padding: 12px 32px;
-  color: var(--sd-white) !important;
+  color: var(--sd-purple) !important;
   transition: all 0.25s ease;
 }
 #book-appointment-wizard #book-appointment-form #book-appointment-submit:hover {
-  background-color: var(--sd-sky-blue-dark) !important;
-  border-color: var(--sd-sky-blue-dark) !important;
+  background-color: var(--sd-green-dark) !important;
+  border-color: var(--sd-green-dark) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(71, 181, 224, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 217, 74, 0.35);
 }
 
 /* === FORM MESSAGE === */
@@ -364,8 +368,8 @@ body {
 #book-appointment-wizard #available-hours .available-hour {
   margin-bottom: 8px;
   border-radius: var(--sd-radius-pill) !important;
-  border: 2px solid var(--sd-sky-blue) !important;
-  color: var(--sd-sky-blue) !important;
+  border: 2px solid var(--sd-teal) !important;
+  color: var(--sd-teal) !important;
   font-family: var(--sd-font-body);
   font-weight: 600;
   padding: 8px 16px;
@@ -374,15 +378,15 @@ body {
   box-shadow: none !important;
 }
 #book-appointment-wizard #available-hours .available-hour:hover {
-  background: rgba(71, 181, 224, 0.1) !important;
+  background: rgba(42, 111, 107, 0.08) !important;
   transform: translateY(-1px);
 }
 
 #book-appointment-wizard #available-hours .selected-hour {
-  background-color: var(--sd-coral) !important;
-  border-color: var(--sd-coral) !important;
+  background-color: var(--sd-teal) !important;
+  border-color: var(--sd-teal) !important;
   color: var(--sd-white) !important;
-  box-shadow: 0 3px 10px rgba(232, 120, 138, 0.3) !important;
+  box-shadow: 0 3px 10px rgba(42, 111, 107, 0.3) !important;
 }
 
 #book-appointment-wizard .span3 {
@@ -464,7 +468,7 @@ body {
   padding: 16px 20px;
   text-align: center;
   border-top: none;
-  background: var(--sd-navy);
+  background: var(--sd-purple);
 }
 
 #book-appointment-wizard #frame-footer small {
@@ -670,15 +674,15 @@ body {
   width: 80%;
   max-width: 300px;
   border-radius: var(--sd-radius-pill) !important;
-  background-color: #B94D60 !important;
-  border-color: #B94D60 !important;
+  background-color: var(--sd-green) !important;
+  border-color: var(--sd-green) !important;
   font-family: var(--sd-font-heading);
   font-weight: 700;
-  color: var(--sd-white) !important;
+  color: var(--sd-purple) !important;
 }
 #success-frame .btn:hover {
-  background-color: #A24253 !important;
-  border-color: #A24253 !important;
+  background-color: var(--sd-green-dark) !important;
+  border-color: var(--sd-green-dark) !important;
 }
 
 @media (min-width: 768px) {

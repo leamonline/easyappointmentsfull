@@ -28,9 +28,9 @@
 
         <div class="row frame-content mb-3">
             <div class="col-12 col-md-8 mx-auto">
-                <div class="pet-info-section p-3 rounded-3" style="background: rgba(71, 181, 224, 0.08); border: 2px solid rgba(71, 181, 224, 0.2);">
-                    <h5 class="mb-3" style="font-family: 'Baloo 2', cursive; color: #1B2D4B;">
-                        <i class="fas fa-paw me-2" style="color: #E8788A;"></i>Your Dog's Details
+                <div class="pet-info-section p-3 rounded-3" style="background: rgba(0, 194, 255, 0.06); border: 2px solid rgba(0, 194, 255, 0.2);">
+                    <h5 class="mb-3" style="font-family: 'Quicksand', sans-serif; color: #2D004B; font-weight: 700;">
+                        <i class="fas fa-paw me-2" style="color: #E8506A;"></i>Your Dog's Details
                     </h5>
                     <div class="row">
                         <div class="col-12 col-md-4 mb-3">

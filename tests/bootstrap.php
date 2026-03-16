@@ -25,3 +25,8 @@ if (!class_exists('Config')) {
 
 // Composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load CI stubs for unit testing (global-namespace functions & classes).
+if (getenv('APP_ENV') === 'testing') {
+    require_once __DIR__ . '/stubs/ci_stubs.php';
+}

@@ -369,14 +369,14 @@ class Google_sync
      * Get all the events between the sync period.
      *
      * @param string $google_calendar The name of the Google Calendar to be used.
-     * @param string $start The start date of sync period.
-     * @param string $end The end date of sync period.
+     * @param int $start The start timestamp of sync period.
+     * @param int $end The end timestamp of sync period.
      *
      * @return Events Returns a collection of events.
      *
      * @throws \Google\Service\Exception
      */
-    public function get_sync_events(string $google_calendar, string $start, string $end): Events
+    public function get_sync_events(string $google_calendar, int $start, int $end): Events
     {
         $params = [
             'timeMin' => date(DateTimeInterface::RFC3339, $start),

@@ -228,6 +228,6 @@ class Ics_file
 
     public function generate_uid(int $db_record_id): string
     {
-        return 'ea-' . md5($db_record_id);
+        return 'ea-' . md5((string) $db_record_id);
     }
 }

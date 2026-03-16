@@ -68,7 +68,7 @@ class Google extends EA_Controller
                 throw new InvalidArgumentException('No provider ID provided.');
             }
 
-            $provider = $CI->providers_model->find($provider_id);
+            $provider = $CI->providers_model->find((int) $provider_id);
 
             // Check whether the selected provider has the Google Sync enabled.
             $google_sync = $CI->providers_model->get_setting($provider['id'], 'google_sync');
@@ -86,9 +86,9 @@ class Google extends EA_Controller
 
             $sync_future_days = $provider['settings']['sync_future_days'];
 
-            $start = strtotime('-' . $sync_past_days . ' days', strtotime(date('Y-m-d')));
+            $start = (int) strtotime('-' . $sync_past_days . ' days', strtotime(date('Y-m-d')));
 
-            $end = strtotime('+' . $sync_future_days . ' days', strtotime(date('Y-m-d')));
+            $end = (int) strtotime('+' . $sync_future_days . ' days', strtotime(date('Y-m-d')));
 
             $where = [
                 'start_datetime >=' => date('Y-m-d H:i:s', $start),

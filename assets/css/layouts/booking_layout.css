@@ -1,8 +1,8 @@
 /* ----------------------------------------------------------------------------
- * Easy!Appointments - Online Appointment Scheduler
+ * Smarter Dog - Online Appointment Scheduler
  * Smarter Dog Grooming Salon — Custom Branded Theme
  *
- * @package     EasyAppointments
+ * @package     SmarterDog
  * @link        https://easyappointments.org
  * @since       v1.5.0
  * ---------------------------------------------------------------------------- */
@@ -277,19 +277,19 @@ body {
   margin-right: 0;
 }
 
-/* Next button — coral pink */
+/* Next button — coral pink, WCAG AA contrast (4.5:1+ with white) */
 #book-appointment-wizard .wizard-frame .command-buttons .btn-dark,
 #book-appointment-wizard .wizard-frame .command-buttons .button-next {
-  background-color: var(--sd-coral) !important;
-  border-color: var(--sd-coral) !important;
+  background-color: #B94D60 !important;
+  border-color: #B94D60 !important;
   color: var(--sd-white) !important;
 }
 #book-appointment-wizard .wizard-frame .command-buttons .btn-dark:hover,
 #book-appointment-wizard .wizard-frame .command-buttons .button-next:hover {
-  background-color: var(--sd-coral-dark) !important;
-  border-color: var(--sd-coral-dark) !important;
+  background-color: #A24253 !important;
+  border-color: #A24253 !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(232, 120, 138, 0.35);
+  box-shadow: 0 4px 14px rgba(185, 77, 96, 0.35);
 }
 
 /* Back button — outline navy */
@@ -464,11 +464,11 @@ body {
   padding: 16px 20px;
   text-align: center;
   border-top: none;
-  background: var(--sd-sky-blue);
+  background: var(--sd-navy);
 }
 
 #book-appointment-wizard #frame-footer small {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 #book-appointment-wizard #frame-footer a {
@@ -490,7 +490,7 @@ body {
 }
 
 .footer-powered-by {
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
 #book-appointment-wizard #select-language,
@@ -503,13 +503,13 @@ body {
 }
 
 #book-appointment-wizard #select-language {
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--sd-white) !important;
 }
 
 #book-appointment-wizard .backend-link {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: var(--sd-white) !important;
 }
@@ -670,15 +670,15 @@ body {
   width: 80%;
   max-width: 300px;
   border-radius: var(--sd-radius-pill) !important;
-  background-color: var(--sd-coral) !important;
-  border-color: var(--sd-coral) !important;
+  background-color: #B94D60 !important;
+  border-color: #B94D60 !important;
   font-family: var(--sd-font-heading);
   font-weight: 700;
   color: var(--sd-white) !important;
 }
 #success-frame .btn:hover {
-  background-color: var(--sd-coral-dark) !important;
-  border-color: var(--sd-coral-dark) !important;
+  background-color: #A24253 !important;
+  border-color: #A24253 !important;
 }
 
 @media (min-width: 768px) {

@@ -64,7 +64,7 @@ $route['translate_uri_dashes'] = FALSE;
 | Set the appropriate headers so that iframe control and permissions are 
 | properly configured.
 |
-| Enable this if you want to disable use of Easy!Appointments within an 
+| Enable this if you want to disable use of Smarter Dog within an 
 | iframe.
 |
 | Options:

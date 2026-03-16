@@ -37,19 +37,19 @@
                             <label for="pet-name" class="form-label">
                                 Dog's Name <span class="text-danger">*</span>
                             </label>
-                            <input type="text" id="pet-name" class="required form-control" maxlength="128"
-                                   placeholder="e.g. Buddy"/>
+                            <input type="text" id="pet-name" name="pet-name" class="required form-control" maxlength="128"
+                                   autocomplete="off" placeholder="e.g. Buddy"/>
                         </div>
                         <div class="col-12 col-md-4 mb-3">
                             <label for="pet-breed" class="form-label">Breed</label>
-                            <input type="text" id="pet-breed" class="form-control" maxlength="128"
-                                   placeholder="e.g. Cockapoo"/>
+                            <input type="text" id="pet-breed" name="pet-breed" class="form-control" maxlength="128"
+                                   autocomplete="off" placeholder="e.g. Cockapoo"/>
                         </div>
                         <div class="col-12 col-md-4 mb-3">
                             <label for="pet-size" class="form-label">
                                 Size <span class="text-danger">*</span>
                             </label>
-                            <select id="pet-size" class="required form-select">
+                            <select id="pet-size" name="pet-size" class="required form-select">
                                 <option value="small">Small (under 10kg)</option>
                                 <option value="medium" selected>Medium (10-25kg)</option>
                                 <option value="large">Large (over 25kg)</option>
@@ -70,7 +70,8 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="first-name"
+                        <input type="text" id="first-name" name="first-name"
+                               autocomplete="given-name"
                                class="<?= $require_first_name ? 'required' : '' ?> form-control" maxlength="100"/>
                     </div>
                 <?php endif; ?>
@@ -83,7 +84,8 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="last-name"
+                        <input type="text" id="last-name" name="last-name"
+                               autocomplete="family-name"
                                class="<?= $require_last_name ? 'required' : '' ?> form-control" maxlength="120"/>
                     </div>
                 <?php endif; ?>
@@ -96,7 +98,8 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="email"
+                        <input type="email" id="email" name="email"
+                               autocomplete="email"
                                class="<?= $require_email ? 'required' : '' ?> form-control" maxlength="120"/>
                     </div>
                 <?php endif; ?>
@@ -109,7 +112,8 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="phone-number" maxlength="60"
+                        <input type="tel" id="phone-number" name="phone-number" maxlength="60"
+                               autocomplete="tel"
                                class="<?= $require_phone_number ? 'required' : '' ?> form-control"/>
                     </div>
                 <?php endif; ?>
@@ -130,7 +134,9 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="address" class="<?= $require_address ? 'required' : '' ?> form-control"
+                        <input type="text" id="address" name="address"
+                               autocomplete="street-address"
+                               class="<?= $require_address ? 'required' : '' ?> form-control"
                                maxlength="120"/>
                     </div>
                 <?php endif; ?>
@@ -142,7 +148,9 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="city" class="<?= $require_city ? 'required' : '' ?> form-control"
+                        <input type="text" id="city" name="city"
+                               autocomplete="address-level2"
+                               class="<?= $require_city ? 'required' : '' ?> form-control"
                                maxlength="120"/>
                     </div>
                 <?php endif; ?>
@@ -154,7 +162,9 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <input type="text" id="zip-code" class="<?= $require_zip_code ? 'required' : '' ?> form-control"
+                        <input type="text" id="zip-code" name="zip-code"
+                               autocomplete="postal-code"
+                               class="<?= $require_zip_code ? 'required' : '' ?> form-control"
                                maxlength="120"/>
                     </div>
                 <?php endif; ?>
@@ -166,7 +176,8 @@
                                 <span class="text-danger">*</span>
                             <?php endif; ?>
                         </label>
-                        <textarea id="notes" maxlength="500"
+                        <textarea id="notes" name="notes" maxlength="500"
+                                  autocomplete="off"
                                   class="<?= $require_notes ? 'required' : '' ?> form-control" rows="1"></textarea>
                     </div>
                 <?php endif; ?>

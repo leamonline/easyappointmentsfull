@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------------
- * Easy!Appointments - Online Appointment Scheduler
+ * Smarter Dog - Online Appointment Scheduler
  *
- * @package     EasyAppointments
+ * @package     SmarterDog
  * @author      A.Tselegidis <alextselegidis@gmail.com>
  * @copyright   Copyright (c) Alex Tselegidis
  * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
@@ -72,7 +72,7 @@ App.Http.Caldav = (function () {
     }
 
     /**
-     * Trigger the sync process between Easy!Appointments and Caldav Calendar.
+     * Trigger the sync process between Smarter Dog and Caldav Calendar.
      *
      * @param {Number} providerId
      *

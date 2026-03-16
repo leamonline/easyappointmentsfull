@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /* ----------------------------------------------------------------------------
- * Easy!Appointments - Online Appointment Scheduler
+ * Smarter Dog - Online Appointment Scheduler
  *
- * @package     EasyAppointments
+ * @package     SmarterDog
  * @author      A.Tselegidis <alextselegidis@gmail.com>
  * @copyright   Copyright (c) Alex Tselegidis
  * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
@@ -48,7 +48,7 @@ class Console extends EA_Controller
     /**
      * Perform a console installation.
      *
-     * Use this method to install Easy!Appointments directly from the terminal.
+     * Use this method to install Smarter Dog directly from the terminal.
      *
      * Usage:
      *
@@ -70,7 +70,7 @@ class Console extends EA_Controller
     /**
      * Migrate the database to the latest state.
      *
-     * Use this method to upgrade an Easy!Appointments instance to the latest database state.
+     * Use this method to upgrade an Smarter Dog instance to the latest database state.
      *
      * Notice:
      *
@@ -108,7 +108,7 @@ class Console extends EA_Controller
     /**
      * Create a database backup file.
      *
-     * Use this method to back up your Easy!Appointments data.
+     * Use this method to back up your Smarter Dog data.
      *
      * Usage:
      *
@@ -126,7 +126,7 @@ class Console extends EA_Controller
     /**
      * Trigger the synchronization of all provider calendars with Google Calendar.
      *
-     * Use this method in a cronjob to automatically sync events between Easy!Appointments and Google Calendar.
+     * Use this method in a cronjob to automatically sync events between Smarter Dog and Google Calendar.
      *
      * Notice:
      *
@@ -168,7 +168,7 @@ class Console extends EA_Controller
     {
         $help = [
             '',
-            'Easy!Appointments ' . config('version'),
+            'Smarter Dog ' . config('version'),
             '',
             'Usage:',
             '',

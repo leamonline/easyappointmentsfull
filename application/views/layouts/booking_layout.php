@@ -3,11 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Book your dog grooming appointment at Smarter Dog Grooming Salon. Easy online scheduling for all breeds and sizes.">
     <meta name="theme-color" content="#47B5E0">
     <meta name="google" content="notranslate">
 
-    <meta property="og:title" content="<?= lang('page_title') . ' ' . vars('company_name') ?> | Easy!Appointments"/>
+    <meta property="og:title" content="<?= lang('page_title') . ' ' . vars('company_name') ?> | Smarter Dog"/>
     <meta property="og:description" content="Book Your Appointment With A Few Clicks"/>
     <meta property="og:url" content="<?= base_url() ?>">
     <meta property="og:image" content="<?= base_url('assets/img/social-card.png') ?>"/>
@@ -15,7 +16,7 @@
 
     <?php slot('meta'); ?>
 
-    <title><?= lang('page_title') . ' ' . vars('company_name') ?> | Easy!Appointments</title>
+    <title><?= lang('page_title') . ' ' . vars('company_name') ?> | Smarter Dog</title>
 
     <link rel="icon" type="image/x-icon" href="<?= asset_url('assets/img/favicon.ico') ?>">
     <link rel="icon" sizes="192x192" href="<?= asset_url('assets/img/logo.png') ?>">
@@ -37,7 +38,7 @@
 </head>
 
 <body>
-<div id="main" class="container">
+<main id="main" class="container">
     <div class="row wrapper">
         <div id="book-appointment-wizard" class="col-12 col-lg-10 col-xl-8 col-xxl-7">
 
@@ -52,7 +53,7 @@
 
         </div>
     </div>
-</div>
+</main>
 
 <?php if (vars('display_cookie_notice') === '1'): ?>
     <?php component('cookie_notice_modal', ['cookie_notice_content' => vars('cookie_notice_content')]); ?>

@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /* ----------------------------------------------------------------------------
- * Easy!Appointments - Online Appointment Scheduler
+ * Smarter Dog - Online Appointment Scheduler
  *
- * @package     EasyAppointments
+ * @package     SmarterDog
  * @author      A.Tselegidis <alextselegidis@gmail.com>
  * @copyright   Copyright (c) Alex Tselegidis
  * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
@@ -14,7 +14,7 @@
 require_once BASEPATH . 'libraries/Migration.php';
 
 /**
- * Easy!Appointments migration.
+ * Smarter Dog migration.
  *
  * @property EA_Benchmark $benchmark
  * @property EA_Cache $cache

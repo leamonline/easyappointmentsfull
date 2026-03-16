@@ -1,7 +1,7 @@
 /* ----------------------------------------------------------------------------
- * Easy!Appointments - Online Appointment Scheduler
+ * Smarter Dog - Online Appointment Scheduler
  *
- * @package     EasyAppointments
+ * @package     SmarterDog
  * @author      A.Tselegidis <alextselegidis@gmail.com>
  * @copyright   Copyright (c) Alex Tselegidis
  * @license     https://opensource.org/licenses/GPL-3.0 - GPLv3
@@ -40,7 +40,7 @@ App.Pages.Installation = (function () {
     });
 
     /**
-     * Event: Install Easy!Appointments Button "Click"
+     * Event: Install Smarter Dog Button "Click"
      */
     $install.on('click', () => {
         if (!validate()) {
@@ -62,7 +62,7 @@ App.Pages.Installation = (function () {
             dataType: 'json',
         }).done(() => {
             $alert
-                .text('Easy!Appointments has been successfully installed!')
+                .text('Smarter Dog has been successfully installed!')
                 .addClass('alert-success')
                 .prop('hidden', false);
 

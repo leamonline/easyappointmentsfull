@@ -9,7 +9,7 @@
 ?>
 <html lang="en">
 <head>
-    <title><?= $subject ?> | Easy!Appointments</title>
+    <title><?= $subject ?> | Smarter Dog</title>
 </head>
 <body style="font: 13px arial, helvetica, tahoma;">
 
@@ -34,7 +34,7 @@
                 border-top: 1px solid #EEE; background: #FAFAFA;">
         Powered by
         <a href="https://easyappointments.org" style="text-decoration: none;">
-            Easy!Appointments
+            Smarter Dog
         </a>
         |
         <a href="<?= $settings['company_link'] ?>" style="text-decoration: none;">

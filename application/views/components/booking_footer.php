@@ -14,7 +14,7 @@
 
         <span class="footer-powered-by small">
             Powered By
-            <a href="https://easyappointments.org" target="_blank">Easy!Appointments</a>
+            <a href="https://easyappointments.org" target="_blank">Smarter Dog</a>
         </span>
 
         <span class="footer-options">

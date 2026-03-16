@@ -1,0 +1,108 @@
+parameters:
+    level: 5
+    paths:
+        - application/
+    excludePaths:
+        - application/views
+        - application/language
+        - application/config/constants.php
+        - application/config/app.php
+        - application/config/database.php
+        - application/config/google.php
+        - application/migrations
+        - application/third_party (?)
+        - application/core/EA_Config.php
+    scanDirectories:
+        - system/core
+        - system/libraries
+        - system/database
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        # CodeIgniter 3 dynamic property access via __get magic on controllers/models
+        - '#Access to an undefined property (EA_Controller|CI_Controller|Booking|Calendar|Customers|Pets|Reports|Providers|Services|Admins|Secretaries|Backend_api|Backend|Webhooks|Blocked_periods)\:\:\$#'
+        # CI3 helper functions loaded dynamically at runtime
+        - '#Function (site_url|redirect|base_url|random_string|write_file|config|html_purify|is_assoc|array_fields|slot_hour|setting|validate_datetime) not found\.#'
+        # EA_* wrapper classes extending CI3 core classes
+        - '#Class EA_\w+ extends unknown class CI_\w+\.#'
+        # CI3 session/cache/config/migration methods available at runtime
+        - '#Call to an undefined method EA_(Session|Cache|Config|Migration)::\w+\(\)\.#'
+        # CI3 EA_Model abstract method calls resolved by child classes
+        - '#Call to an undefined method EA_Model::(get|save)\(\)\.#'
+        # CI3 UTF8_ENABLED constant
+        - '#Constant UTF8_ENABLED not found\.#'
+        # Config class defined at runtime
+        - '#on an unknown class Config\.#'
+        # EA_Config class excluded from analysis but referenced in PHPDoc
+        - '#unknown class EA_Config#'
+        # JetBrains IDE attribute (dev dependency)
+        - identifier: attribute.notFound
+        # Sabre VObject uses magic __get for properties like $VEVENT, $DTSTART, etc.
+        -
+            identifier: property.notFound
+            path: application/libraries/Caldav_sync.php
+        -
+            identifier: method.notFound
+            path: application/libraries/Caldav_sync.php
+        # Google API uses magic __get for properties
+        - '#Google\\\\Service\\\\Calendar#'
+        -
+            identifier: property.notFound
+            path: application/libraries/Google_sync.php
+        # Ics_calendar custom provider
+        - '#Property Ics_calendar::\$\w+ .+ does not accept#'
+        # CI_Security internal property
+        - '#Property CI_Security::\$_csrf_hash#'
+        # CI3 get_where() accepts arrays at runtime despite type stub saying string|null
+        -
+            message: '#Parameter \#2 .* of method CI_DB_query_builder::get_where\(\) expects string\|null, array.* given\.#'
+            identifier: argument.type
+        # EA_Controller class-name case: CI3 naming convention mismatch
+        - identifier: class.nameCase
+          path: application/core/EA_Controller.php
+        # EA_Migration return type (CI3 internal)
+        - identifier: return.type
+          path: application/core/EA_Migration.php
+        # Test.php: ENVIRONMENT is always 'testing' during phpstan bootstrap
+        -
+            identifier: notIdentical.alwaysFalse
+            path: application/controllers/Test.php
+        # Google.php: defensive null coalesce on Google API return values
+        -
+            identifier: nullCoalesce.expr
+            path: application/controllers/Google.php
+        # Google.php: PHPDoc-based always-false comparisons on Google API types
+        -
+            identifier: identical.alwaysFalse
+            path: application/controllers/Google.php
+        -
+            identifier: booleanOr.alwaysFalse
+            path: application/controllers/Google.php
+        # Captcha_builder: PHPDoc says array so is_array() is always true
+        -
+            identifier: function.alreadyNarrowedType
+            path: application/libraries/Captcha_builder.php
+        # Ics_provider: PHPDoc says Closure so instanceof Closure is always true
+        -
+            identifier: instanceof.alwaysTrue
+            path: application/libraries/Ics_provider.php
+        -
+            identifier: deadCode.unreachable
+            path: application/libraries/Ics_provider.php
+        # array_helper: PHPDoc says callable so is_callable() is always true
+        -
+            identifier: function.alreadyNarrowedType
+            path: application/helpers/array_helper.php
+        # Availability: array_values on already-list value (defensive)
+        -
+            identifier: arrayValues.list
+            path: application/libraries/Availability.php
+        # Caldav_sync: PHPDoc-based boolean negation always false
+        -
+            identifier: booleanNot.alwaysFalse
+            path: application/libraries/Caldav_sync.php
+        # Caldav_sync: Sabre VObject magic properties cast to string before ?? (defensive)
+        -
+            identifier: nullCoalesce.expr
+            path: application/libraries/Caldav_sync.php

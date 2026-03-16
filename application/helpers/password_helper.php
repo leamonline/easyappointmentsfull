@@ -54,7 +54,7 @@ function generate_salt(): string
 {
     $max_length = 100;
 
-    $salt = hash('sha256', uniqid(rand(), true));
+    $salt = hash('sha256', uniqid((string) rand(), true));
 
     return substr($salt, 0, $max_length);
 }

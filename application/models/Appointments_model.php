@@ -695,7 +695,7 @@ class Appointments_model extends EA_Model
      */
     public function calculate_end_datetime(array $appointment): string
     {
-        $duration = $this->db->get_where('services', ['id' => $appointment['id_services']])?->row()?->duration;
+        $duration = $this->db->get_where('services', ['id' => $appointment['id_services']])->row()->duration;
 
         $end_date_time_object = new DateTime($appointment['start_datetime']);
 

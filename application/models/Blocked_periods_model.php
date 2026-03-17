@@ -408,6 +408,6 @@ class Blocked_periods_model extends EA_Model
             ->where('DATE(start_datetime) <=', $date)
             ->where('DATE(end_datetime) >=', $date)
             ->get()
-            ->num_rows() > 1;
+            ->num_rows() > 0;
     }
 }

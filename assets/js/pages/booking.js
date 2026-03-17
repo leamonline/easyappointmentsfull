@@ -368,7 +368,7 @@ App.Pages.Booking = (function () {
         $selectService.on('change', (event) => {
             const $target = $(event.target);
             const serviceId = $selectService.val();
-            $selectProvider.parent().prop('hidden', !Boolean(serviceId));
+            $selectProvider.parent().prop('hidden', true);
 
             $selectProvider.empty();
 
@@ -399,6 +399,12 @@ App.Pages.Booking = (function () {
                 $(new Option(lang('any_provider'), 'any-provider')).insertAfter($selectProvider.find('option:first'));
             }
 
+            // Auto-select the first available provider
+            const $firstProvider = $selectProvider.find('option[value!=""]').first();
+            if ($firstProvider.length) {
+                $selectProvider.val($firstProvider.val());
+            }
+
             App.Http.Booking.getUnavailableDates(
                 $selectProvider.val(),
                 $target.val(),
@@ -419,10 +425,7 @@ App.Pages.Booking = (function () {
         $('.button-next').on('click', (event) => {
             const $target = $(event.currentTarget);
 
-            // If we are on the first step and there is no provider selected do not continue with the next step.
-            if ($target.attr('data-step_index') === '1' && !$selectProvider.val()) {
-                return;
-            }
+            // Provider is auto-selected (single provider: Smarter Dog Grooming Salon)
 
             // If we are on the 2nd tab then the user should have an appointment hour selected.
             if ($target.attr('data-step_index') === '2') {
@@ -1052,13 +1055,6 @@ App.Pages.Booking = (function () {
             additionalInfoParts.push(`${lang('location')}: ${service.location}`);
         }
 
-        if (additionalInfoParts.length) {
-            $(`
-                <div class="mb-2 fst-italic">
-                    ${additionalInfoParts.join(', ')}
-                </div>
-            `).appendTo($serviceDescription);
-        }
 
         // Render the service description
 

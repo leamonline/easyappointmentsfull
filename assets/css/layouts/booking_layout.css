@@ -453,7 +453,7 @@ body {
 #book-appointment-wizard #service-description {
   overflow-y: auto;
   clear: both;
-  max-height: 153px;
+  max-height: none;
   box-shadow: none;
   font-family: var(--sd-font-body);
   color: #5a6b7f;

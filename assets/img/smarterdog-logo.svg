@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Light blue background square -->
+  <rect width="400" height="400" rx="40" fill="#29B6F6"/>
+
+  <!-- Gold ring border -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="#F5C542" stroke-width="7" stroke-linecap="round"/>
+  <!-- Slight brush stroke effect on ring -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="#F5C542" stroke-width="4" stroke-dasharray="20 2" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Inner blue circle -->
+  <circle cx="200" cy="200" r="133" fill="#1976D2"/>
+
+  <!-- Dog silhouette - white, centered and sitting -->
+  <g fill="#ffffff" transform="translate(200,185) scale(1.6)">
+    <!-- Left ear - floppy -->
+    <path d="M-22,-52 C-28,-68 -38,-62 -34,-48 C-32,-42 -26,-40 -22,-42Z"/>
+    <!-- Right ear - floppy -->
+    <path d="M22,-52 C28,-68 38,-62 34,-48 C32,-42 26,-40 22,-42Z"/>
+    <!-- Head -->
+    <ellipse cx="0" cy="-38" rx="24" ry="22"/>
+    <!-- Snout -->
+    <ellipse cx="0" cy="-26" rx="12" ry="10"/>
+    <!-- Nose -->
+    <ellipse cx="0" cy="-28" rx="5" ry="3.5" fill="#1976D2"/>
+    <!-- Eyes -->
+    <circle cx="-9" cy="-42" r="3" fill="#1976D2"/>
+    <circle cx="9" cy="-42" r="3" fill="#1976D2"/>
+    <!-- Body -->
+    <ellipse cx="0" cy="4" rx="30" ry="28"/>
+    <!-- Front left leg -->
+    <path d="M-18,22 C-20,38 -18,48 -14,50 C-10,52 -8,48 -8,38 L-8,22Z"/>
+    <!-- Front right leg -->
+    <path d="M18,22 C20,38 18,48 14,50 C10,52 8,48 8,38 L8,22Z"/>
+    <!-- Front paws -->
+    <ellipse cx="-14" cy="50" rx="8" ry="4"/>
+    <ellipse cx="14" cy="50" rx="8" ry="4"/>
+    <!-- Tail base hint (wavy) -->
+    <path d="M26,0 C36,-8 40,-18 34,-24" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+
+  <!-- Sparkle stars -->
+  <g fill="#1a2744">
+    <!-- 4-point star left -->
+    <path d="M95,195 L98,188 L101,195 L108,198 L101,201 L98,208 L95,201 L88,198Z"/>
+    <!-- Small diamond star -->
+    <path d="M82,218 L84,214 L86,218 L90,220 L86,222 L84,226 L82,222 L78,220Z" transform="scale(0.7) translate(38,90)"/>
+  </g>
+
+  <!-- Curved text: SMARTER DOG (top) -->
+  <defs>
+    <path id="topArc" d="M70,200 A130,130 0 0,1 330,200" fill="none"/>
+    <path id="bottomArc" d="M80,220 A125,125 0 0,0 320,220" fill="none"/>
+  </defs>
+
+  <text font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="38" fill="#1a2744" letter-spacing="6">
+    <textPath href="#topArc" startOffset="50%" text-anchor="middle">SMARTER DOG</textPath>
+  </text>
+
+  <!-- Curved text: GROOMING SALON (bottom) -->
+  <text font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="32" fill="#1a2744" letter-spacing="4">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">GROOMING SALON</textPath>
+  </text>
+</svg>

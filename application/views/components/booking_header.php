@@ -8,7 +8,7 @@
 
 <div id="header">
     <div id="company-name">
-        <img src="<?= vars('company_logo') ?: base_url('assets/img/logo.png') ?>" alt="logo" id="company-logo">
+        <img src="<?= vars('company_logo') ?: base_url('assets/img/smarterdog-logo.svg') ?>" alt="Smarter Dog Grooming Salon logo" id="company-logo">
 
         <span>
             <?= e($company_name) ?>

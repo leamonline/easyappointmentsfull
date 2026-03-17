@@ -443,44 +443,20 @@ class Booking extends EA_Controller
             $appointment['is_unavailability'] = false;
             $appointment['color'] = $service['color'];
 
-            // Handle pet data from the booking form.
+            // Handle pet data — pet is selected by ID from the dog selection step.
             $pet_data = $post_data['pet'] ?? null;
 
-            if ($pet_data && !empty($pet_data['name'])) {
-                $pet = [
-                    'id_users_customer' => $customer_id,
-                    'name' => $pet_data['name'],
-                    'breed' => $pet_data['breed'] ?? '',
-                    'size' => $pet_data['size'] ?? 'small',
-                ];
-
-                // Check if this customer already has a pet with this name.
-                $existing_pets = $this->pets_model->get_by_customer($customer_id);
-                $found_pet = null;
-
-                foreach ($existing_pets as $existing_pet) {
-                    if (strtolower(trim($existing_pet['name'])) === strtolower(trim($pet['name']))) {
-                        $found_pet = $existing_pet;
-                        break;
-                    }
-                }
-
-                if ($found_pet) {
-                    // Update breed/size if changed.
-                    $found_pet['breed'] = $pet['breed'];
-                    $found_pet['size'] = $pet['size'];
-                    $this->pets_model->save($found_pet);
-                    $pet_id = $found_pet['id'];
-                } else {
-                    $pet_id = $this->pets_model->save($pet);
-                }
+            if ($pet_data && !empty($pet_data['id'])) {
+                // Pet was selected from the customer's saved pets.
+                $pet_id = (int) $pet_data['id'];
+                $pet = $this->pets_model->find($pet_id);
+                $pet_size = $pet['size'] ?? 'small';
 
                 $appointment['id_pets'] = $pet_id;
 
                 // Calculate seats required based on pet size and time slot.
                 $appointment_start = new DateTime($appointment['start_datetime']);
                 $time = $appointment_start->format('H:i');
-                $pet_size = $pet_data['size'] ?? 'small';
                 $appointment['seats_required'] = $this->salon_capacity->calculate_seats_required($time, $pet_size);
 
                 // Validate large dog restrictions if salon mode is enabled.
@@ -493,7 +469,52 @@ class Booking extends EA_Controller
                         throw new RuntimeException($large_dog_result['reason']);
                     }
 
-                    // Use the seats from the large dog validation.
+                    $appointment['seats_required'] = $large_dog_result['seats_required'];
+                }
+            } elseif ($pet_data && !empty($pet_data['name'])) {
+                // Fallback: pet entered inline (legacy/manage mode).
+                $pet = [
+                    'id_users_customer' => $customer_id,
+                    'name' => $pet_data['name'],
+                    'breed' => $pet_data['breed'] ?? '',
+                    'size' => $pet_data['size'] ?? 'small',
+                ];
+
+                $existing_pets = $this->pets_model->get_by_customer($customer_id);
+                $found_pet = null;
+
+                foreach ($existing_pets as $existing_pet) {
+                    if (strtolower(trim($existing_pet['name'])) === strtolower(trim($pet['name']))) {
+                        $found_pet = $existing_pet;
+                        break;
+                    }
+                }
+
+                if ($found_pet) {
+                    $found_pet['breed'] = $pet['breed'];
+                    $found_pet['size'] = $pet['size'];
+                    $this->pets_model->save($found_pet);
+                    $pet_id = $found_pet['id'];
+                } else {
+                    $pet_id = $this->pets_model->save($pet);
+                }
+
+                $appointment['id_pets'] = $pet_id;
+                $pet_size = $pet_data['size'] ?? 'small';
+
+                $appointment_start = new DateTime($appointment['start_datetime']);
+                $time = $appointment_start->format('H:i');
+                $appointment['seats_required'] = $this->salon_capacity->calculate_seats_required($time, $pet_size);
+
+                if ($this->salon_capacity->is_enabled() && $pet_size === 'large') {
+                    $date = $appointment_start->format('Y-m-d');
+                    $exclude_id = $manage_mode ? ($appointment['id'] ?? null) : null;
+                    $large_dog_result = $this->salon_capacity->validate_large_dog($date, $time, $pet_size, $exclude_id);
+
+                    if (!$large_dog_result['allowed'] && !$large_dog_result['requires_approval']) {
+                        throw new RuntimeException($large_dog_result['reason']);
+                    }
+
                     $appointment['seats_required'] = $large_dog_result['seats_required'];
                 }
             }

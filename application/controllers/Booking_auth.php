@@ -17,6 +17,10 @@
  * Handles customer authentication in the booking flow.
  *
  * @package Controllers
+ *
+ * @property Customers_model $customers_model
+ * @property Customer_auth_model $customer_auth_model
+ * @property Pets_model $pets_model
  */
 class Booking_auth extends EA_Controller
 {

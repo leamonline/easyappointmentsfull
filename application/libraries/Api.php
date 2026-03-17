@@ -83,7 +83,6 @@ class Api
                 throw new RuntimeException(
                     'The provided credentials do not match any admin user!',
                     401,
-                    'Unauthorized',
                 );
             }
         } catch (Throwable) {

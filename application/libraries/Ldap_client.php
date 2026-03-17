@@ -122,7 +122,7 @@ class Ldap_client
         $connection = @ldap_connect($host, $port);
 
         if (!$connection) {
-            throw new Exception('Could not connect to LDAP server: ' . @ldap_error($connection));
+            throw new Exception('Could not connect to LDAP server.');
         }
 
         @ldap_set_option($connection, LDAP_OPT_PROTOCOL_VERSION, 3);

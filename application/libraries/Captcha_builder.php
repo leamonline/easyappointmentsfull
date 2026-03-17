@@ -42,7 +42,7 @@ class Captcha_builder
      */
     protected $lineColor = null;
     /**
-     * @var array
+     * @var int|false|null
      */
     protected $background = null;
     /**
@@ -54,7 +54,7 @@ class Captcha_builder
      */
     protected $backgroundImages = [];
     /**
-     * @var resource
+     * @var \GdImage|null
      */
     protected $contents = null;
     /**
@@ -270,7 +270,7 @@ class Captcha_builder
      *
      * @param string $backgroundImage
      * @param string $imageType
-     * @return resource
+     * @return \GdImage|false
      * @throws Exception
      */
     protected function createBackgroundImageFromType($backgroundImage, $imageType)
@@ -288,7 +288,6 @@ class Captcha_builder
 
             default:
                 throw new Exception('Not supported file type for background image!');
-                break;
         }
 
         return $image;

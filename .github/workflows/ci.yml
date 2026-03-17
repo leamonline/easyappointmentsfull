@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master, develop]
+
+jobs:
+  lint-and-test:
+    name: PHP ${{ matrix.php-version }} Lint & Test
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version: ['8.1']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl, json, mbstring, gd, simplexml, fileinfo, mysqli
+          coverage: xdebug
+
+      - name: Validate composer.json
+        run: composer validate --no-check-publish
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHP Lint
+        run: |
+          find application system -name "*.php" -print0 | xargs -0 -n1 php -l | (! grep -v "No syntax errors")
+
+      - name: Run PHPUnit
+        run: composer test

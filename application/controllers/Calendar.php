@@ -147,7 +147,7 @@ class Calendar extends EA_Controller
         if (!empty($appointment_hash)) {
             $occurrences = $this->appointments_model->get(['hash' => $appointment_hash]);
 
-            if ($appointment_hash !== '' && !empty($occurrences)) {
+            if (!empty($occurrences)) {
                 $edit_appointment = $occurrences[0];
 
                 $this->appointments_model->load($edit_appointment, ['customer']);
@@ -501,7 +501,7 @@ class Calendar extends EA_Controller
 
             json_response([
                 'success' => true,
-                'warnings' => $warnings ?? [],
+                'warnings' => [],
             ]);
         } catch (Throwable $e) {
             json_exception($e);

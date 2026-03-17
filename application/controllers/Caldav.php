@@ -118,7 +118,7 @@ class Caldav extends EA_Controller
             throw new InvalidArgumentException('No provider ID provided.');
         }
 
-        $provider = $CI->providers_model->find($provider_id);
+        $provider = $CI->providers_model->find((int) $provider_id);
 
         // Check whether the selected provider has the CalDAV Sync enabled.
 

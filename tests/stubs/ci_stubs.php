@@ -44,6 +44,9 @@ if (!class_exists('EA_Controller')) {
 if (!class_exists('CI_Model')) {
     class CI_Model
     {
+        public $db;
+        public $load;
+
         public function __get($key)
         {
             return get_instance()->$key;
@@ -51,7 +54,7 @@ if (!class_exists('CI_Model')) {
     }
 }
 
-// Minimal EA_Model stub.
+// Minimal EA_Model stub with cast() and quote_order_by() support.
 if (!class_exists('EA_Model')) {
     class EA_Model extends CI_Model
     {
@@ -59,6 +62,28 @@ if (!class_exists('EA_Model')) {
 
         public function __construct()
         {
+        }
+
+        protected function cast(array &$record): void
+        {
+            foreach ($this->casts as $field => $type) {
+                if (!array_key_exists($field, $record)) {
+                    continue;
+                }
+
+                $record[$field] = match ($type) {
+                    'integer' => (int) $record[$field],
+                    'float' => (float) $record[$field],
+                    'boolean' => (bool) $record[$field],
+                    'string' => (string) $record[$field],
+                    default => $record[$field],
+                };
+            }
+        }
+
+        protected function quote_order_by(string $order_by): string
+        {
+            return $order_by;
         }
     }
 }

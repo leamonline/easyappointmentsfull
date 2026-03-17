@@ -1036,3 +1036,116 @@ ERROR - 2026-03-16 02:59:46 --> JSON exception: {"success":false,"message":"Inva
     ),
   ),
 )
+ERROR - 2026-03-16 03:24:14 --> 404 Page Not Found: Robotstxt/index Trace: array (
+  0 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Exceptions.php',
+    'line' => 134,
+    'function' => 'log_message',
+    'args' => 
+    array (
+      0 => 'error',
+      1 => '404 Page Not Found: Robotstxt/index',
+    ),
+  ),
+  1 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Common.php',
+    'line' => 439,
+    'function' => 'show_404',
+    'class' => 'CI_Exceptions',
+    'type' => '->',
+    'args' => 
+    array (
+      0 => 'Robotstxt/index',
+      1 => true,
+    ),
+  ),
+  2 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/CodeIgniter.php',
+    'line' => 443,
+    'function' => 'show_404',
+    'args' => 
+    array (
+      0 => 'Robotstxt/index',
+    ),
+  ),
+)
+ERROR - 2026-03-16 03:50:16 --> 404 Page Not Found: Robotstxt/index Trace: array (
+  0 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Exceptions.php',
+    'line' => 134,
+    'function' => 'log_message',
+    'args' => 
+    array (
+      0 => 'error',
+      1 => '404 Page Not Found: Robotstxt/index',
+    ),
+  ),
+  1 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Common.php',
+    'line' => 439,
+    'function' => 'show_404',
+    'class' => 'CI_Exceptions',
+    'type' => '->',
+    'args' => 
+    array (
+      0 => 'Robotstxt/index',
+      1 => true,
+    ),
+  ),
+  2 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/CodeIgniter.php',
+    'line' => 443,
+    'function' => 'show_404',
+    'args' => 
+    array (
+      0 => 'Robotstxt/index',
+    ),
+  ),
+)
+ERROR - 2026-03-16 19:47:40 --> Severity: Error --> Maximum execution time of 30 seconds exceeded /Users/leam/Desktop/easyappointments/vendor/google/apiclient-services/src/Calendar/Resource/Calendars.php 30 Trace: array (
+  0 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Exceptions.php',
+    'line' => 104,
+    'function' => 'log_message',
+    'args' => 
+    array (
+      0 => 'error',
+      1 => 'Severity: Error --> Maximum execution time of 30 seconds exceeded /Users/leam/Desktop/easyappointments/vendor/google/apiclient-services/src/Calendar/Resource/Calendars.php 30',
+    ),
+  ),
+  1 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Common.php',
+    'line' => 640,
+    'function' => 'log_exception',
+    'class' => 'CI_Exceptions',
+    'type' => '->',
+    'args' => 
+    array (
+      0 => 'Error',
+      1 => 'Maximum execution time of 30 seconds exceeded',
+      2 => '/Users/leam/Desktop/easyappointments/vendor/google/apiclient-services/src/Calendar/Resource/Calendars.php',
+      3 => 30,
+    ),
+  ),
+  2 => 
+  array (
+    'file' => '/Users/leam/Desktop/easyappointments/system/core/Common.php',
+    'line' => 708,
+    'function' => '_error_handler',
+    'args' => 
+    array (
+      0 => 1,
+      1 => 'Maximum execution time of 30 seconds exceeded',
+      2 => '/Users/leam/Desktop/easyappointments/vendor/google/apiclient-services/src/Calendar/Resource/Calendars.php',
+      3 => 30,
+    ),
+  ),
+)

@@ -763,6 +763,7 @@ App.Pages.Booking = (function () {
         const providerId = $selectProvider.val();
 
         const serviceOptionText = serviceId ? $selectService.find('option:selected').text() : lang('service');
+        const providerOptionText = providerId ? $selectProvider.find('option:selected').text() : lang('provider');
 
         $displayBookingSelection.text(serviceOptionText);
 

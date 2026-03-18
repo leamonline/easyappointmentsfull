@@ -97,7 +97,7 @@ class Secretaries_model extends EA_Model
             empty($secretary['email']) ||
             empty($secretary['phone_number'])
         ) {
-            throw new InvalidArgumentException('Not all required fields are provided: ' . print_r($secretary, true));
+            throw new InvalidArgumentException('Not all required fields are provided: ' . json_encode(array_keys($secretary)));
         }
 
         // Validate the email address.
@@ -111,7 +111,7 @@ class Secretaries_model extends EA_Model
             foreach ($secretary['providers'] as $provider_id) {
                 if (!is_numeric($provider_id)) {
                     throw new InvalidArgumentException(
-                        'The provided secretary providers are invalid: ' . print_r($secretary, true),
+                        'The provided secretary providers are invalid: ' . json_encode(array_keys($secretary)),
                     );
                 }
             }

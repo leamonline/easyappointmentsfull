@@ -56,7 +56,7 @@ $db['default']['database'] = Config::DB_NAME;
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = 'ea_';
 $db['default']['pconnect'] = FALSE;
-$db['default']['db_debug'] = TRUE;
+$db['default']['db_debug'] = defined('ENVIRONMENT') && ENVIRONMENT === 'development';
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = '';
 $db['default']['char_set'] = 'utf8mb4';

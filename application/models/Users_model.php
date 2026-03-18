@@ -97,7 +97,7 @@ class Users_model extends EA_Model
             empty($user['email']) ||
             empty($user['phone_number'])
         ) {
-            throw new InvalidArgumentException('Not all required fields are provided: ' . print_r($user, true));
+            throw new InvalidArgumentException('Not all required fields are provided: ' . json_encode(array_keys($user)));
         }
     }
 

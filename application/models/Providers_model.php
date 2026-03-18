@@ -99,7 +99,7 @@ class Providers_model extends EA_Model
             empty($provider['email']) ||
             empty($provider['phone_number'])
         ) {
-            throw new InvalidArgumentException('Not all required fields are provided: ' . print_r($provider, true));
+            throw new InvalidArgumentException('Not all required fields are provided: ' . json_encode(array_keys($provider)));
         }
 
         // Validate the email address.
@@ -113,7 +113,7 @@ class Providers_model extends EA_Model
             foreach ($provider['services'] as $service_id) {
                 if (!is_numeric($service_id)) {
                     throw new InvalidArgumentException(
-                        'The provided provider services are invalid: ' . print_r($provider, true),
+                        'The provided provider services are invalid: ' . json_encode(array_keys($provider)),
                     );
                 }
             }

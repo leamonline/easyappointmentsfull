@@ -87,7 +87,7 @@ class Blocked_periods_model extends EA_Model
             empty($blocked_period['end_datetime'])
         ) {
             throw new InvalidArgumentException(
-                'Not all required fields are provided: ' . print_r($blocked_period, true),
+                'Not all required fields are provided: ' . json_encode(array_keys($blocked_period)),
             );
         }
 

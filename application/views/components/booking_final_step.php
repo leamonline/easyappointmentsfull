@@ -8,7 +8,7 @@
  */
 ?>
 
-<div id="wizard-frame-4" class="wizard-frame" style="display:none;">
+<div id="wizard-frame-5" class="wizard-frame" style="display:none;">
     <div class="frame-container">
         <h2 class="frame-title"><?= lang('appointment_confirmation') ?></h2>
 
@@ -42,6 +42,20 @@
         <?php endif; ?>
 
         <?php slot('after_captcha'); ?>
+
+        <!-- Notes field (optional) -->
+        <div class="row frame-content m-auto mb-3">
+            <div class="col-12 col-md-8 mx-auto">
+                <label for="booking-notes" class="form-label">
+                    <?= lang('notes') ?>
+                    <span class="text-muted small">(optional)</span>
+                </label>
+                <textarea id="booking-notes" name="booking-notes" maxlength="500"
+                          class="form-control" rows="2"
+                          placeholder="Any special instructions or notes about your appointment..."
+                          aria-label="<?= lang('notes') ?>"></textarea>
+            </div>
+        </div>
     </div>
 
     <div class="d-flex fs-6 justify-content-around">
@@ -73,8 +87,8 @@
     </div>
 
     <div class="command-buttons">
-        <button type="button" id="button-back-4" class="btn button-back btn-outline-secondary"
-                data-step_index="4">
+        <button type="button" id="button-back-5" class="btn button-back btn-outline-secondary"
+                data-step_index="5">
             <i class="fas fa-chevron-left me-2"></i>
             <?= lang('back') ?>
         </button>

@@ -117,7 +117,7 @@ class Customers_model extends EA_Model
             (empty($customer['city']) && $require_city) ||
             (empty($customer['zip_code']) && $require_zip_code)
         ) {
-            throw new InvalidArgumentException('Not all required fields are provided: ' . print_r($customer, true));
+            throw new InvalidArgumentException('Not all required fields are provided: ' . json_encode(array_keys($customer)));
         }
 
         if (!empty($customer['email'])) {
@@ -237,7 +237,7 @@ class Customers_model extends EA_Model
     public function find_record_id(array $customer): int
     {
         if (empty($customer['email'])) {
-            throw new InvalidArgumentException('The customer email was not provided: ' . print_r($customer, true));
+            throw new InvalidArgumentException('The customer email was not provided: ' . json_encode(array_keys($customer)));
         }
 
         $customer = $this->db

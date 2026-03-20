@@ -97,7 +97,7 @@ class Admins_model extends EA_Model
             empty($admin['email']) ||
             empty($admin['phone_number'])
         ) {
-            throw new InvalidArgumentException('Not all required fields are provided: ' . print_r($admin, true));
+            throw new InvalidArgumentException('Not all required fields are provided: ' . json_encode(array_keys($admin)));
         }
 
         // Validate the email address.

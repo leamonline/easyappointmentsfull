@@ -134,7 +134,9 @@ class Ldap_client
             throw new Exception('LDAP bind failed: ' . @ldap_error($connection));
         }
 
-        $wildcard_keyword = !empty($keyword) ? '*' . $keyword . '*' : '*';
+        $escaped_keyword = !empty($keyword) ? ldap_escape($keyword, '', LDAP_ESCAPE_FILTER) : '';
+
+        $wildcard_keyword = !empty($escaped_keyword) ? '*' . $escaped_keyword . '*' : '*';
 
         $interpolated_filter = str_replace('{{KEYWORD}}', $wildcard_keyword, $filter);
 

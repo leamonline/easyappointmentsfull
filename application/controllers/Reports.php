@@ -99,10 +99,10 @@ class Reports extends EA_Controller
                 $grooming_appointments[] = $appointment;
                 $total_dogs++;
 
-                $status = $appointment['status'] ?? '';
-                if ($status === 'Completed' || $status === 'completed') {
+                $status = strtolower($appointment['status'] ?? '');
+                if ($status === 'completed') {
                     $completed_count++;
-                } elseif ($status === 'Cancelled' || $status === 'cancelled') {
+                } elseif ($status === 'cancelled') {
                     $cancelled_count++;
                 } elseif ($status === 'no_show') {
                     $no_show_count++;

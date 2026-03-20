@@ -65,7 +65,7 @@
                                     <small>
                                         <?= lang('current_user') ?>:
                                         <span>
-                                            <?= $timezones[session('timezone', 'UTC')] ?>
+                                            <?= e($timezones[session('timezone', 'UTC')]) ?>
                                         </span>
                                     </small>
                                 </div>

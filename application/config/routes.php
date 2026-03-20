@@ -74,7 +74,7 @@ $route['translate_uri_dashes'] = FALSE;
 |
 */
 
-// header('X-Frame-Options: SAMEORIGIN');
+header('X-Frame-Options: SAMEORIGIN');
 
 /*
 | -------------------------------------------------------------------------
@@ -85,20 +85,24 @@ $route['translate_uri_dashes'] = FALSE;
 |
 */
 
-header('Access-Control-Allow-Origin: ' . ($_SERVER['HTTP_ORIGIN'] ?? '*')); // NOTICE: Change this header to restrict CORS access.
+$allowed_origins = [
+    rtrim(Config::BASE_URL, '/'),
+];
 
-header('Access-Control-Allow-Credentials: "true"');
+$request_origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($request_origin, $allowed_origins, true))
+{
+    header('Access-Control-Allow-Origin: ' . $request_origin);
+    header('Access-Control-Allow-Credentials: true');
+}
 
 if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
 {
-    // May also be using PUT, PATCH, HEAD etc
     header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD');
 }
 
-if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-{
-    header('Access-Control-Allow-Headers: ' . $_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']);
-}
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Csrf-Token, X-Requested-With');
 
 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'OPTIONS')
 {

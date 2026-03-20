@@ -20,7 +20,7 @@
 
 <div class="email-container" style="width: 650px; border: 1px solid #eee; margin: 30px auto;">
     <div id="header"
-         style="background-color: <?= $settings['company_color'] ?? '#429a82' ?>; height: 45px; padding: 10px 15px;">
+         style="background-color: <?= !empty($settings['company_color']) && preg_match('/^#[0-9a-fA-F]{3,8}$/', $settings['company_color']) ? $settings['company_color'] : '#429a82' ?>; height: 45px; padding: 10px 15px;">
         <strong id="logo" style="color: white; font-size: 20px; margin-top: 10px; display: inline-block">
             <?= e($settings['company_name']) ?>
         </strong>

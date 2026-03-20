@@ -30,8 +30,8 @@
                     </label>
                     <select id="ldap-import-role-slug" class="form-select required">
                         <?php foreach ($roles as $role): ?>
-                            <option value="<?= $role['slug'] ?>">
-                                <?= $role['name'] ?>
+                            <option value="<?= e($role['slug']) ?>">
+                                <?= e($role['name']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

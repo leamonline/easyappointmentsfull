@@ -189,12 +189,12 @@ class EA_Model extends CI_Model
     {
         if (is_assoc($record)) {
             foreach ($fields as $field => $default) {
-                $record[$field] = $record[$field] ?? null ?: $default;
+                $record[$field] = $record[$field] ?? $default;
             }
         } else {
             foreach ($record as &$record_item) {
                 foreach ($fields as $field => $default) {
-                    $record_item[$field] = $record_item[$field] ?? null ?: $default;
+                    $record_item[$field] = $record_item[$field] ?? $default;
                 }
             }
         }

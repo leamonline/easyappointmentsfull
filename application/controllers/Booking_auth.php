@@ -207,12 +207,13 @@ class Booking_auth extends EA_Controller
                 throw new InvalidArgumentException('Pet name is required.');
             }
 
+            $allowed_sizes = ['small', 'medium', 'large'];
             $pet_data = [
                 'id_users_customer' => $customer_id,
                 'name' => $name,
                 'breed' => $breed ?? '',
                 'date_of_birth' => !empty($date_of_birth) ? $date_of_birth : null,
-                'size' => $size ?? 'small',
+                'size' => in_array($size ?? '', $allowed_sizes, true) ? $size : 'small',
             ];
 
             $pet_id = $this->pets_model->save($pet_data);

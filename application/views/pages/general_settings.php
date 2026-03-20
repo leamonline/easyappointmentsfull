@@ -123,8 +123,8 @@
 
                                     <select id="theme" data-field="theme" class="form-select">
                                         <?php foreach (vars('available_themes') as $available_theme): ?>
-                                            <option value="<?= $available_theme ?>">
-                                                <?= ucfirst($available_theme) ?>
+                                            <option value="<?= e($available_theme) ?>">
+                                                <?= e(ucfirst($available_theme)) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
@@ -200,8 +200,8 @@
                                     <select id="default-language" class="form-select required"
                                             data-field="default_language">
                                         <?php foreach (vars('available_languages') as $available_language): ?>
-                                            <option value="<?= $available_language ?>">
-                                                <?= ucfirst($available_language) ?>
+                                            <option value="<?= e($available_language) ?>">
+                                                <?= e(ucfirst($available_language)) ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>

@@ -190,8 +190,8 @@
                         </label>
                         <select id="language" class="form-select required" disabled>
                             <?php foreach (vars('available_languages') as $available_language): ?>
-                                <option value="<?= $available_language ?>">
-                                    <?= ucfirst($available_language) ?>
+                                <option value="<?= e($available_language) ?>">
+                                    <?= e(ucfirst($available_language)) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

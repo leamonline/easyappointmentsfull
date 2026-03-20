@@ -114,11 +114,11 @@
                         <div class="mb-3">
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox"
-                                       id="include-<?= str_replace('_', '-', $available_action) ?>"
-                                       data-action="<?= $available_action ?>">
+                                       id="include-<?= e(str_replace('_', '-', $available_action)) ?>"
+                                       data-action="<?= e($available_action) ?>">
 
                                 <label class="form-check-label"
-                                       for="include-<?= str_replace('_', '-', $available_action) ?>">
+                                       for="include-<?= e(str_replace('_', '-', $available_action)) ?>">
                                     <?= lang($available_action) ?>
                                 </label>
                             </div>

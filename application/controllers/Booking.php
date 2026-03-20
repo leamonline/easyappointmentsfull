@@ -42,6 +42,8 @@ class Booking extends EA_Controller
         'custom_field_5',
     ];
     public array $allowed_provider_fields = ['id', 'first_name', 'last_name', 'services', 'timezone'];
+    public const ALLOWED_PET_SIZES = ['small', 'medium', 'large'];
+
     public array $allowed_appointment_fields = [
         'id',
         'start_datetime',
@@ -450,7 +452,7 @@ class Booking extends EA_Controller
                 // Pet was selected from the customer's saved pets.
                 $pet_id = (int) $pet_data['id'];
                 $pet = $this->pets_model->find($pet_id);
-                $pet_size = $pet['size'] ?? 'small';
+                $pet_size = in_array($pet['size'] ?? '', self::ALLOWED_PET_SIZES, true) ? $pet['size'] : 'small';
 
                 $appointment['id_pets'] = $pet_id;
 
@@ -473,11 +475,12 @@ class Booking extends EA_Controller
                 }
             } elseif ($pet_data && !empty($pet_data['name'])) {
                 // Fallback: pet entered inline (legacy/manage mode).
+                $inline_pet_size = $pet_data['size'] ?? '';
                 $pet = [
                     'id_users_customer' => $customer_id,
                     'name' => $pet_data['name'],
                     'breed' => $pet_data['breed'] ?? '',
-                    'size' => $pet_data['size'] ?? 'small',
+                    'size' => in_array($inline_pet_size, self::ALLOWED_PET_SIZES, true) ? $inline_pet_size : 'small',
                 ];
 
                 $existing_pets = $this->pets_model->get_by_customer($customer_id);
@@ -500,7 +503,7 @@ class Booking extends EA_Controller
                 }
 
                 $appointment['id_pets'] = $pet_id;
-                $pet_size = $pet_data['size'] ?? 'small';
+                $pet_size = $pet['size'];
 
                 $appointment_start = new DateTime($appointment['start_datetime']);
                 $time = $appointment_start->format('H:i');

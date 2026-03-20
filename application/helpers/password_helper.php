@@ -12,25 +12,17 @@
  * ---------------------------------------------------------------------------- */
 
 /**
- * Generate a hash of password string.
+ * Legacy password hashing using iterated SHA-256.
  *
- * For user security, all system passwords are stored in hash string into the database. Use this method to produce the
- * hashed password.
+ * Retained for verifying existing password hashes during migration to bcrypt.
  *
- * @param string $salt Salt value for current user. This value is stored on the database and is used when generating
- * the password hashes.
+ * @param string $salt Salt value for current user.
  * @param string $password Given string password.
  *
- * @return string Returns the hash string of the given password.
- *
- * @throws Exception
+ * @return string Returns the legacy hash string.
  */
-function hash_password(string $salt, string $password): string
+function legacy_hash_password(string $salt, string $password): string
 {
-    if (strlen($password) > MAX_PASSWORD_LENGTH) {
-        throw new InvalidArgumentException('The provided password is too long, please use a shorter value.');
-    }
-
     $half = (int) (strlen($salt) / 2);
 
     $hash = hash('sha256', substr($salt, 0, $half) . $password . substr($salt, $half));
@@ -40,6 +32,61 @@ function hash_password(string $salt, string $password): string
     }
 
     return $hash;
+}
+
+/**
+ * Generate a hash of password string using bcrypt.
+ *
+ * @param string $salt Unused, kept for backward compatibility with callers.
+ * @param string $password Given string password.
+ *
+ * @return string Returns the bcrypt hash.
+ *
+ * @throws InvalidArgumentException
+ */
+function hash_password(string $salt, string $password): string
+{
+    if (strlen($password) > MAX_PASSWORD_LENGTH) {
+        throw new InvalidArgumentException('The provided password is too long, please use a shorter value.');
+    }
+
+    return password_hash($password, PASSWORD_BCRYPT);
+}
+
+/**
+ * Verify a password against a stored hash.
+ *
+ * Supports both bcrypt hashes (starting with $2y$) and legacy SHA-256 hashes.
+ *
+ * @param string $password Plain text password to verify.
+ * @param string $stored_hash The stored hash from the database.
+ * @param string $salt The user's salt (needed for legacy hash verification).
+ *
+ * @return bool Returns true if the password matches.
+ */
+function verify_password_hash(string $password, string $stored_hash, string $salt = ''): bool
+{
+    if (str_starts_with($stored_hash, '$2y$') || str_starts_with($stored_hash, '$2a$') || str_starts_with($stored_hash, '$2b$')) {
+        return password_verify($password, $stored_hash);
+    }
+
+    if (empty($salt)) {
+        return false;
+    }
+
+    return hash_equals($stored_hash, legacy_hash_password($salt, $password));
+}
+
+/**
+ * Check if a stored hash needs to be upgraded to bcrypt.
+ *
+ * @param string $stored_hash The stored hash from the database.
+ *
+ * @return bool Returns true if the hash is a legacy format.
+ */
+function needs_password_rehash(string $stored_hash): bool
+{
+    return !str_starts_with($stored_hash, '$2y$') && !str_starts_with($stored_hash, '$2a$') && !str_starts_with($stored_hash, '$2b$');
 }
 
 /**

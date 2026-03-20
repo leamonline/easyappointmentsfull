@@ -49,19 +49,27 @@ class Accounts
      */
     public function check_login(string $username, string $password): ?array
     {
-        $salt = $this->get_salt_by_username($username);
-
-        $password = hash_password($salt, $password);
-
         $user_settings = $this->CI->db
             ->get_where('user_settings', [
                 'username' => $username,
-                'password' => $password,
             ])
             ->row_array();
 
         if (empty($user_settings)) {
             return null;
+        }
+
+        $stored_hash = $user_settings['password'] ?? '';
+        $salt = $user_settings['salt'] ?? '';
+
+        if (!verify_password_hash($password, $stored_hash, $salt)) {
+            return null;
+        }
+
+        // Transparently upgrade legacy SHA-256 hashes to bcrypt on successful login.
+        if (needs_password_rehash($stored_hash)) {
+            $new_hash = hash_password($salt, $password);
+            $this->CI->users_model->set_setting($user_settings['id_users'], 'password', $new_hash);
         }
 
         $user = $this->CI->users_model->find($user_settings['id_users']);
@@ -134,12 +142,10 @@ class Accounts
 
         $user = $query->row_array();
 
-        // Generate a new password for the user.
+        // Generate a new password for the user (stored as bcrypt).
         $new_password = random_string('alnum', 12);
 
-        $salt = $this->get_salt_by_username($username);
-
-        $hash_password = hash_password($salt, $new_password);
+        $hash_password = hash_password('', $new_password);
 
         $this->CI->users_model->set_setting($user['id'], 'password', $hash_password);
 

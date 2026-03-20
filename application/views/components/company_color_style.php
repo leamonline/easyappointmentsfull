@@ -4,7 +4,7 @@
  */
 ?>
 
-<?php if (!empty($company_color) && $company_color !== DEFAULT_COMPANY_COLOR): ?>
+<?php if (!empty($company_color) && $company_color !== DEFAULT_COMPANY_COLOR && preg_match('/^#[0-9a-fA-F]{3,8}$/', $company_color)): ?>
     <style>
         /* Generic Overrides */
 

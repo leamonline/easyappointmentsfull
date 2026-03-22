@@ -31,10 +31,10 @@ class Migration_Add_pet_and_seats_columns_to_appointments_table extends EA_Migra
             $this->dbforge->add_column('appointments', $fields);
 
             $this->db->query('
-                ALTER TABLE `appointments`
+                ALTER TABLE `' . $this->db->dbprefix('appointments') . '`
                 ADD CONSTRAINT `fk_appointments_pets`
                 FOREIGN KEY (`id_pets`)
-                REFERENCES `pets` (`id`)
+                REFERENCES `' . $this->db->dbprefix('pets') . '` (`id`)
                 ON DELETE SET NULL
                 ON UPDATE CASCADE
             ');
@@ -60,7 +60,7 @@ class Migration_Add_pet_and_seats_columns_to_appointments_table extends EA_Migra
     public function down(): void
     {
         if ($this->db->field_exists('id_pets', 'appointments')) {
-            $this->db->query('ALTER TABLE `appointments` DROP FOREIGN KEY `fk_appointments_pets`');
+            $this->db->query('ALTER TABLE `' . $this->db->dbprefix('appointments') . '` DROP FOREIGN KEY `fk_appointments_pets`');
             $this->dbforge->drop_column('appointments', 'id_pets');
         }
 

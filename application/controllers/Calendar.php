@@ -286,8 +286,9 @@ class Calendar extends EA_Controller
                     $start_dt = new DateTime($appointment['start_datetime']);
                     $date = $start_dt->format('Y-m-d');
                     $time = $start_dt->format('H:i');
+                    $exclude_id = $manage_mode ? (int) $appointment['id'] : null;
 
-                    // Determine pet size and seats required.
+                    // Determine pet size.
                     $pet_size = 'small';
                     if (!empty($appointment['id_pets'])) {
                         try {
@@ -298,26 +299,17 @@ class Calendar extends EA_Controller
                         }
                     }
 
-                    // Validate large dog rules.
-                    $large_dog_result = $this->salon_capacity->validate_large_dog(
+                    // Calculate seats required for the appointment record.
+                    $large_dog_result = $this->salon_capacity->validate_large_dog($date, $time, $pet_size, $exclude_id);
+                    $appointment['seats_required'] = $large_dog_result['seats_required'];
+
+                    // Admin can override approval-required slots, but hard blocks still apply.
+                    $slot_result = $this->salon_capacity->is_slot_available_for_pet(
                         $date,
                         $time,
                         $pet_size,
-                        $manage_mode ? (int) $appointment['id'] : null,
-                    );
-
-                    if (!$large_dog_result['allowed'] && !$large_dog_result['requires_approval']) {
-                        throw new RuntimeException($large_dog_result['reason']);
-                    }
-
-                    $appointment['seats_required'] = $large_dog_result['seats_required'];
-
-                    // Check slot availability.
-                    $slot_result = $this->salon_capacity->is_slot_available(
-                        $date,
-                        $time,
-                        $appointment['seats_required'],
-                        $manage_mode ? (int) $appointment['id'] : null,
+                        true, // is_admin
+                        $exclude_id,
                     );
 
                     if (!$slot_result['available']) {
@@ -328,11 +320,6 @@ class Calendar extends EA_Controller
                         );
                         $alt_text = $alternatives ? ' Try: ' . implode(', ', $alternatives) : '';
                         throw new RuntimeException($slot_result['reason'] . $alt_text);
-                    }
-
-                    // Set status to pending_approval for large dogs needing owner approval.
-                    if ($large_dog_result['requires_approval']) {
-                        $appointment['status'] = 'pending_approval';
                     }
                 }
 

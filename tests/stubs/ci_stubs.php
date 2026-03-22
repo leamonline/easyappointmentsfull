@@ -41,12 +41,12 @@ if (!class_exists('EA_Controller')) {
 }
 
 // Minimal CI_Model stub (proxies property access to CI instance).
+// Note: do NOT declare $db or $load here — they must remain undeclared
+// so that __get() fires and proxies to the CI instance, matching real CI behaviour.
 if (!class_exists('CI_Model')) {
+    #[\AllowDynamicProperties]
     class CI_Model
     {
-        public $db;
-        public $load;
-
         public function __get($key)
         {
             return get_instance()->$key;

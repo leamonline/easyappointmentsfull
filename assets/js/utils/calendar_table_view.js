@@ -555,6 +555,29 @@ App.Utils.CalendarTableView = (function () {
             'text': App.Utils.Date.format(date, vars('date_format'), vars('time_format')),
         }).appendTo($dateColumn);
 
+        // Add capacity summary beneath the date title.
+        const $capacityRow = $('<div/>', {
+            'class': 'capacity-row text-muted small mb-1',
+        }).appendTo($dateColumn);
+
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+        App.Http.Calendar.getCapacityOverview(formattedDate).done((response) => {
+            if (!response || !response.enabled || !response.is_working_day) {
+                return;
+            }
+
+            const badges = response.slots.map((slot) => {
+                let color;
+                if (slot.used === 0) color = '#4CAF50';
+                else if (slot.available > 0) color = '#FFC107';
+                else color = '#F44336';
+
+                return `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};margin:0 1px;" title="${slot.time}: ${slot.used}/${slot.capacity}"></span>`;
+            });
+
+            $capacityRow.html(badges.join('') + ' <span>' + response.daily_dog_count + '/' + response.daily_dog_limit + '</span>');
+        });
+
         const filterProviderIds = $filterProvider.val().map((filterProviderId) => Number(filterProviderId));
         const filterServiceIds = $filterService.val().map((filterServiceId) => Number(filterServiceId));
 

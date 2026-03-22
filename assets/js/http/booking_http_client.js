@@ -86,9 +86,13 @@ App.Http.Booking = (function () {
         $.post(url, data).done((response) => {
             $availableHours.empty();
 
+            // Handle enriched salon response {hours: [...], capacity: {...}} or plain array.
+            const hours = Array.isArray(response) ? response : (response.hours || []);
+            const capacity = Array.isArray(response) ? null : (response.capacity || null);
+
             // The response contains the available hours for the selected provider and service. Fill the available
             // hours div with response data.
-            if (response.length > 0) {
+            if (hours.length > 0) {
                 let providerId = $selectProvider.val();
 
                 if (providerId === 'any-provider') {
@@ -112,7 +116,7 @@ App.Http.Booking = (function () {
                 const selectedTimezone = $('#select-timezone').val();
                 const timeFormat = vars('time_format') === 'regular' ? 'h:mm a' : 'HH:mm';
 
-                response.forEach((availableHour) => {
+                hours.forEach((availableHour) => {
                     const availableHourMoment = moment
                         .tz(selectedDate + ' ' + availableHour + ':00', providerTimezone)
                         .tz(selectedTimezone);
@@ -121,15 +125,30 @@ App.Http.Booking = (function () {
                         return; // Due to the selected timezone the available hour belongs to another date.
                     }
 
-                    $availableHours.append(
-                        $('<button/>', {
-                            'class': 'btn btn-outline-secondary w-100 shadow-none available-hour',
-                            'data': {
-                                'value': availableHour,
-                            },
-                            'text': availableHourMoment.format(timeFormat),
-                        }),
-                    );
+                    const $btn = $('<button/>', {
+                        'class': 'btn btn-outline-secondary w-100 shadow-none available-hour',
+                        'data': {
+                            'value': availableHour,
+                        },
+                        'text': availableHourMoment.format(timeFormat),
+                    });
+
+                    // Add capacity hint badge if salon mode provides it.
+                    if (capacity && capacity[availableHour]) {
+                        const slotCap = capacity[availableHour];
+
+                        if (slotCap.available === 1 && slotCap.capacity > 1) {
+                            $btn.append(
+                                $('<span/>', {
+                                    'class': 'badge bg-warning text-dark ms-2',
+                                    'text': '1 left',
+                                    'css': {'font-size': '0.65rem'},
+                                }),
+                            );
+                        }
+                    }
+
+                    $availableHours.append($btn);
                 });
 
                 if (App.Pages.Booking.manageMode) {

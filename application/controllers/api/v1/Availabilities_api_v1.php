@@ -71,7 +71,9 @@ class Availabilities_api_v1 extends EA_Controller
 
             $service = $this->services_model->find($service_id);
 
-            $available_hours = $this->availability->get_available_hours($date, $service, $provider);
+            $pet_size = request('petSize');
+
+            $available_hours = $this->availability->get_available_hours($date, $service, $provider, null, $pet_size);
 
             json_response($available_hours);
         } catch (Throwable $e) {

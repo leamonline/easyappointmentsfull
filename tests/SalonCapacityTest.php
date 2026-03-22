@@ -388,6 +388,74 @@ class SalonCapacityTest extends TestCase
         $this->assertFalse($this->lib->is_working_day('2026-03-21')); // Saturday
     }
 
+    // -- is_slot_available_for_pet -------------------------------------
+
+    public function test_small_dog_slot_available_for_pet(): void
+    {
+        $this->setDbMock(['10:00' => 0], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '10:00', 'small');
+        $this->assertTrue($result['available']);
+    }
+
+    public function test_large_dog_allowed_at_bookend_0830(): void
+    {
+        $this->setDbMock(['08:30' => 0], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '08:30', 'large');
+        $this->assertTrue($result['available']);
+    }
+
+    public function test_large_dog_allowed_at_afternoon_slot(): void
+    {
+        $this->setDbMock(['12:00' => 0], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '12:00', 'large');
+        $this->assertTrue($result['available']);
+    }
+
+    public function test_large_dog_denied_at_mid_morning_for_customer(): void
+    {
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '10:00', 'large', false);
+        $this->assertFalse($result['available']);
+        $this->assertStringContainsString('approval', $result['reason']);
+    }
+
+    public function test_large_dog_allowed_at_mid_morning_for_admin(): void
+    {
+        $this->setDbMock(['10:00' => 0], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '10:00', 'large', true);
+        $this->assertTrue($result['available']);
+    }
+
+    public function test_large_dog_denied_at_0900_when_0830_occupied(): void
+    {
+        $this->setDbMock(['08:30' => 1], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '09:00', 'large');
+        $this->assertFalse($result['available']);
+    }
+
+    public function test_large_dog_at_0900_when_0830_occupied_allowed_for_admin(): void
+    {
+        $this->setDbMock(['08:30' => 1, '09:00' => 0], 2);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '09:00', 'large', true);
+        $this->assertTrue($result['available']);
+    }
+
+    public function test_large_dog_at_afternoon_denied_when_at_capacity(): void
+    {
+        $this->setDbMock(['12:00' => 1], 2);
+        // Large dog at 12:00 needs 2 seats, only 1 left out of 2
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '12:00', 'large');
+        $this->assertFalse($result['available']);
+        $this->assertStringContainsString('capacity', $result['reason']);
+    }
+
+    public function test_small_dog_denied_when_daily_limit_reached(): void
+    {
+        $this->setDbMock([], 16);
+        $result = $this->lib->is_slot_available_for_pet('2026-03-16', '10:00', 'small');
+        $this->assertFalse($result['available']);
+        $this->assertStringContainsString('Daily maximum', $result['reason']);
+    }
+
     // -- get_alternative_slots -----------------------------------------
 
     public function test_get_alternative_slots_returns_nearby_available(): void

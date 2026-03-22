@@ -1200,6 +1200,9 @@ App.Utils.CalendarDefaultView = (function () {
     function refreshCalendarAppointments($calendar, recordId, filterType, startDate, endDate) {
         $('#loading').css('visibility', 'hidden');
 
+        // Refresh the capacity overview panel for the current date range.
+        refreshCapacityOverview(startDate);
+
         const calendarEventSource = [];
 
         startDate = moment(startDate).format('YYYY-MM-DD');
@@ -1692,6 +1695,62 @@ App.Utils.CalendarDefaultView = (function () {
                 fullCalendar.view.activeEnd,
             );
         }, 60000);
+    }
+
+    /**
+     * Refresh the capacity overview panel for a given date.
+     *
+     * @param {String|Date} date The date to show capacity for.
+     */
+    function refreshCapacityOverview(date) {
+        const $overview = $('#capacity-overview');
+        const $slots = $('#capacity-slots');
+        const $summary = $('#capacity-summary');
+
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+
+        App.Http.Calendar.getCapacityOverview(formattedDate).done((response) => {
+            if (!response || !response.enabled) {
+                $overview.hide();
+                return;
+            }
+
+            if (!response.is_working_day) {
+                $overview.show();
+                $slots.empty();
+                $summary.text(formattedDate + ' — Not a working day');
+                return;
+            }
+
+            $slots.empty();
+
+            response.slots.forEach((slot) => {
+                let bgClass;
+                if (slot.used === 0) {
+                    bgClass = 'bg-success';
+                } else if (slot.available > 0) {
+                    bgClass = 'bg-warning';
+                } else {
+                    bgClass = 'bg-danger';
+                }
+
+                const $badge = $('<span/>', {
+                    'class': 'badge ' + bgClass + ' text-dark',
+                    'text': slot.time + ' (' + slot.used + '/' + slot.capacity + ')',
+                    'title': slot.used + ' of ' + slot.capacity + ' seats used',
+                    'style': 'font-size: 0.75rem; cursor: default;',
+                });
+
+                $slots.append($badge);
+            });
+
+            $summary.text(
+                formattedDate + ' — ' +
+                response.daily_dog_count + '/' + response.daily_dog_limit + ' dogs booked'
+            );
+
+            $overview.show();
+        });
     }
 
     return {

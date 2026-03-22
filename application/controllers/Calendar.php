@@ -866,4 +866,59 @@ class Calendar extends EA_Controller
             json_exception($e);
         }
     }
+
+    /**
+     * Get the salon capacity overview for a specific date.
+     *
+     * Returns slot occupancy, effective capacity, and daily dog count for the admin calendar sidebar.
+     */
+    public function get_capacity_overview(): void
+    {
+        try {
+            if (cannot('view', PRIV_APPOINTMENTS)) {
+                throw new RuntimeException('You do not have the required permissions for this task.');
+            }
+
+            if (!$this->salon_capacity->is_enabled()) {
+                json_response(['enabled' => false]);
+                return;
+            }
+
+            $date = request('date');
+
+            if (!$date) {
+                $date = date('Y-m-d');
+            }
+
+            $slots = $this->salon_capacity->get_all_slots();
+            $occupancy = $this->salon_capacity->get_day_occupancy($date);
+            $daily_dog_count = $this->salon_capacity->get_daily_dog_count($date);
+            $max_dogs = (int) (setting('salon_max_dogs_per_day') ?: 16);
+
+            $slot_data = [];
+
+            foreach ($slots as $slot) {
+                $effective_capacity = $this->salon_capacity->get_effective_capacity($date, $slot);
+                $used = $occupancy[$slot] ?? 0;
+
+                $slot_data[] = [
+                    'time' => $slot,
+                    'used' => $used,
+                    'capacity' => $effective_capacity,
+                    'available' => max(0, $effective_capacity - $used),
+                ];
+            }
+
+            json_response([
+                'enabled' => true,
+                'date' => $date,
+                'is_working_day' => $this->salon_capacity->is_working_day($date),
+                'slots' => $slot_data,
+                'daily_dog_count' => $daily_dog_count,
+                'daily_dog_limit' => $max_dogs,
+            ]);
+        } catch (Throwable $e) {
+            json_exception($e);
+        }
+    }
 }

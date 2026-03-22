@@ -99,6 +99,13 @@
         </div>
     </div>
 
+    <div id="capacity-overview" class="mb-2" style="display: none;">
+        <div class="d-flex align-items-center flex-wrap gap-1" id="capacity-slots">
+            <!-- Dynamically rendered capacity slots -->
+        </div>
+        <small class="text-muted" id="capacity-summary"></small>
+    </div>
+
     <div id="calendar">
         <!-- Dynamically Generated Content -->
     </div>

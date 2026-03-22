@@ -123,12 +123,48 @@ App.Utils.CalendarEventPopover = (function () {
     /**
      * Render custom content into the popover of events.
      *
+     * Shows pet info (name, breed, size) and seat count for salon appointments.
+     *
      * @param {Object} info The info object as passed from FullCalendar
      *
-     * @return {Object|String|null} Return HTML string, a jQuery selector or null for nothing.
+     * @return {Object|null} Return a jQuery element or null for nothing.
      */
     function renderCustomContent(info) {
-        return null; // Default behavior
+        const data = info.event.extendedProps.data;
+
+        if (!data || !data.pet) {
+            return null;
+        }
+
+        const pet = data.pet;
+        const parts = [];
+
+        if (pet.name) {
+            let petText = pet.name;
+            if (pet.breed) petText += ' (' + pet.breed + ')';
+            parts.push(petText);
+        }
+
+        if (pet.size) {
+            const sizeLabels = {small: 'Small', medium: 'Medium', large: 'Large'};
+            parts.push(sizeLabels[pet.size] || pet.size);
+        }
+
+        const seats = data.seats_required || 1;
+        parts.push(seats + (seats === 1 ? ' seat' : ' seats'));
+
+        return $('<div/>', {
+            'html': [
+                $('<strong/>', {
+                    'class': 'd-inline-block me-2',
+                    'text': 'Dog',
+                }),
+                $('<span/>', {
+                    'text': parts.join(' — '),
+                }),
+                $('<br/>'),
+            ],
+        });
     }
 
     return {

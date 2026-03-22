@@ -242,6 +242,24 @@ App.Http.Calendar = (function () {
         return $.post(url, data);
     }
 
+    /**
+     * Get the salon capacity overview for a specific date.
+     *
+     * @param {String} date Date in YYYY-MM-DD format.
+     *
+     * @return {*|jQuery}
+     */
+    function getCapacityOverview(date) {
+        const url = App.Utils.Url.siteUrl('calendar/get_capacity_overview');
+
+        const data = {
+            csrf_token: vars('csrf_token'),
+            date: date,
+        };
+
+        return $.post(url, data);
+    }
+
     return {
         saveAppointment,
         deleteAppointment,
@@ -251,5 +269,6 @@ App.Http.Calendar = (function () {
         deleteWorkingPlanException,
         getCalendarAppointments,
         getCalendarAppointmentsForTableView,
+        getCapacityOverview,
     };
 })();

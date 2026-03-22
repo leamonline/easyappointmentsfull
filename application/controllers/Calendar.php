@@ -286,8 +286,9 @@ class Calendar extends EA_Controller
                     $start_dt = new DateTime($appointment['start_datetime']);
                     $date = $start_dt->format('Y-m-d');
                     $time = $start_dt->format('H:i');
+                    $exclude_id = $manage_mode ? (int) $appointment['id'] : null;
 
-                    // Determine pet size and seats required.
+                    // Determine pet size.
                     $pet_size = 'small';
                     if (!empty($appointment['id_pets'])) {
                         try {
@@ -298,26 +299,17 @@ class Calendar extends EA_Controller
                         }
                     }
 
-                    // Validate large dog rules.
-                    $large_dog_result = $this->salon_capacity->validate_large_dog(
+                    // Calculate seats required for the appointment record.
+                    $large_dog_result = $this->salon_capacity->validate_large_dog($date, $time, $pet_size, $exclude_id);
+                    $appointment['seats_required'] = $large_dog_result['seats_required'];
+
+                    // Admin can override approval-required slots, but hard blocks still apply.
+                    $slot_result = $this->salon_capacity->is_slot_available_for_pet(
                         $date,
                         $time,
                         $pet_size,
-                        $manage_mode ? (int) $appointment['id'] : null,
-                    );
-
-                    if (!$large_dog_result['allowed'] && !$large_dog_result['requires_approval']) {
-                        throw new RuntimeException($large_dog_result['reason']);
-                    }
-
-                    $appointment['seats_required'] = $large_dog_result['seats_required'];
-
-                    // Check slot availability.
-                    $slot_result = $this->salon_capacity->is_slot_available(
-                        $date,
-                        $time,
-                        $appointment['seats_required'],
-                        $manage_mode ? (int) $appointment['id'] : null,
+                        true, // is_admin
+                        $exclude_id,
                     );
 
                     if (!$slot_result['available']) {
@@ -325,14 +317,13 @@ class Calendar extends EA_Controller
                             $date,
                             $time,
                             $appointment['seats_required'],
+                            3,
+                            $exclude_id,
+                            $pet_size,
+                            true, // is_admin
                         );
                         $alt_text = $alternatives ? ' Try: ' . implode(', ', $alternatives) : '';
                         throw new RuntimeException($slot_result['reason'] . $alt_text);
-                    }
-
-                    // Set status to pending_approval for large dogs needing owner approval.
-                    if ($large_dog_result['requires_approval']) {
-                        $appointment['status'] = 'pending_approval';
                     }
                 }
 
@@ -871,6 +862,61 @@ class Calendar extends EA_Controller
             $response['blocked_periods'] = $this->blocked_periods_model->get_for_period($start_date, $end_date);
 
             json_response($response);
+        } catch (Throwable $e) {
+            json_exception($e);
+        }
+    }
+
+    /**
+     * Get the salon capacity overview for a specific date.
+     *
+     * Returns slot occupancy, effective capacity, and daily dog count for the admin calendar sidebar.
+     */
+    public function get_capacity_overview(): void
+    {
+        try {
+            if (cannot('view', PRIV_APPOINTMENTS)) {
+                throw new RuntimeException('You do not have the required permissions for this task.');
+            }
+
+            if (!$this->salon_capacity->is_enabled()) {
+                json_response(['enabled' => false]);
+                return;
+            }
+
+            $date = request('date');
+
+            if (!$date) {
+                $date = date('Y-m-d');
+            }
+
+            $slots = $this->salon_capacity->get_all_slots();
+            $occupancy = $this->salon_capacity->get_day_occupancy($date);
+            $daily_dog_count = $this->salon_capacity->get_daily_dog_count($date);
+            $max_dogs = (int) (setting('salon_max_dogs_per_day') ?: 16);
+
+            $slot_data = [];
+
+            foreach ($slots as $slot) {
+                $effective_capacity = $this->salon_capacity->get_effective_capacity($date, $slot);
+                $used = $occupancy[$slot] ?? 0;
+
+                $slot_data[] = [
+                    'time' => $slot,
+                    'used' => $used,
+                    'capacity' => $effective_capacity,
+                    'available' => max(0, $effective_capacity - $used),
+                ];
+            }
+
+            json_response([
+                'enabled' => true,
+                'date' => $date,
+                'is_working_day' => $this->salon_capacity->is_working_day($date),
+                'slots' => $slot_data,
+                'daily_dog_count' => $daily_dog_count,
+                'daily_dog_limit' => $max_dogs,
+            ]);
         } catch (Throwable $e) {
             json_exception($e);
         }

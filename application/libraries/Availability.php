@@ -51,6 +51,8 @@ class Availability
      * @param array $service Service data.
      * @param array $provider Provider data.
      * @param int|null $exclude_appointment_id Exclude an appointment from the availability generation.
+     * @param string|null $pet_size Pet size ('small', 'medium', 'large') for salon capacity filtering.
+     * @param bool $is_admin Whether the caller is an admin (allows mid-morning large dogs).
      *
      * @return array
      *
@@ -61,6 +63,8 @@ class Availability
         array $service,
         array $provider,
         ?int $exclude_appointment_id = null,
+        ?string $pet_size = null,
+        bool $is_admin = false,
     ): array {
         if ($this->CI->blocked_periods_model->is_entire_date_blocked($date)) {
             return [];
@@ -78,9 +82,9 @@ class Availability
 
         $available_hours = $this->consider_future_booking_limit($date, $available_hours, $provider);
 
-        // Apply salon capacity rules (2-2-1 rule and daily dog limit) if salon mode is enabled.
+        // Apply salon capacity rules (2-2-1 rule, daily dog limit, large dog restrictions) if salon mode is enabled.
         if ($this->CI->salon_capacity->is_enabled()) {
-            $available_hours = $this->consider_salon_capacity($date, $available_hours, $exclude_appointment_id);
+            $available_hours = $this->consider_salon_capacity($date, $available_hours, $exclude_appointment_id, $pet_size, $is_admin);
         }
 
         return $available_hours;
@@ -89,12 +93,18 @@ class Availability
     /**
      * Filter available hours through salon capacity rules.
      *
-     * Removes slots that are at capacity per the 2-2-1 rule or daily dog limit.
-     * Uses seats_required=1 as minimum (large dog restrictions are checked at booking time).
+     * When pet_size is provided, uses is_slot_available_for_pet() which applies
+     * the full rule set (bookend-only for large dogs, early close, back-to-back
+     * restrictions, etc.) so customers only see slots they can actually book.
+     *
+     * When pet_size is not provided, falls back to is_slot_available() with
+     * seats_required=1 as a baseline filter.
      *
      * @param string $date Selected date (Y-m-d).
      * @param array $available_hours Already generated available hours.
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
+     * @param string|null $pet_size Pet size ('small', 'medium', 'large') or null if unknown.
+     * @param bool $is_admin Whether the caller is an admin.
      *
      * @return array Returns filtered available hours.
      */
@@ -102,11 +112,23 @@ class Availability
         string $date,
         array $available_hours,
         ?int $exclude_appointment_id = null,
+        ?string $pet_size = null,
+        bool $is_admin = false,
     ): array {
         $filtered = [];
 
         foreach ($available_hours as $hour) {
-            $result = $this->CI->salon_capacity->is_slot_available($date, $hour, 1, $exclude_appointment_id);
+            if ($pet_size) {
+                $result = $this->CI->salon_capacity->is_slot_available_for_pet(
+                    $date,
+                    $hour,
+                    $pet_size,
+                    $is_admin,
+                    $exclude_appointment_id,
+                );
+            } else {
+                $result = $this->CI->salon_capacity->is_slot_available($date, $hour, 1, $exclude_appointment_id);
+            }
 
             if ($result['available']) {
                 $filtered[] = $hour;

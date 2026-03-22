@@ -423,6 +423,24 @@ App.Components.AppointmentsModal = (function () {
         });
 
         /**
+         * Event: Pet "Change"
+         *
+         * Show a hint when a large dog is selected so the admin is aware of slot restrictions.
+         */
+        $selectPet.on('change', () => {
+            const $selected = $selectPet.find(':selected');
+            const size = $selected.attr('data-size') || '';
+
+            if (size === 'large') {
+                $petInfoHint.text('Large dog — 8:30 (1 seat, can share), 12:00–13:00 (2 seats, no sharing). Other slots need approval.');
+            } else if ($selected.val()) {
+                $petInfoHint.text('');
+            } else {
+                $petInfoHint.text('');
+            }
+        });
+
+        /**
          * Event: Enter New Customer Button "Click"
          */
         $newCustomer.on('click', () => {
@@ -611,7 +629,9 @@ App.Components.AppointmentsModal = (function () {
                 const sizeLabel = pet.size ? ` — ${pet.size}` : '';
                 const breedLabel = pet.breed ? ` (${pet.breed})` : '';
                 const label = `${pet.name}${breedLabel}${sizeLabel}`;
-                $selectPet.append(new Option(label, pet.id));
+                const $option = $(new Option(label, pet.id));
+                $option.attr('data-size', pet.size || 'small');
+                $selectPet.append($option);
             });
 
             // Auto-select if only one pet.

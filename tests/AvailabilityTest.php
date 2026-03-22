@@ -13,9 +13,9 @@ require_once __DIR__ . '/../application/libraries/Availability.php';
  */
 class TestableAvailability extends \Availability
 {
-    public function call_consider_salon_capacity(string $date, array $hours, ?int $exclude = null): array
+    public function call_consider_salon_capacity(string $date, array $hours, ?int $exclude = null, ?string $pet_size = null, bool $is_admin = false): array
     {
-        return $this->consider_salon_capacity($date, $hours, $exclude);
+        return $this->consider_salon_capacity($date, $hours, $exclude, $pet_size, $is_admin);
     }
 
     public function call_consider_book_advance_timeout(string $date, array $hours, array $provider): array
@@ -493,6 +493,197 @@ class AvailabilityTest extends TestCase
 
         $this->assertEmpty($hours);
     }
+
+
+    // ===================================================================
+    // Salon capacity: 13:00 early close filtering
+    // ===================================================================
+
+    public function test_consider_salon_capacity_filters_1300_when_early_close(): void
+    {
+        // Mock salon capacity to report 13:00 as unavailable (early close).
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturnCallback(function ($date, $hour) {
+                if ($hour === '13:00') {
+                    return ['available' => false, 'reason' => '13:00 is closed (early close)'];
+                }
+                return ['available' => true, 'reason' => ''];
+            });
+
+        $input = ['12:00', '12:30', '13:00'];
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', $input);
+
+        $this->assertEquals(['12:00', '12:30'], $result);
+        $this->assertNotContains('13:00', $result);
+    }
+
+    // ===================================================================
+    // Salon capacity: 2-2-1 rule via mock
+    // ===================================================================
+
+    public function test_consider_salon_capacity_filters_221_capped_slot(): void
+    {
+        // Mock: 09:30 capped to 1 and already has 1 booking (so unavailable).
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturnCallback(function ($date, $hour) {
+                if ($hour === '09:30') {
+                    return ['available' => false, 'reason' => 'Slot 09:30 at capacity (1/1)'];
+                }
+                return ['available' => true, 'reason' => ''];
+            });
+
+        $input = ['08:30', '09:00', '09:30', '10:00', '10:30'];
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', $input);
+
+        $this->assertNotContains('09:30', $result);
+        $this->assertContains('08:30', $result);
+        $this->assertContains('10:00', $result);
+    }
+
+    // ===================================================================
+    // Salon capacity: large dog mock interactions
+    // ===================================================================
+
+    public function test_salon_on_filters_multiple_full_slots_in_full_day(): void
+    {
+        // Simulate a near-full day: only 12:00 and 12:30 are available.
+        $available_slots = ['12:00', '12:30'];
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_enabled')->willReturn(true);
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturnCallback(function ($date, $hour) use ($available_slots) {
+                return [
+                    'available' => in_array($hour, $available_slots),
+                    'reason' => in_array($hour, $available_slots) ? '' : 'full',
+                ];
+            });
+
+        $hours = $this->lib->get_available_hours('2026-04-06', $this->service, $this->provider);
+
+        // Only 12:00 and 12:30 should survive from the salon filter
+        // (other hours between 08:00-16:30 are also generated but filtered out).
+        foreach ($hours as $h) {
+            $this->assertContains($h, $available_slots,
+                "$h should not appear — salon capacity says it's full");
+        }
+        $this->assertContains('12:00', $hours);
+        $this->assertContains('12:30', $hours);
+    }
+
+    // ===================================================================
+    // consider_salon_capacity with pet_size
+    // ===================================================================
+
+    public function test_consider_salon_capacity_uses_is_slot_available_for_pet_when_pet_size_given(): void
+    {
+        // When pet_size='large', non-bookend slots should be filtered out.
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available_for_pet')
+            ->willReturnCallback(function ($date, $hour, $petSize, $isAdmin, $excludeId) {
+                // Large dogs only at bookend slots.
+                $bookend = ['08:30', '09:00', '12:00', '12:30', '13:00'];
+                if ($petSize === 'large' && !in_array($hour, $bookend)) {
+                    return ['available' => false, 'reason' => 'bookend only'];
+                }
+                return ['available' => true, 'reason' => ''];
+            });
+        // is_slot_available should NOT be called when pet_size is provided.
+        $this->ci()->salon_capacity->expects($this->never())->method('is_slot_available');
+
+        $input = ['08:30', '09:00', '09:30', '10:00', '10:30', '12:00', '13:00'];
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', $input, null, 'large');
+
+        $this->assertEquals(['08:30', '09:00', '12:00', '13:00'], $result);
+        $this->assertNotContains('09:30', $result);
+        $this->assertNotContains('10:00', $result);
+        $this->assertNotContains('10:30', $result);
+    }
+
+    public function test_consider_salon_capacity_falls_back_to_is_slot_available_when_no_pet_size(): void
+    {
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        // is_slot_available should be called (no pet size, baseline filter).
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturn(['available' => true, 'reason' => '']);
+        // is_slot_available_for_pet should NOT be called.
+        $this->ci()->salon_capacity->expects($this->never())->method('is_slot_available_for_pet');
+
+        $input = ['08:30', '09:00', '10:00'];
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', $input, null, null);
+
+        $this->assertEquals($input, $result);
+    }
+
+    public function test_consider_salon_capacity_passes_is_admin_flag(): void
+    {
+        $passedArgs = [];
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available_for_pet')
+            ->willReturnCallback(function ($date, $hour, $petSize, $isAdmin, $excludeId) use (&$passedArgs) {
+                $passedArgs[] = ['hour' => $hour, 'petSize' => $petSize, 'isAdmin' => $isAdmin];
+                return ['available' => true, 'reason' => ''];
+            });
+
+        $this->lib->call_consider_salon_capacity('2026-03-16', ['10:00'], null, 'large', true);
+
+        $this->assertCount(1, $passedArgs);
+        $this->assertEquals('large', $passedArgs[0]['petSize']);
+        $this->assertTrue($passedArgs[0]['isAdmin']);
+    }
+
+    public function test_consider_salon_capacity_large_dog_with_admin_gets_all_slots(): void
+    {
+        // Admin override: all slots available for large dogs.
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available_for_pet')
+            ->willReturn(['available' => true, 'reason' => '']);
+
+        $input = ['08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '12:00', '13:00'];
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', $input, null, 'large', true);
+
+        $this->assertEquals($input, $result);
+    }
+
+    // ===================================================================
+    // get_available_hours with pet_size
+    // ===================================================================
+
+    public function test_get_available_hours_passes_pet_size_through(): void
+    {
+        // Track what consider_salon_capacity receives via the salon_capacity mock.
+        $receivedPetSizes = [];
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_enabled')->willReturn(true);
+        $this->ci()->salon_capacity->method('is_slot_available_for_pet')
+            ->willReturnCallback(function ($date, $hour, $petSize) use (&$receivedPetSizes) {
+                $receivedPetSizes[] = $petSize;
+                return ['available' => true, 'reason' => ''];
+            });
+
+        $this->lib->get_available_hours('2026-04-06', $this->service, $this->provider, null, 'large');
+
+        $this->assertNotEmpty($receivedPetSizes);
+        // Every call should have received 'large'.
+        foreach ($receivedPetSizes as $ps) {
+            $this->assertEquals('large', $ps);
+        }
+    }
+
+    public function test_get_available_hours_without_pet_size_uses_baseline_filter(): void
+    {
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_enabled')->willReturn(true);
+        // Should call is_slot_available (no pet_size), not is_slot_available_for_pet.
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturn(['available' => true, 'reason' => '']);
+        $this->ci()->salon_capacity->expects($this->never())->method('is_slot_available_for_pet');
+
+        $hours = $this->lib->get_available_hours('2026-04-06', $this->service, $this->provider, null, null);
+
+        $this->assertNotEmpty($hours);
+    }
 }
 
 // -- Stub classes for Availability tests --
@@ -553,6 +744,11 @@ class AvailStubSalonCapacity
     }
 
     public function is_slot_available(string $date, string $time, int $seats = 1, ?int $exclude = null): array
+    {
+        return ['available' => true, 'reason' => ''];
+    }
+
+    public function is_slot_available_for_pet(string $date, string $time, string $pet_size = 'small', bool $is_admin = false, ?int $exclude = null): array
     {
         return ['available' => true, 'reason' => ''];
     }

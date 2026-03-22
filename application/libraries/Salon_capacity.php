@@ -342,6 +342,53 @@ class Salon_capacity
     }
 
     /**
+     * Check if a slot is available for a specific pet size.
+     *
+     * Combines large-dog validation, seat calculation, capacity check, 2-2-1 rule,
+     * and daily maximum into a single call. When is_admin is true, slots that would
+     * normally require owner approval for large dogs are allowed.
+     *
+     * @param string $date Date (Y-m-d).
+     * @param string $time Slot time (H:i).
+     * @param string $pet_size Pet size ('small', 'medium', 'large').
+     * @param bool $is_admin Whether the caller is an admin.
+     * @param int|null $exclude_appointment_id Appointment ID to exclude.
+     *
+     * @return array Returns ['available' => bool, 'reason' => string].
+     */
+    public function is_slot_available_for_pet(
+        string $date,
+        string $time,
+        string $pet_size = 'small',
+        bool $is_admin = false,
+        ?int $exclude_appointment_id = null,
+    ): array {
+        // For large dogs, check the large-dog placement rules first.
+        if ($pet_size === 'large') {
+            $large_dog_result = $this->validate_large_dog($date, $time, $pet_size, $exclude_appointment_id);
+
+            if (!$large_dog_result['allowed']) {
+                // Admins can override slots that require approval.
+                if ($is_admin && $large_dog_result['requires_approval']) {
+                    // Allow but still use the seats_required from the validation.
+                } else {
+                    return [
+                        'available' => false,
+                        'reason' => $large_dog_result['reason'],
+                    ];
+                }
+            }
+
+            $seats_required = $large_dog_result['seats_required'];
+        } else {
+            $seats_required = 1;
+        }
+
+        // Now check basic slot availability with the correct seat count.
+        return $this->is_slot_available($date, $time, $seats_required, $exclude_appointment_id);
+    }
+
+    /**
      * Check if a slot is available for booking.
      *
      * Combines capacity check, 2-2-1 rule, and daily maximum.
@@ -396,6 +443,8 @@ class Salon_capacity
      * @param int $seats_required Seats needed.
      * @param int $max_alternatives Maximum number of alternatives to return.
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
+     * @param string|null $pet_size Pet size for pet-aware filtering.
+     * @param bool $is_admin Whether the caller is an admin.
      *
      * @return array Returns an array of available slot times.
      */
@@ -405,6 +454,8 @@ class Salon_capacity
         int $seats_required = 1,
         int $max_alternatives = 3,
         ?int $exclude_appointment_id = null,
+        ?string $pet_size = null,
+        bool $is_admin = false,
     ): array {
         $all_slots = $this->get_all_slots();
         $alternatives = [];
@@ -427,7 +478,11 @@ class Salon_capacity
                 continue;
             }
 
-            $availability = $this->is_slot_available($date, $slot, $seats_required, $exclude_appointment_id);
+            if ($pet_size) {
+                $availability = $this->is_slot_available_for_pet($date, $slot, $pet_size, $is_admin, $exclude_appointment_id);
+            } else {
+                $availability = $this->is_slot_available($date, $slot, $seats_required, $exclude_appointment_id);
+            }
 
             if ($availability['available']) {
                 $alternatives[] = $slot;

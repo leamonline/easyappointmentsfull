@@ -317,6 +317,10 @@ class Calendar extends EA_Controller
                             $date,
                             $time,
                             $appointment['seats_required'],
+                            3,
+                            $exclude_id,
+                            $pet_size,
+                            true, // is_admin
                         );
                         $alt_text = $alternatives ? ' Try: ' . implode(', ', $alternatives) : '';
                         throw new RuntimeException($slot_result['reason'] . $alt_text);

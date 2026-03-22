@@ -64,6 +64,11 @@ App.Pages.Booking = (function () {
         return ageMonths < 6;
     }
 
+    /** Get the current pet's size for capacity filtering, or null if no pet selected. */
+    function getPetSize() {
+        return selectedPet ? selectedPet.size : null;
+    }
+
     function getPriceForSize(serviceName, size) {
         const key = serviceName.toLowerCase();
         const prices = servicePrices[key];
@@ -166,7 +171,7 @@ App.Pages.Booking = (function () {
             minDate: moment().subtract(1, 'day').set({hours: 23, minutes: 59, seconds: 59}).toDate(),
             maxDate: moment().add(vars('future_booking_limit'), 'days').toDate(),
             onChange: (selectedDates) => {
-                App.Http.Booking.getAvailableHours(moment(selectedDates[0]).format('YYYY-MM-DD'));
+                App.Http.Booking.getAvailableHours(moment(selectedDates[0]).format('YYYY-MM-DD'), getPetSize());
                 updateConfirmFrame();
             },
             onMonthChange: (selectedDates, dateStr, instance) => {
@@ -182,6 +187,7 @@ App.Pages.Booking = (function () {
                         $selectProvider.val(), $selectService.val(),
                         displayedMonthMoment.format('YYYY-MM-DD'),
                         detectDatepickerMonthChangeStep(previousMoment, displayedMonthMoment),
+                        getPetSize(),
                     );
                 }, 500);
             },
@@ -196,6 +202,7 @@ App.Pages.Booking = (function () {
                         $selectProvider.val(), $selectService.val(),
                         displayedMonthMoment.format('YYYY-MM-DD'),
                         detectDatepickerMonthChangeStep(previousMoment, displayedMonthMoment),
+                        getPetSize(),
                     );
                 }, 500);
             },
@@ -284,6 +291,7 @@ App.Pages.Booking = (function () {
 
             $card.on('click', () => {
                 selectedPet = pet;
+                App.Http.Booking.setPetSize(pet.size);
                 renderDogCards();
             });
 
@@ -446,6 +454,7 @@ App.Pages.Booking = (function () {
                     }
                     bookingPets.push(response.pet);
                     selectedPet = response.pet;
+                    App.Http.Booking.setPetSize(response.pet.size);
                     renderDogCards();
                     $('#add-dog-form').slideUp();
                     $('#btn-show-add-dog').show();
@@ -465,7 +474,7 @@ App.Pages.Booking = (function () {
         $selectTimezone.on('change', () => {
             const date = App.Utils.UI.getDateTimePickerValue($selectDate);
             if (!date) return;
-            App.Http.Booking.getAvailableHours(moment(date).format('YYYY-MM-DD'));
+            App.Http.Booking.getAvailableHours(moment(date).format('YYYY-MM-DD'), getPetSize());
             updateConfirmFrame();
         });
 
@@ -476,6 +485,8 @@ App.Pages.Booking = (function () {
                 $(event.target).val(),
                 $selectService.val(),
                 moment(todayObj).format('YYYY-MM-DD'),
+                1,
+                getPetSize(),
             );
             updateConfirmFrame();
         });
@@ -520,6 +531,8 @@ App.Pages.Booking = (function () {
                 $selectProvider.val(),
                 $(event.target).val(),
                 moment(App.Utils.UI.getDateTimePickerValue($selectDate)).format('YYYY-MM-DD'),
+                1,
+                getPetSize(),
             );
 
             updateConfirmFrame();
@@ -790,11 +803,13 @@ App.Pages.Booking = (function () {
             $selectProvider.val(appointment.id_users_provider);
             const startMoment = moment(appointment.start_datetime);
             App.Utils.UI.setDateTimePickerValue($selectDate, startMoment.toDate());
-            App.Http.Booking.getAvailableHours(startMoment.format('YYYY-MM-DD'));
+            App.Http.Booking.getAvailableHours(startMoment.format('YYYY-MM-DD'), getPetSize());
             App.Http.Booking.getUnavailableDates(
                 appointment.id_users_provider,
                 appointment.id_services,
                 startMoment.format('YYYY-MM-DD'),
+                1,
+                getPetSize(),
             );
             bookingCustomer = customer;
             $bookingNotes.val(appointment.notes || '');

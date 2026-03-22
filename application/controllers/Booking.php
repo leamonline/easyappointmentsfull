@@ -689,6 +689,7 @@ class Booking extends EA_Controller
             $provider_id = request('provider_id');
             $service_id = request('service_id');
             $selected_date = request('selected_date');
+            $pet_size = request('pet_size'); // 'small', 'medium', 'large', or null
 
             // Do not continue if there was no provider selected (more likely there is no provider in the system).
 
@@ -723,6 +724,7 @@ class Booking extends EA_Controller
                         $service,
                         $provider,
                         $exclude_appointment_id,
+                        $pet_size,
                     );
 
                     $available_hours = array_merge($available_hours, $provider_available_hours);
@@ -741,6 +743,7 @@ class Booking extends EA_Controller
                     $service,
                     $provider,
                     $exclude_appointment_id,
+                    $pet_size,
                 );
             }
 
@@ -776,6 +779,7 @@ class Booking extends EA_Controller
             $selected_date = new DateTime($selected_date_string);
             $number_of_days_in_month = (int) $selected_date->format('t');
             $unavailable_dates = [];
+            $pet_size = request('pet_size'); // 'small', 'medium', 'large', or null
 
             $provider_ids =
                 $provider_id === ANY_PROVIDER ? $this->search_providers_by_service($service_id) : [$provider_id];
@@ -803,6 +807,7 @@ class Booking extends EA_Controller
                         $service,
                         $provider,
                         $exclude_appointment_id,
+                        $pet_size,
                     );
 
                     if (!empty($available_hours)) {

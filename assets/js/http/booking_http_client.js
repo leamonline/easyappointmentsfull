@@ -33,6 +33,7 @@ App.Http.Booking = (function () {
     let processingUnavailableDates = false;
     let searchedMonthStart;
     let searchedMonthCounter = 0;
+    let currentPetSize = null; // Tracks the selected pet's size for capacity filtering.
 
     /**
      * Get Available Hours
@@ -41,9 +42,15 @@ App.Http.Booking = (function () {
      * provider and date.
      *
      * @param {String} selectedDate The selected date of the available hours we need.
+     * @param {String|null} petSize The selected pet's size ('small', 'medium', 'large') or null.
      */
-    function getAvailableHours(selectedDate) {
+    function getAvailableHours(selectedDate, petSize) {
         $availableHours.empty();
+
+        // Track pet size for internal calls (e.g. applyUnavailableDates).
+        if (petSize !== undefined) {
+            currentPetSize = petSize;
+        }
 
         // Find the selected service duration (it is going to be send within the "data" object).
         const serviceId = $selectService.val();
@@ -73,6 +80,7 @@ App.Http.Booking = (function () {
             service_duration: serviceDuration,
             manage_mode: Number(vars('manage_mode') || 0),
             appointment_id: appointmentId,
+            pet_size: petSize || null,
         };
 
         $.post(url, data).done((response) => {
@@ -237,10 +245,16 @@ App.Http.Booking = (function () {
      * @param {Number} serviceId The selected service ID.
      * @param {String} selectedDateString Y-m-d value of the selected date.
      * @param {Number} [monthChangeStep] Whether to add or subtract months.
+     * @param {String|null} [petSize] The selected pet's size ('small', 'medium', 'large') or null.
      */
-    function getUnavailableDates(providerId, serviceId, selectedDateString, monthChangeStep = 1) {
+    function getUnavailableDates(providerId, serviceId, selectedDateString, monthChangeStep = 1, petSize = null) {
         if (processingUnavailableDates) {
             return;
+        }
+
+        // Track pet size for internal calls (e.g. applyUnavailableDates).
+        if (petSize !== undefined && petSize !== null) {
+            currentPetSize = petSize;
         }
 
         if (!providerId || !serviceId) {
@@ -258,6 +272,7 @@ App.Http.Booking = (function () {
             csrf_token: vars('csrf_token'),
             manage_mode: Number(App.Pages.Booking.manageMode),
             appointment_id: appointmentId,
+            pet_size: petSize || null,
         };
 
         $.ajax({
@@ -300,7 +315,7 @@ App.Http.Booking = (function () {
                     selectedDateMoment.add(1, 'month');
 
                     const nextSelectedDate = selectedDateMoment.format('YYYY-MM-DD');
-                    getUnavailableDates(providerId, serviceId, nextSelectedDate, monthChangeStep);
+                    getUnavailableDates(providerId, serviceId, nextSelectedDate, monthChangeStep, petSize);
 
                     return;
                 }
@@ -347,7 +362,7 @@ App.Http.Booking = (function () {
 
                 if (unavailableDates.indexOf(moment(currentDate).format('YYYY-MM-DD')) === -1) {
                     App.Utils.UI.setDateTimePickerValue($selectDate, currentDate);
-                    getAvailableHours(moment(currentDate).format('YYYY-MM-DD'));
+                    getAvailableHours(moment(currentDate).format('YYYY-MM-DD'), currentPetSize);
                     break;
                 }
             }
@@ -396,5 +411,13 @@ App.Http.Booking = (function () {
         getUnavailableDates,
         applyPreviousUnavailableDates,
         deletePersonalInformation,
+        /**
+         * Update the tracked pet size for capacity filtering.
+         *
+         * @param {String|null} size 'small', 'medium', 'large', or null.
+         */
+        setPetSize(size) {
+            currentPetSize = size || null;
+        },
     };
 })();

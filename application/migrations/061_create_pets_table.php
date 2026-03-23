@@ -75,10 +75,10 @@ class Migration_Create_pets_table extends EA_Migration
             $this->dbforge->create_table('pets', true);
 
             $this->db->query('
-                ALTER TABLE `pets`
+                ALTER TABLE `' . $this->db->dbprefix('pets') . '`
                 ADD CONSTRAINT `fk_pets_customers`
                 FOREIGN KEY (`id_users_customer`)
-                REFERENCES `users` (`id`)
+                REFERENCES `' . $this->db->dbprefix('users') . '` (`id`)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
             ');

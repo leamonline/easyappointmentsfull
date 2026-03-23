@@ -762,7 +762,28 @@ class Booking extends EA_Controller
                 );
             }
 
-            json_response($response);
+            // Enrich response with capacity info if salon mode is enabled.
+            if ($this->salon_capacity->is_enabled()) {
+                $capacity_info = [];
+
+                foreach ($response as $hour) {
+                    $occupancy = $this->salon_capacity->get_slot_occupancy($selected_date, $hour, $exclude_appointment_id);
+                    $capacity = $this->salon_capacity->get_effective_capacity($selected_date, $hour, $exclude_appointment_id);
+
+                    $capacity_info[$hour] = [
+                        'used' => $occupancy,
+                        'capacity' => $capacity,
+                        'available' => max(0, $capacity - $occupancy),
+                    ];
+                }
+
+                json_response([
+                    'hours' => $response,
+                    'capacity' => $capacity_info,
+                ]);
+            } else {
+                json_response($response);
+            }
         } catch (Throwable $e) {
             json_exception($e);
         }

@@ -314,6 +314,59 @@ class PetsModelTest extends TestCase
     }
 
     // =================================================================
+    //  validate() — vaccination_status is optional with free-form values
+    // =================================================================
+
+    /**
+     * Verifies that validate() passes when vaccination_status is omitted entirely.
+     * The DB ENUM default of 'unknown' is applied at the database level.
+     */
+    public function test_validate_passes_without_vaccination_status(): void
+    {
+        $pet = $this->validPet();
+        unset($pet['vaccination_status']);
+
+        $this->model->validate($pet);
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Verifies that validate() accepts 'up_to_date' as a vaccination_status value.
+     */
+    public function test_validate_accepts_vaccination_status_up_to_date(): void
+    {
+        $this->model->validate($this->validPet(['vaccination_status' => 'up_to_date']));
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Verifies that validate() accepts 'pending_second' as a vaccination_status value.
+     */
+    public function test_validate_accepts_vaccination_status_pending_second(): void
+    {
+        $this->model->validate($this->validPet(['vaccination_status' => 'pending_second']));
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Verifies that validate() accepts 'unknown' as a vaccination_status value.
+     */
+    public function test_validate_accepts_vaccination_status_unknown(): void
+    {
+        $this->model->validate($this->validPet(['vaccination_status' => 'unknown']));
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Verifies that validate() accepts null vaccination_status without throwing.
+     */
+    public function test_validate_accepts_null_vaccination_status(): void
+    {
+        $this->model->validate($this->validPet(['vaccination_status' => null]));
+        $this->assertTrue(true);
+    }
+
+    // =================================================================
     //  save() — insert path (empty id)
     // =================================================================
 
@@ -352,6 +405,22 @@ class PetsModelTest extends TestCase
         $result = $this->model->save($this->validPet(['id' => 0]));
 
         $this->assertSame(15, $result);
+    }
+
+    /**
+     * Verifies that save() inserts successfully when vaccination_status is absent.
+     * The DB ENUM default ('unknown') is applied at the database layer, not the model.
+     */
+    public function test_save_insert_succeeds_without_vaccination_status(): void
+    {
+        $this->db->setInsertId(50);
+
+        $pet = $this->validPet();
+        unset($pet['vaccination_status']);
+
+        $result = $this->model->save($pet);
+
+        $this->assertSame(50, $result);
     }
 
     /**
@@ -633,7 +702,7 @@ class PetsModelTest extends TestCase
     }
 
     // =================================================================
-    //  db_field() — API resource field mapping
+    //  API field mapping (db_field)
     // =================================================================
 
     /**

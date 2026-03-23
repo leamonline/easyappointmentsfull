@@ -116,7 +116,20 @@ class Appointments_api_v1 extends EA_Controller
             foreach ($appointments as &$appointment) {
                 $this->appointments_model->api_encode($appointment);
 
-                $this->aggregates($appointment);
+                if (request('aggregates') !== null) {
+                    $appointment['service'] = $this->services_model->find(
+                        $appointment['id_services'] ?? ($appointment['serviceId'] ?? null),
+                    );
+                    $appointment['provider'] = $this->providers_model->find(
+                        $appointment['id_users_provider'] ?? ($appointment['providerId'] ?? null),
+                    );
+                    $appointment['customer'] = $this->customers_model->find(
+                        $appointment['id_users_customer'] ?? ($appointment['customerId'] ?? null),
+                    );
+                    $this->services_model->api_encode($appointment['service']);
+                    $this->providers_model->api_encode($appointment['provider']);
+                    $this->customers_model->api_encode($appointment['customer']);
+                }
 
                 if (!empty($fields)) {
                     $this->appointments_model->only($appointment, $fields);
@@ -130,37 +143,6 @@ class Appointments_api_v1 extends EA_Controller
             json_response($appointments);
         } catch (Throwable $e) {
             json_exception($e);
-        }
-    }
-
-    /**
-     * Load the relations of the current appointment if the "aggregates" query parameter is present.
-     *
-     * This is a compatibility addition to the appointment resource which was the only one to support it.
-     *
-     * Use the "attach" query parameter instead as this one will be removed.
-     *
-     * @param array $appointment Appointment data.
-     *
-     * @deprecated Since 1.5
-     */
-    private function aggregates(array &$appointment): void
-    {
-        $aggregates = request('aggregates') !== null;
-
-        if ($aggregates) {
-            $appointment['service'] = $this->services_model->find(
-                $appointment['id_services'] ?? ($appointment['serviceId'] ?? null),
-            );
-            $appointment['provider'] = $this->providers_model->find(
-                $appointment['id_users_provider'] ?? ($appointment['providerId'] ?? null),
-            );
-            $appointment['customer'] = $this->customers_model->find(
-                $appointment['id_users_customer'] ?? ($appointment['customerId'] ?? null),
-            );
-            $this->services_model->api_encode($appointment['service']);
-            $this->providers_model->api_encode($appointment['provider']);
-            $this->customers_model->api_encode($appointment['customer']);
         }
     }
 

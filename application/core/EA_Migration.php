@@ -50,6 +50,6 @@ class EA_Migration extends CI_Migration
      */
     public function current_version(): int
     {
-        return $this->_get_version();
+        return (int) $this->_get_version();
     }
 }

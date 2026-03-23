@@ -12,6 +12,7 @@
  * ---------------------------------------------------------------------------- */
 
 use Google\Service\Calendar\Event;
+use Google\Service\Calendar\EventDateTime;
 use Google\Service\Calendar\Events;
 
 /**
@@ -164,13 +165,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($appointment['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime((new DateTime($appointment['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339));
         $event->setEnd($end);
 
@@ -226,13 +227,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($appointment['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime((new DateTime($appointment['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339));
         $event->setEnd($end);
 
@@ -284,13 +285,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($unavailability['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime(
             (new DateTime($unavailability['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
@@ -322,13 +323,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($unavailability['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime(
             (new DateTime($unavailability['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );

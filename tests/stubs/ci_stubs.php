@@ -59,6 +59,7 @@ if (!class_exists('EA_Model')) {
     class EA_Model extends CI_Model
     {
         protected array $casts = [];
+        protected array $api_resource = [];
 
         public function __construct()
         {
@@ -84,6 +85,11 @@ if (!class_exists('EA_Model')) {
         protected function quote_order_by(string $order_by): string
         {
             return $order_by;
+        }
+
+        public function db_field(string $api_field): ?string
+        {
+            return $this->api_resource[$api_field] ?? null;
         }
     }
 }

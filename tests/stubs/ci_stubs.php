@@ -18,6 +18,14 @@ if (!function_exists('setting')) {
     }
 }
 
+// Stub the random_string() helper (used by Appointments_model::insert).
+if (!function_exists('random_string')) {
+    function random_string(string $type = 'alnum', int $len = 8): string
+    {
+        return str_repeat('a', $len);
+    }
+}
+
 // Stub BASEPATH constant.
 if (!defined('BASEPATH')) {
     define('BASEPATH', __DIR__ . '/../../system/');

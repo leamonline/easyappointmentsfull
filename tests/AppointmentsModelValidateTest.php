@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 // Require the model under test.
+require_once __DIR__ . '/stubs/MockDb.php';
 require_once __DIR__ . '/../application/models/Appointments_model.php';
 
 /**
@@ -300,6 +301,156 @@ class AppointmentsModelValidateTest extends TestCase
 
         // Should NOT throw — unavailability skips customer/service/pet/seats validation.
         $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
+    // ===================================================================
+    // Datetime validation
+    // ===================================================================
+
+    public function test_invalid_start_datetime_throws(): void
+    {
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = 'not-a-date';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('start date time is invalid');
+
+        $this->model->validate($appt);
+    }
+
+    public function test_invalid_end_datetime_throws(): void
+    {
+        $appt = $this->validAppointment;
+        $appt['end_datetime'] = 'not-a-date';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('end date time is invalid');
+
+        $this->model->validate($appt);
+    }
+
+    public function test_start_after_end_throws(): void
+    {
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 11:00:00';
+        $appt['end_datetime'] = '2026-04-06 10:00:00';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('duration cannot be less than');
+
+        $this->model->validate($appt);
+    }
+
+    public function test_equal_start_and_end_throws(): void
+    {
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 10:00:00';
+        $appt['end_datetime'] = '2026-04-06 10:00:00';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('duration cannot be less than');
+
+        $this->model->validate($appt);
+    }
+
+    // ===================================================================
+    // save() — insert path (no id)
+    // ===================================================================
+
+    /**
+     * Create a MockDb pre-configured so all validate() existence checks pass.
+     */
+    private function createMockDbForSave(): \MockDb
+    {
+        $db = new \MockDb();
+        $db->setNumRows(1);
+
+        return $db;
+    }
+
+    public function test_save_insert_returns_new_id(): void
+    {
+        $db = $this->createMockDbForSave();
+        $db->setInsertId(42);
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $result = $this->model->save($this->validAppointment);
+
+        $this->assertSame(42, $result);
+    }
+
+    public function test_save_insert_with_null_id_returns_new_id(): void
+    {
+        $db = $this->createMockDbForSave();
+        $db->setInsertId(10);
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $appt = $this->validAppointment;
+        $appt['id'] = null;
+
+        $result = $this->model->save($appt);
+
+        $this->assertSame(10, $result);
+    }
+
+    // ===================================================================
+    // save() — update path (existing id)
+    // ===================================================================
+
+    public function test_save_update_returns_existing_id(): void
+    {
+        $db = $this->createMockDbForSave();
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $appt = $this->validAppointment;
+        $appt['id'] = 7;
+
+        $result = $this->model->save($appt);
+
+        $this->assertSame(7, $result);
+    }
+
+    public function test_save_update_throws_on_failed_update(): void
+    {
+        $db = $this->createMockDbForSave();
+        $db->setLastQuerySuccess(false);
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $appt = $this->validAppointment;
+        $appt['id'] = 7;
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not update appointment');
+
+        $this->model->save($appt);
+    }
+
+    // ===================================================================
+    // delete()
+    // ===================================================================
+
+    public function test_delete_completes_without_error(): void
+    {
+        $db = $this->createMockDbForSave();
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $this->model->delete(5);
+        $this->assertTrue(true);
+    }
+
+    public function test_delete_with_nonexistent_id_does_not_throw(): void
+    {
+        $db = $this->createMockDbForSave();
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $this->model->delete(9999);
         $this->assertTrue(true);
     }
 }

@@ -196,6 +196,26 @@ class AppointmentsModelValidateTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_valid_appointment_with_zero_pet_id_passes(): void
+    {
+        // id_pets = 0 is falsy — empty(0) is true, so pet validation is skipped.
+        $appt = $this->validAppointment;
+        $appt['id_pets'] = 0;
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
+    public function test_valid_appointment_with_empty_string_pet_id_passes(): void
+    {
+        // id_pets = '' is falsy — empty('') is true, so pet validation is skipped.
+        $appt = $this->validAppointment;
+        $appt['id_pets'] = '';
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
     // ===================================================================
     // seats_required validation
     // ===================================================================
@@ -288,6 +308,33 @@ class AppointmentsModelValidateTest extends TestCase
         $this->model->validate($appt);
     }
 
+    public function test_seats_required_null_defaults_to_1(): void
+    {
+        // Explicit null — the ?? operator defaults to 1.
+        $appt = $this->validAppointment;
+        $appt['seats_required'] = null;
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
+    public function test_seats_required_2_with_large_dog_appointment_passes(): void
+    {
+        // Scenario: large dog occupies two slots across 12:00–13:00.
+        $petRow = ['id' => 10, 'id_users_customer' => 100];
+        $this->ci()->db = $this->createDbMockWithPet($petRow);
+        $this->model = new \Appointments_model();
+
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 12:00:00';
+        $appt['end_datetime'] = '2026-04-06 13:00:00';
+        $appt['id_pets'] = 10;
+        $appt['seats_required'] = 2;
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
     // ===================================================================
     // Unavailability appointments skip pet/seats validation
     // ===================================================================
@@ -354,6 +401,41 @@ class AppointmentsModelValidateTest extends TestCase
         $this->model->validate($appt);
     }
 
+    public function test_valid_start_before_end_passes(): void
+    {
+        // Explicit positive test: start < end with sufficient duration.
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 09:00:00';
+        $appt['end_datetime'] = '2026-04-06 09:30:00';
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
+    public function test_duration_exactly_minimum_passes(): void
+    {
+        // EVENT_MINIMUM_DURATION is 5 minutes — boundary should pass.
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 10:00:00';
+        $appt['end_datetime'] = '2026-04-06 10:05:00';
+
+        $this->model->validate($appt);
+        $this->assertTrue(true);
+    }
+
+    public function test_duration_below_minimum_throws(): void
+    {
+        // 4-minute duration is below EVENT_MINIMUM_DURATION (5 minutes).
+        $appt = $this->validAppointment;
+        $appt['start_datetime'] = '2026-04-06 10:00:00';
+        $appt['end_datetime'] = '2026-04-06 10:04:00';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('duration cannot be less than');
+
+        $this->model->validate($appt);
+    }
+
     // ===================================================================
     // save() — insert path (no id)
     // ===================================================================
@@ -394,6 +476,19 @@ class AppointmentsModelValidateTest extends TestCase
         $result = $this->model->save($appt);
 
         $this->assertSame(10, $result);
+    }
+
+    public function test_save_insert_throws_on_failed_insert(): void
+    {
+        $db = $this->createMockDbForSave();
+        $db->setLastQuerySuccess(false);
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not insert appointment');
+
+        $this->model->save($this->validAppointment);
     }
 
     // ===================================================================
@@ -451,6 +546,18 @@ class AppointmentsModelValidateTest extends TestCase
         $this->model = new \Appointments_model();
 
         $this->model->delete(9999);
+        $this->assertTrue(true);
+    }
+
+    public function test_delete_does_not_throw_for_appointment_with_pet(): void
+    {
+        // Appointment linked to a pet — delete runs a simple DELETE query.
+        // The ON DELETE SET NULL cascade is handled at the DB level.
+        $db = $this->createMockDbForSave();
+        $this->ci()->db = $db;
+        $this->model = new \Appointments_model();
+
+        $this->model->delete(5);
         $this->assertTrue(true);
     }
 }

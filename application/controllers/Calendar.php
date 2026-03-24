@@ -335,7 +335,7 @@ class Calendar extends EA_Controller
 
                 $this->appointments_model->optional($appointment, $this->optional_appointment_fields);
 
-                $appointment['id'] = $this->appointments_model->save($appointment);
+                $appointment['id'] = $this->appointments_model->save($appointment, ['is_admin' => true]);
             }
 
             if (empty($appointment['id'])) {

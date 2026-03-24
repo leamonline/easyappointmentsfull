@@ -62,9 +62,9 @@ class Appointments_model extends EA_Model
      *
      * @throws InvalidArgumentException
      */
-    public function save(array $appointment): int
+    public function save(array $appointment, array $options = []): int
     {
-        $this->validate($appointment);
+        $this->validate($appointment, $options);
 
         if (empty($appointment['id'])) {
             return $this->insert($appointment);
@@ -80,7 +80,7 @@ class Appointments_model extends EA_Model
      *
      * @throws InvalidArgumentException
      */
-    public function validate(array $appointment): void
+    public function validate(array $appointment, array $options = []): void
     {
         // If an appointment ID is provided then check whether the record really exists in the database.
         if (!empty($appointment['id'])) {
@@ -180,6 +180,19 @@ class Appointments_model extends EA_Model
                     throw new InvalidArgumentException(
                         'The pet does not belong to the appointment customer.',
                     );
+                }
+
+                // Vaccination gate: block unvaccinated puppies unless admin override.
+                $is_admin = $options['is_admin'] ?? false;
+
+                if (!$is_admin) {
+                    $this->load->model('pets_model');
+
+                    if ($this->pets_model->is_puppy_needing_vaccination($pet)) {
+                        throw new InvalidArgumentException(
+                            'Puppies must have completed their second vaccinations before booking.',
+                        );
+                    }
                 }
             }
 

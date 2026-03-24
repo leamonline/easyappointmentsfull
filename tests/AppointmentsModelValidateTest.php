@@ -7,7 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 // Require the model under test.
 require_once __DIR__ . '/stubs/MockDb.php';
+require_once __DIR__ . '/../application/helpers/validation_helper.php';
 require_once __DIR__ . '/../application/models/Appointments_model.php';
+require_once __DIR__ . '/../application/models/Pets_model.php';
 
 /**
  * Tests for Appointments_model::validate() — id_pets and seats_required validations.
@@ -35,6 +37,8 @@ class AppointmentsModelValidateTest extends TestCase
         $ci = new \EA_Controller();
         $ci->load = new AppointmentsStubLoader();
         $ci->db = $this->createPassingDbMock();
+
+        $ci->pets_model = new \Pets_model();
 
         $GLOBALS['_ci_instance'] = $ci;
 
@@ -560,6 +564,213 @@ class AppointmentsModelValidateTest extends TestCase
         $this->model->delete(5);
         $this->assertTrue(true);
     }
+
+    // ===================================================================
+    // Vaccination gate
+    // ===================================================================
+
+    /**
+     * Set up CI instance with a pet row for vaccination gate tests.
+     * The Pets_model is attached to the CI instance so load->model() finds it.
+     */
+    private function setupVaccinationTest(array $petRow): void
+    {
+        $this->ci()->db = $this->createDbMockWithPet($petRow);
+
+        $pets_model = new \Pets_model();
+        $this->ci()->pets_model = $pets_model;
+
+        $this->model = new \Appointments_model();
+    }
+
+    private function puppyAppointment(int $petId = 5): array
+    {
+        $appt = $this->validAppointment;
+        $appt['id_pets'] = $petId;
+
+        return $appt;
+    }
+
+    public function test_puppy_with_unknown_vaccination_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '4 months',
+            'breed' => 'Labrador',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
+
+    public function test_puppy_with_pending_first_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '3 months',
+            'breed' => 'Poodle',
+            'vaccination_status' => 'pending_first',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
+
+    public function test_puppy_with_pending_second_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '5 months',
+            'breed' => 'Beagle',
+            'vaccination_status' => 'pending_second',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
+
+    public function test_puppy_with_up_to_date_passes(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '4 months',
+            'breed' => 'Labrador',
+            'vaccination_status' => 'up_to_date',
+        ]);
+
+        $this->model->validate($this->puppyAppointment());
+        $this->assertTrue(true);
+    }
+
+    public function test_adult_with_unknown_vaccination_passes(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '2 years',
+            'breed' => 'Labrador',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->model->validate($this->puppyAppointment());
+        $this->assertTrue(true);
+    }
+
+    public function test_breed_puppy_indicator_with_unknown_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => null,
+            'breed' => 'Labrador puppy',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
+
+    public function test_age_field_puppy_with_pending_first_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => 'puppy',
+            'breed' => 'Spaniel',
+            'vaccination_status' => 'pending_first',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
+
+    public function test_admin_override_bypasses_vaccination_gate(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '4 months',
+            'breed' => 'Labrador',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->model->validate($this->puppyAppointment(), ['is_admin' => true]);
+        $this->assertTrue(true);
+    }
+
+    public function test_null_age_no_breed_indicator_passes(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => null,
+            'breed' => 'Labrador',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->model->validate($this->puppyAppointment());
+        $this->assertTrue(true);
+    }
+
+    public function test_unparseable_age_no_breed_indicator_passes(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => 'old boy',
+            'breed' => 'Poodle',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        $this->model->validate($this->puppyAppointment());
+        $this->assertTrue(true);
+    }
+
+    public function test_six_months_exactly_passes(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '6 months',
+            'breed' => 'Labrador',
+            'vaccination_status' => 'unknown',
+        ]);
+
+        // 6.0 is NOT < 6.0, so this should pass.
+        $this->model->validate($this->puppyAppointment());
+        $this->assertTrue(true);
+    }
+
+    public function test_weeks_under_six_months_throws(): void
+    {
+        $this->setupVaccinationTest([
+            'id' => 5,
+            'id_users_customer' => 100,
+            'age' => '8 weeks',
+            'breed' => 'Terrier',
+            'vaccination_status' => 'pending_first',
+        ]);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Puppies must have completed their second vaccinations before booking.');
+
+        $this->model->validate($this->puppyAppointment());
+    }
 }
 
 // -- Stub classes --
@@ -568,6 +779,11 @@ class AppointmentsStubLoader
 {
     public function model(string $name): void
     {
+        // Attach the model instance to the CI controller if already set.
+        $ci = $GLOBALS['_ci_instance'] ?? null;
+        if ($ci && isset($ci->{$name})) {
+            return; // already loaded
+        }
     }
 
     public function library(string $name): void

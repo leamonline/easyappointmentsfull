@@ -21,7 +21,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         # CodeIgniter 3 dynamic property access via __get magic on controllers/models
-        - '#Access to an undefined property (EA_Controller|CI_Controller|Booking|Calendar|Customers|Pets|Reports|Providers|Services|Admins|Secretaries|Backend_api|Backend|Webhooks|Blocked_periods)\:\:\$#'
+        - '#Access to an undefined property (EA_Controller|CI_Controller|Booking|Calendar|Customers|Pets|Reports|Providers|Services|Admins|Secretaries|Backend_api|Backend|Webhooks|Blocked_periods|Appointments_model)\:\:\$#'
         # CI3 helper functions loaded dynamically at runtime
         - '#Function (site_url|redirect|base_url|random_string|write_file|config|html_purify|is_assoc|array_fields|slot_hour|setting|validate_datetime) not found\.#'
         # CI3 EA_Model abstract method calls resolved by child classes

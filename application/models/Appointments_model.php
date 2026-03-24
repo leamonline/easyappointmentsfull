@@ -57,6 +57,7 @@ class Appointments_model extends EA_Model
      * Save (insert or update) an appointment.
      *
      * @param array<string, mixed> $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $options
      *
      * @return int Returns the appointment ID.
      *
@@ -77,6 +78,7 @@ class Appointments_model extends EA_Model
      * Validate the appointment data.
      *
      * @param array<string, mixed> $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $options
      *
      * @throws InvalidArgumentException
      */

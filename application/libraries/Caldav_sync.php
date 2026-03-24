@@ -56,10 +56,10 @@ class Caldav_sync
     /**
      * Add an appointment record to the connected CalDAV calendar.
      *
-     * @param array $appointment Appointment record.
-     * @param array $service Service record.
-     * @param array $provider Provider record.
-     * @param array $customer Customer record.
+     * @param array<string, mixed> $appointment Appointment record.
+     * @param array<string, mixed> $service Service record.
+     * @param array<string, mixed> $provider Provider record.
+     * @param array<string, mixed> $customer Customer record.
      *
      * @return string|null Returns the event ID
      *
@@ -94,8 +94,8 @@ class Caldav_sync
     /**
      * Add an unavailability record to the connected CalDAV calendar.
      *
-     * @param array $unavailability Appointment record.
-     * @param array $provider Provider record.
+     * @param array<string, mixed> $unavailability Appointment record.
+     * @param array<string, mixed> $provider Provider record.
      *
      * @return string|null Returns the event ID
      *
@@ -134,7 +134,7 @@ class Caldav_sync
     /**
      * Delete an existing appointment from Caldav Calendar.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param string $caldav_event_id The Caldav Calendar event ID to be removed.
      */
     public function delete_event(array $provider, string $caldav_event_id): void
@@ -153,10 +153,10 @@ class Caldav_sync
     /**
      * Get a Caldav Calendar event.
      *
-     * @param array $provider Provider Data.
+     * @param array<string, mixed> $provider Provider Data.
      * @param string $caldav_event_id CalDAV calendar event ID.
      *
-     * @return array|null
+     * @return array<string, mixed>|null
      * @throws Exception If there’s an issue parsing the ICS data.
      */
     public function get_event(array $provider, string $caldav_event_id): ?array
@@ -184,11 +184,11 @@ class Caldav_sync
     /**
      * Get all the events between the sync period.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param string $start_date_time The start date of sync period.
      * @param string $end_date_time The end date of sync period.
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      * @throws Exception If there's an issue with event fetching or parsing.
      */
     public function get_sync_events(array $provider, string $start_date_time, string $end_date_time): array
@@ -224,6 +224,14 @@ class Caldav_sync
         }
     }
 
+    /**
+     * @param SimpleXMLElement $xml
+     * @param string $start_date_time
+     * @param string $end_date_time
+     * @param DateTimeZone $timezone
+     *
+     * @return array<int, array<string, mixed>>
+     */
     private function parse_xml_events(
         SimpleXMLElement $xml,
         string $start_date_time,
@@ -244,6 +252,11 @@ class Caldav_sync
         return $events;
     }
 
+    /**
+     * @param string $body
+     *
+     * @return array<int, string>
+     */
     private function extract_ics_file_urls(string $body): array
     {
         $ics_files = [];
@@ -260,12 +273,12 @@ class Caldav_sync
      * Fetch and parse the ICS files from the remote server
      *
      * @param Client $client
-     * @param array $ics_file_urls
+     * @param array<int, string> $ics_file_urls
      * @param string $start_date_time
      * @param string $end_date_time
      * @param DateTimeZone $timezone_OBJECT
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     private function fetch_and_parse_ics_files(
         Client $client,
@@ -302,6 +315,14 @@ class Caldav_sync
         return $events;
     }
 
+    /**
+     * @param string $ics_contents
+     * @param string $start_date_time
+     * @param string $end_date_time
+     * @param DateTimeZone $timezone_object
+     *
+     * @return array<int, array<string, mixed>>
+     */
     private function expand_ics_content(
         string $ics_contents,
         string $start_date_time,
@@ -434,6 +455,11 @@ class Caldav_sync
     }
 
     /**
+     * @param array<string, mixed> $appointment
+     * @param array<string, mixed> $service
+     * @param array<string, mixed> $provider
+     * @param array<string, mixed> $customer
+     *
      * @throws CalendarEventException
      */
     private function get_appointment_ics_file(
@@ -448,6 +474,9 @@ class Caldav_sync
     }
 
     /**
+     * @param array<string, mixed> $unavailability
+     * @param array<string, mixed> $provider
+     *
      * @throws CalendarEventException
      */
     private function get_unavailability_ics_file(array $unavailability, array $provider): string
@@ -496,7 +525,7 @@ class Caldav_sync
      * @param VEvent $vevent Holds the VEVENT information
      * @param DateTimeZone $timezone_object The date timezone values
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Throwable
      */

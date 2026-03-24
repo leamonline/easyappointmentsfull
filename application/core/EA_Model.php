@@ -42,7 +42,7 @@
 class EA_Model extends CI_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [];
 
@@ -80,7 +80,7 @@ class EA_Model extends CI_Model
      *
      * @param int $record_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the record data.
+     * @return array<string, mixed> Returns an array with the record data.
      *
      * @throws InvalidArgumentException
      *
@@ -98,12 +98,12 @@ class EA_Model extends CI_Model
     /**
      * Get all records that match the provided criteria.
      *
-     * param array|string $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of records.
+     * @return array<int, array<string, mixed>> Returns an array of records.
      */
     public function get_batch($where = null, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -113,7 +113,7 @@ class EA_Model extends CI_Model
     /**
      * Save (insert or update) a record.
      *
-     * @param array $record Associative array with the record data.
+     * @param array<string, mixed> $record Associative array with the record data.
      *
      * @return int Returns the record ID.
      *
@@ -130,9 +130,11 @@ class EA_Model extends CI_Model
      * The integrated MySQL library will return all values as strings, something that can easily becoming problematic,
      * especially when comparing database values.
      *
-     * @param array $record Record data.
+     * @param array<string, mixed> $record Record data.
+     *
+     * @return void
      */
-    public function cast(array &$record)
+    public function cast(array &$record): void
     {
         foreach ($this->casts as $attribute => $cast) {
             if (!isset($record[$attribute])) {
@@ -165,10 +167,12 @@ class EA_Model extends CI_Model
     /**
      * Only keep the requested fields of the provided record.
      *
-     * @param array $record Record data (single or multiple records).
-     * @param array $fields Requested field names.
+     * @param array<string, mixed> $record Record data (single or multiple records).
+     * @param array<int, string> $fields Requested field names.
+     *
+     * @return void
      */
-    public function only(array &$record, array $fields)
+    public function only(array &$record, array $fields): void
     {
         if (is_assoc($record)) {
             $record = array_fields($record, $fields);
@@ -182,10 +186,12 @@ class EA_Model extends CI_Model
     /**
      * Ensure a field exists in an array by using its value or NULL.
      *
-     * @param array $record Record data (single or multiple records).
-     * @param array $fields Requested field names.
+     * @param array<string, mixed> $record Record data (single or multiple records).
+     * @param array<string, mixed> $fields Requested field names.
+     *
+     * @return void
      */
-    public function optional(array &$record, array $fields)
+    public function optional(array &$record, array $fields): void
     {
         if (is_assoc($record)) {
             foreach ($fields as $field => $default) {

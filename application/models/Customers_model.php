@@ -21,7 +21,7 @@
 class Customers_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -30,7 +30,7 @@ class Customers_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -58,7 +58,7 @@ class Customers_model extends EA_Model
     /**
      * Save (insert or update) a customer.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @return int Returns the customer ID.
      *
@@ -82,7 +82,7 @@ class Customers_model extends EA_Model
     /**
      * Validate the customer data.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @throws InvalidArgumentException
      */
@@ -150,12 +150,12 @@ class Customers_model extends EA_Model
     /**
      * Get all customers that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of customers.
+     * @return array<int, array<string, mixed>> Returns an array of customers.
      */
     public function get(
         array|string|null $where = null,
@@ -201,7 +201,7 @@ class Customers_model extends EA_Model
     /**
      * Check if a particular customer record already exists in the database.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @return bool Returns whether there is a record matching the provided one or not.
      *
@@ -228,7 +228,7 @@ class Customers_model extends EA_Model
     /**
      * Find the record ID of a customer.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @return int Returns the ID of the record that matches the provided argument.
      *
@@ -259,7 +259,7 @@ class Customers_model extends EA_Model
     /**
      * Insert a new customer into the database.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @return int Returns the customer ID.
      *
@@ -281,7 +281,7 @@ class Customers_model extends EA_Model
     /**
      * Update an existing customer.
      *
-     * @param array $customer Associative array with the customer data.
+     * @param array<string, mixed> $customer Associative array with the customer data.
      *
      * @return int Returns the customer ID.
      *
@@ -315,7 +315,7 @@ class Customers_model extends EA_Model
      *
      * @param int $customer_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the customer data.
+     * @return array<string, mixed> Returns an array with the customer data.
      */
     public function find(int $customer_id): array
     {
@@ -393,7 +393,7 @@ class Customers_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of customers.
+     * @return array<int, array<string, mixed>> Returns an array of customers.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -432,12 +432,12 @@ class Customers_model extends EA_Model
     /**
      * Load related resources to a customer.
      *
-     * @param array $customer Associative array with the customer data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $customer Associative array with the customer data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$customer, array $resources)
+    public function load(array &$customer, array $resources): void
     {
         if (empty($customer) || empty($resources)) {
             return;
@@ -457,7 +457,7 @@ class Customers_model extends EA_Model
     /**
      * Convert the database customer record to the equivalent API resource.
      *
-     * @param array $customer Customer data.
+     * @param array<string, mixed> $customer Customer data.
      */
     public function api_encode(array &$customer): void
     {
@@ -487,8 +487,8 @@ class Customers_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database admin record.
      *
-     * @param array $customer API resource.
-     * @param array|null $base Base customer data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $customer API resource.
+     * @param array<string, mixed>|null $base Base customer data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$customer, ?array $base = null): void
     {

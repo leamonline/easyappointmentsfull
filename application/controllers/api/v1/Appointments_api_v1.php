@@ -219,7 +219,7 @@ class Appointments_api_v1 extends EA_Controller
     /**
      * Send the required notifications and trigger syncing after saving an appointment.
      *
-     * @param array $appointment Appointment data.
+     * @param array<string, mixed> $appointment Appointment data.
      * @param string $action Performed action ("store" or "update").
      */
     private function notify_and_sync_appointment(array $appointment, string $action = 'store'): void

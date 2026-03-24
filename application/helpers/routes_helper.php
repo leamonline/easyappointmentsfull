@@ -15,7 +15,7 @@ if (!function_exists('route_api_resource')) {
     /**
      * Define a route for an API resource (includes index, store, update and delete callbacks).
      *
-     * @param array $route Route config.
+     * @param array<string, mixed> $route Route config.
      * @param string $resource Resource name.
      * @param string $prefix URL prefix (e.g. api/v1/).
      */

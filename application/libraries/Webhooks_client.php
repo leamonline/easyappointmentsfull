@@ -47,11 +47,11 @@ class Webhooks_client
      * Trigger the registered webhooks for the provided action.
      *
      * @param string $action Webhook action.
-     * @param array $payload Payload data.
+     * @param array<string, mixed> $payload Payload data.
      *
-     * @return void|null
+     * @return void
      */
-    public function trigger(string $action, array $payload)
+    public function trigger(string $action, array $payload): void
     {
         $webhooks = $this->CI->webhooks_model->get();
 
@@ -65,9 +65,9 @@ class Webhooks_client
     /**
      * Call the provided webhook.
      *
-     * @param array $webhook
+     * @param array<string, mixed> $webhook
      * @param string $action
-     * @param array $payload
+     * @param array<string, mixed> $payload
      */
     private function call(array $webhook, string $action, array $payload): void
     {

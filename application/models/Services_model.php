@@ -21,7 +21,7 @@
 class Services_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -33,7 +33,7 @@ class Services_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -54,7 +54,7 @@ class Services_model extends EA_Model
     /**
      * Save (insert or update) a service.
      *
-     * @param array $service Associative array with the service data.
+     * @param array<string, mixed> $service Associative array with the service data.
      *
      * @return int Returns the service ID.
      *
@@ -74,7 +74,7 @@ class Services_model extends EA_Model
     /**
      * Validate the service data.
      *
-     * @param array $service Associative array with the service data.
+     * @param array<string, mixed> $service Associative array with the service data.
      *
      * @throws InvalidArgumentException
      */
@@ -156,7 +156,7 @@ class Services_model extends EA_Model
     /**
      * Insert a new service into the database.
      *
-     * @param array $service Associative array with the service data.
+     * @param array<string, mixed> $service Associative array with the service data.
      *
      * @return int Returns the service ID.
      *
@@ -177,7 +177,7 @@ class Services_model extends EA_Model
     /**
      * Update an existing service.
      *
-     * @param array $service Associative array with the service data.
+     * @param array<string, mixed> $service Associative array with the service data.
      *
      * @return int Returns the service ID.
      *
@@ -211,7 +211,7 @@ class Services_model extends EA_Model
      *
      * @param int $service_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the service data.
+     * @return array<string, mixed> Returns an array with the service data.
      *
      * @throws InvalidArgumentException
      */
@@ -272,7 +272,7 @@ class Services_model extends EA_Model
      *
      * @param bool $without_private Only include the public services.
      *
-     * @return array Returns an array of services.
+     * @return array<int, array<string, mixed>> Returns an array of services.
      */
     public function get_available_services(bool $without_private = false): array
     {
@@ -302,12 +302,12 @@ class Services_model extends EA_Model
     /**
      * Get all services that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of services.
+     * @return array<int, array<string, mixed>> Returns an array of services.
      */
     public function get(
         array|string|null $where = null,
@@ -350,7 +350,7 @@ class Services_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of services.
+     * @return array<int, array<string, mixed>> Returns an array of services.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -377,8 +377,8 @@ class Services_model extends EA_Model
     /**
      * Load related resources to a service.
      *
-     * @param array $service Associative array with the service data.
-     * @param array $resources Resource names to be attached ("category" supported).
+     * @param array<string, mixed> $service Associative array with the service data.
+     * @param string[] $resources Resource names to be attached ("category" supported).
      *
      * @throws InvalidArgumentException
      */
@@ -405,7 +405,7 @@ class Services_model extends EA_Model
     /**
      * Convert the database service record to the equivalent API resource.
      *
-     * @param array $service Service data.
+     * @param array<string, mixed> $service Service data.
      */
     public function api_encode(array &$service): void
     {
@@ -430,8 +430,8 @@ class Services_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database service record.
      *
-     * @param array $service API resource.
-     * @param array|null $base Base service data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $service API resource.
+     * @param array<string, mixed>|null $base Base service data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$service, ?array $base = null): void
     {

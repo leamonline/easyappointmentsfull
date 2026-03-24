@@ -21,14 +21,14 @@
 class Settings_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'name' => 'name',
@@ -38,7 +38,7 @@ class Settings_model extends EA_Model
     /**
      * Save (insert or update) a setting.
      *
-     * @param array $setting Associative array with the setting data.
+     * @param array<string, mixed> $setting Associative array with the setting data.
      *
      * @return int Returns the setting ID.
      *
@@ -58,7 +58,7 @@ class Settings_model extends EA_Model
     /**
      * Validate the setting data.
      *
-     * @param array $setting Associative array with the setting data.
+     * @param array<string, mixed> $setting Associative array with the setting data.
      *
      * @throws InvalidArgumentException
      */
@@ -84,7 +84,7 @@ class Settings_model extends EA_Model
     /**
      * Insert a new setting into the database.
      *
-     * @param array $setting Associative array with the setting data.
+     * @param array<string, mixed> $setting Associative array with the setting data.
      *
      * @return int Returns the setting ID.
      *
@@ -105,7 +105,7 @@ class Settings_model extends EA_Model
     /**
      * Update an existing setting.
      *
-     * @param array $setting Associative array with the setting data.
+     * @param array<string, mixed> $setting Associative array with the setting data.
      *
      * @return int Returns the setting ID.
      *
@@ -139,7 +139,7 @@ class Settings_model extends EA_Model
      *
      * @param int $setting_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the setting data.
+     * @return array<string, mixed> Returns an array with the setting data.
      *
      * @throws InvalidArgumentException
      */
@@ -213,7 +213,7 @@ class Settings_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of settings.
+     * @return array<int, array<string, mixed>> Returns an array of settings.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -240,12 +240,12 @@ class Settings_model extends EA_Model
     /**
      * Get all settings that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of settings.
+     * @return array<int, array<string, mixed>> Returns an array of settings.
      */
     public function get(
         array|string|null $where = null,
@@ -273,12 +273,12 @@ class Settings_model extends EA_Model
     /**
      * Load related resources to a setting.
      *
-     * @param array $setting Associative array with the setting data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $setting Associative array with the setting data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$setting, array $resources)
+    public function load(array &$setting, array $resources): void
     {
         // Users do not currently have any related resources.
     }
@@ -286,7 +286,7 @@ class Settings_model extends EA_Model
     /**
      * Convert the database setting record to the equivalent API resource.
      *
-     * @param array $setting Setting data.
+     * @param array<string, mixed> $setting Setting data.
      */
     public function api_encode(array &$setting): void
     {
@@ -301,8 +301,8 @@ class Settings_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database setting record.
      *
-     * @param array $setting API resource.
-     * @param array|null $base Base setting data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $setting API resource.
+     * @param array<string, mixed>|null $base Base setting data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$setting, ?array $base = null): void
     {

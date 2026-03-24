@@ -43,7 +43,7 @@ if (!function_exists('component')) {
      * echo component('timezones_dropdown', ['attributes' => 'class"form-control"'], TRUE);
      *
      * @param string $component Component template file name.
-     * @param array $vars Additional parameters for the component.
+     * @param array<string, mixed> $vars Additional parameters for the component.
      * @param bool $return Whether to return the HTML or echo it directly.
      *
      * @return string|object Return the HTML if the $return argument is TRUE or NULL.
@@ -61,9 +61,9 @@ if (!function_exists('extend')) {
     /**
      * Use this function at the top of view files to mark the layout you are extending from.
      *
-     * @param $layout
+     * @param string $layout
      */
-    function extend($layout): void
+    function extend(string $layout): void
     {
         config([
             'layout' => [

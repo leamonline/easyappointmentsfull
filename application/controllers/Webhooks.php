@@ -20,6 +20,7 @@
  */
 class Webhooks extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_webhook_fields = [
         'id',
         'name',
@@ -31,6 +32,7 @@ class Webhooks extends EA_Controller
         'notes',
     ];
 
+    /** @var string[] */
     public array $optional_webhook_fields = [
         //
     ];

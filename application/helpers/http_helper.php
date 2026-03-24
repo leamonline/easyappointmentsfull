@@ -55,7 +55,7 @@ if (!function_exists('response')) {
      *
      * @param string $content
      * @param int $status
-     * @param array $headers
+     * @param array<string, string> $headers
      */
     function response(string $content = '', int $status = 200, array $headers = []): void
     {
@@ -76,7 +76,7 @@ if (!function_exists('response')) {
      *
      * @param string $content
      * @param int $status
-     * @param array $headers
+     * @param array<string, string> $headers
      */
     function response(string $content = '', int $status = 200, array $headers = []): void
     {
@@ -101,9 +101,9 @@ if (!function_exists('json_response')) {
      *  'message' => 'This is a JSON property.'
      * ]);
      *
-     * @param array $content
+     * @param array<int|string, mixed> $content
      * @param int $status
-     * @param array $headers
+     * @param array<string, string> $headers
      */
     function json_response(array $content = [], int $status = 200, array $headers = []): void
     {
@@ -157,7 +157,7 @@ if (!function_exists('abort')) {
      *
      * @param int $code
      * @param string $message
-     * @param array $headers
+     * @param array<string, string> $headers
      *
      * @return void
      */

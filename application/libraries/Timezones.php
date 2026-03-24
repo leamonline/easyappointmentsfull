@@ -31,7 +31,7 @@ class Timezones
     protected string $default = 'UTC';
 
     /**
-     * @var array
+     * @var array<string, array<string, string>>
      */
     protected array $timezones = [
         'UTC' => [
@@ -516,7 +516,7 @@ class Timezones
     /**
      * Get all timezones to a grouped array (by continent).
      *
-     * @return array
+     * @return array<string, array<string, string>>
      */
     public function to_grouped_array(): array
     {
@@ -578,7 +578,7 @@ class Timezones
     /**
      * Get all timezones to a flat array.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function to_array(): array
     {

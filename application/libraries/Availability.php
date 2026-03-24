@@ -48,13 +48,13 @@ class Availability
      * Get the available hours of a provider.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $service Service data.
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $provider Provider data.
      * @param int|null $exclude_appointment_id Exclude an appointment from the availability generation.
      * @param string|null $pet_size Pet size ('small', 'medium', 'large') for salon capacity filtering.
      * @param bool $is_admin Whether the caller is an admin (allows mid-morning large dogs).
      *
-     * @return array
+     * @return array<int, string>
      *
      * @throws Exception
      */
@@ -101,12 +101,12 @@ class Availability
      * seats_required=1 as a baseline filter.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $available_hours Already generated available hours.
+     * @param array<int, string> $available_hours Already generated available hours.
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
      * @param string|null $pet_size Pet size ('small', 'medium', 'large') or null if unknown.
      * @param bool $is_admin Whether the caller is an admin.
      *
-     * @return array Returns filtered available hours.
+     * @return array<int, string> Returns filtered available hours.
      */
     protected function consider_salon_capacity(
         string $date,
@@ -144,11 +144,11 @@ class Availability
      * This method will add the additional appointment hours whenever a service accepts multiple attendants.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $service Service data.
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $provider Provider data.
      * @param int|null $exclude_appointment_id Exclude an appointment from the availability generation.
      *
-     * @return array Returns the available hours array.
+     * @return array<int, string> Returns the available hours array.
      *
      * @throws Exception
      */
@@ -247,10 +247,10 @@ class Availability
      * Remove breaks from available time periods.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $periods Empty periods.
-     * @param array $breaks Array of breaks.
+     * @param array<int, array<string, mixed>> $periods Empty periods.
+     * @param array<int, array<string, mixed>> $breaks Array of breaks.
      *
-     * @return array Returns the available time periods without the breaks.
+     * @return array<int, array<string, mixed>> Returns the available time periods without the breaks.
      *
      * @throws Exception
      */
@@ -310,10 +310,10 @@ class Availability
     /**
      * Remove the unavailability entries from the available time periods of the selected date.
      *
-     * @param array $periods Available time periods.
-     * @param array $unavailability_events Unavailability events of the current date.
+     * @param array<int, array<string, mixed>> $periods Available time periods.
+     * @param array<int, array<string, mixed>> $unavailability_events Unavailability events of the current date.
      *
-     * @return array Returns the available time periods without the unavailability events.
+     * @return array<int, array<string, mixed>> Returns the available time periods without the unavailability events.
      *
      * @throws Exception
      */
@@ -382,10 +382,10 @@ class Availability
      * have the start and the end time of an available time period.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param int|null $exclude_appointment_id Exclude an appointment from the availability generation.
      *
-     * @return array Returns an array with the available time periods of the provider.
+     * @return array<int, array<string, string>> Returns an array with the available time periods of the provider.
      *
      * @throws Exception
      */
@@ -596,10 +596,10 @@ class Availability
      * the service fit in each quarter then a new available hour is added to the "$available_hours" array.
      *
      * @param string $date Selected date (Y-m-d).
-     * @param array $service Service data.
-     * @param array $empty_periods Empty periods array.
+     * @param array<string, mixed> $service Service data.
+     * @param array<int, array<string, string>> $empty_periods Empty periods array.
      *
-     * @return array Returns an array with the available hours for the appointment.
+     * @return array<int, string> Returns an array with the available hours for the appointment.
      *
      * @throws Exception
      */
@@ -638,10 +638,10 @@ class Availability
      * that is at least half or one hour from now. The setting is stored in minutes.
      *
      * @param string $date The selected date.
-     * @param array $available_hours Already generated available hours.
-     * @param array $provider Provider information.
+     * @param array<int, string> $available_hours Already generated available hours.
+     * @param array<string, mixed> $provider Provider information.
      *
-     * @return array Returns the updated available hours.
+     * @return array<int, string> Returns the updated available hours.
      *
      * @throws Exception
      */
@@ -672,10 +672,10 @@ class Availability
      * Remove times if succeed the future booking limit.
      *
      * @param string $selected_date
-     * @param array $available_hours
-     * @param array $provider
+     * @param array<int, string> $available_hours
+     * @param array<string, mixed> $provider
      *
-     * @return array
+     * @return array<int, string>
      *
      * @throws Exception
      */

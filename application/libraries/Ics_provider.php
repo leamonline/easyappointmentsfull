@@ -19,14 +19,17 @@
  * Since the method signatures changed in PHP 8.1, the ReturnTypeWillChange attribute allows us to keep compatibility
  * between different PHP versions.
  */
+/**
+ * @implements Iterator<int, mixed>
+ */
 class Ics_provider implements Iterator
 {
     /**
-     * @var array
+     * @var array<int, mixed>
      */
     public $data = [];
     /**
-     * @var array
+     * @var array<int, mixed>
      */
     public $manuallyAddedData = [];
     /**

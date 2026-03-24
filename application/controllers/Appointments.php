@@ -23,6 +23,7 @@
  */
 class Appointments extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_appointment_fields = [
         'id',
         'start_datetime',
@@ -37,6 +38,7 @@ class Appointments extends EA_Controller
         'id_services',
     ];
 
+    /** @var string[] */
     public array $optional_appointment_fields = [
         //
     ];

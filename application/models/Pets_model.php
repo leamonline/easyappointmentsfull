@@ -21,6 +21,11 @@
 class Pets_model extends EA_Model
 {
     /**
+     * Vaccination statuses that indicate incomplete vaccination.
+     */
+    const VACCINATION_BLOCKED_STATUSES = ['unknown', 'pending_first', 'pending_second'];
+
+    /**
      * @var array<string, string>
      */
     protected array $casts = [
@@ -256,5 +261,47 @@ class Pets_model extends EA_Model
     public function query(): CI_DB_query_builder
     {
         return $this->db->from('pets');
+    }
+
+    /**
+     * Determine whether a pet is a puppy that has not completed vaccinations.
+     *
+     * A pet is considered a puppy if its parsed age is under 6 months or its
+     * breed/age field contains the word "puppy". Returns true (blocked) only
+     * when the pet IS a puppy AND vaccination_status is not 'up_to_date'.
+     *
+     * @param array<string, mixed> $pet Pet row from the database.
+     *
+     * @return bool True if the pet should be blocked from booking.
+     */
+    public function is_puppy_needing_vaccination(array $pet): bool
+    {
+        $status = $pet['vaccination_status'] ?? 'unknown';
+
+        if ($status === 'up_to_date') {
+            return false;
+        }
+
+        $is_puppy = false;
+
+        $age_months = parse_pet_age_months($pet['age'] ?? null);
+
+        if ($age_months !== null && $age_months < 6.0) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy && stripos($pet['breed'] ?? '', 'puppy') !== false) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy && stripos($pet['age'] ?? '', 'puppy') !== false) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy) {
+            return false;
+        }
+
+        return in_array($status, self::VACCINATION_BLOCKED_STATUSES, true);
     }
 }

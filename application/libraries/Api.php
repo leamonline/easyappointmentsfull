@@ -229,7 +229,7 @@ class Api
     /**
      * Get the chosen "fields" array of the current request.
      *
-     * @return array|null
+     * @return list<string>|null
      */
     public function request_fields(): ?array
     {
@@ -245,7 +245,7 @@ class Api
     /**
      * Get the provided "with" array of the current request.
      *
-     * @return array|null
+     * @return list<string>|null
      */
     public function request_with(): ?array
     {

@@ -15,7 +15,7 @@ if (!function_exists('is_assoc')) {
     /**
      * Check if an array is an associative array.
      *
-     * @param array $array
+     * @param array<mixed> $array
      *
      * @return bool
      */
@@ -33,7 +33,7 @@ if (!function_exists('array_find')) {
     /**
      * Find the first array element based on the provided function.
      *
-     * @param array $array
+     * @param array<mixed> $array
      * @param callable $callback
      *
      * @return mixed
@@ -56,10 +56,10 @@ if (!function_exists('array_fields')) {
     /**
      * Keep only the provided fields of an array.
      *
-     * @param array $array
-     * @param array $fields
+     * @param array<string, mixed> $array
+     * @param array<int, string> $fields
      *
-     * @return array
+     * @return array<string, mixed>
      */
     function array_fields(array $array, array $fields): array
     {

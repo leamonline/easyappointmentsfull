@@ -20,6 +20,7 @@
  */
 class Providers extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_provider_fields = [
         'id',
         'first_name',
@@ -41,10 +42,12 @@ class Providers extends EA_Controller
         'services',
     ];
 
+    /** @var array<string, mixed> */
     public array $optional_provider_fields = [
         'services' => [],
     ];
 
+    /** @var string[] */
     public array $allowed_provider_setting_fields = [
         'username',
         'password',
@@ -54,11 +57,13 @@ class Providers extends EA_Controller
         'calendar_view',
     ];
 
+    /** @var array<string, mixed> */
     public array $optional_provider_setting_fields = [
         'working_plan' => null,
         'working_plan_exceptions' => '{}',
     ];
 
+    /** @var string[] */
     public array $allowed_service_fields = ['id', 'name'];
 
     /**

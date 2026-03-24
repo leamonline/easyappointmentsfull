@@ -21,7 +21,7 @@
 class Pets_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -29,7 +29,7 @@ class Pets_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -46,7 +46,7 @@ class Pets_model extends EA_Model
     /**
      * Save (insert or update) a pet.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -66,7 +66,7 @@ class Pets_model extends EA_Model
     /**
      * Validate the pet data.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @throws InvalidArgumentException
      */
@@ -98,7 +98,7 @@ class Pets_model extends EA_Model
     /**
      * Insert a new pet into the database.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -119,7 +119,7 @@ class Pets_model extends EA_Model
     /**
      * Update an existing pet.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -153,7 +153,7 @@ class Pets_model extends EA_Model
      *
      * @param int $pet_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the pet data.
+     * @return array<string, mixed> Returns an array with the pet data.
      */
     public function find(int $pet_id): array
     {
@@ -173,12 +173,12 @@ class Pets_model extends EA_Model
     /**
      * Get all pets that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function get(
         array|string|null $where = null,
@@ -208,7 +208,7 @@ class Pets_model extends EA_Model
      *
      * @param int $customer_id Customer ID.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function get_by_customer(int $customer_id): array
     {
@@ -223,7 +223,7 @@ class Pets_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {

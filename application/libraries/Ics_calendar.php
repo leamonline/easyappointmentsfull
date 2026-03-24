@@ -53,12 +53,12 @@ class Ics_calendar extends Calendar
     private $method = 'PUBLISH';
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $image = [];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $customHeaders = [];
 
@@ -170,6 +170,7 @@ class Ics_calendar extends Calendar
      * Sets the RFC-7986 "Name" field for the calendar
      *
      * @param string $name
+     * @return void
      */
     public function setName($name)
     {
@@ -213,7 +214,7 @@ class Ics_calendar extends Calendar
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getImage()
     {
@@ -243,7 +244,8 @@ class Ics_calendar extends Calendar
      *    );
      * For Binary, it is RECOMMENDED to add the FMTTYPE as well, but still not REQUIRED
      *
-     * @param array $image
+     * @param array<string, mixed> $image
+     * @return void
      */
     public function setImage($image)
     {
@@ -270,7 +272,7 @@ class Ics_calendar extends Calendar
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getCustomHeaders()
     {
@@ -281,7 +283,7 @@ class Ics_calendar extends Calendar
      * use to add custom headers as array key-value pairs<br>
      * <strong>Example:</strong> $customHeaders = array('X-WR-TIMEZONE' => 'America/New_York')
      *
-     * @param array $customHeaders
+     * @param array<string, string> $customHeaders
      * @return Calendar
      */
     public function setCustomHeaders(array $customHeaders)
@@ -346,7 +348,7 @@ class Ics_calendar extends Calendar
     }
 
     /**
-     * @param array $todos
+     * @param array<int, CalendarTodo> $todos
      * @return Calendar
      */
     public function setTodos(array $todos)
@@ -374,7 +376,7 @@ class Ics_calendar extends Calendar
     }
 
     /**
-     * @param array $freeBusy
+     * @param array<int, CalendarFreeBusy> $freeBusy
      * @return Calendar
      */
     public function setFreeBusy(array $freeBusy)

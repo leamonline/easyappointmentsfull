@@ -21,14 +21,14 @@
 class Service_categories_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -39,7 +39,7 @@ class Service_categories_model extends EA_Model
     /**
      * Save (insert or update) a service-category.
      *
-     * @param array $service_category Associative array with the service-category data.
+     * @param array<string, mixed> $service_category Associative array with the service-category data.
      *
      * @return int Returns the service-category ID.
      *
@@ -59,7 +59,7 @@ class Service_categories_model extends EA_Model
     /**
      * Validate the service-category data.
      *
-     * @param array $service_category Associative array with the service-category data.
+     * @param array<string, mixed> $service_category Associative array with the service-category data.
      *
      * @throws InvalidArgumentException
      */
@@ -87,7 +87,7 @@ class Service_categories_model extends EA_Model
     /**
      * Insert a new service-category into the database.
      *
-     * @param array $service_category Associative array with the service-category data.
+     * @param array<string, mixed> $service_category Associative array with the service-category data.
      *
      * @return int Returns the service-category ID.
      *
@@ -108,7 +108,7 @@ class Service_categories_model extends EA_Model
     /**
      * Update an existing service-category.
      *
-     * @param array $service_category Associative array with the service-category data.
+     * @param array<string, mixed> $service_category Associative array with the service-category data.
      *
      * @return int Returns the service-category ID.
      *
@@ -142,7 +142,7 @@ class Service_categories_model extends EA_Model
      *
      * @param int $service_category_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the service-category data.
+     * @return array<string, mixed> Returns an array with the service-category data.
      *
      * @throws InvalidArgumentException
      */
@@ -222,7 +222,7 @@ class Service_categories_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of service categories.
+     * @return array<int, array<string, mixed>> Returns an array of service categories.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -249,12 +249,12 @@ class Service_categories_model extends EA_Model
     /**
      * Get all services that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of service categories.
+     * @return array<int, array<string, mixed>> Returns an array of service categories.
      */
     public function get(
         array|string|null $where = null,
@@ -282,12 +282,12 @@ class Service_categories_model extends EA_Model
     /**
      * Load related resources to a service-category.
      *
-     * @param array $service_category Associative array with the service-category data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $service_category Associative array with the service-category data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$service_category, array $resources)
+    public function load(array &$service_category, array $resources): void
     {
         // Service categories do not currently have any related resources.
     }
@@ -295,7 +295,7 @@ class Service_categories_model extends EA_Model
     /**
      * Convert the database service-category record to the equivalent API resource.
      *
-     * @param array $service_category Category data.
+     * @param array<string, mixed> $service_category Category data.
      */
     public function api_encode(array &$service_category): void
     {
@@ -313,8 +313,8 @@ class Service_categories_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database service-category record.
      *
-     * @param array $service_category API resource.
-     * @param array|null $base Base service-category data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $service_category API resource.
+     * @param array<string, mixed>|null $base Base service-category data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$service_category, ?array $base = null): void
     {

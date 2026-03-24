@@ -1,5 +1,5 @@
 parameters:
-    level: 5
+    level: 6
     paths:
         - application/
     excludePaths:
@@ -24,10 +24,6 @@ parameters:
         - '#Access to an undefined property (EA_Controller|CI_Controller|Booking|Calendar|Customers|Pets|Reports|Providers|Services|Admins|Secretaries|Backend_api|Backend|Webhooks|Blocked_periods)\:\:\$#'
         # CI3 helper functions loaded dynamically at runtime
         - '#Function (site_url|redirect|base_url|random_string|write_file|config|html_purify|is_assoc|array_fields|slot_hour|setting|validate_datetime) not found\.#'
-        # EA_* wrapper classes extending CI3 core classes
-        - '#Class EA_\w+ extends unknown class CI_\w+\.#'
-        # CI3 session/cache/config/migration methods available at runtime
-        - '#Call to an undefined method EA_(Session|Cache|Config|Migration)::\w+\(\)\.#'
         # CI3 EA_Model abstract method calls resolved by child classes
         - '#Call to an undefined method EA_Model::(get|save)\(\)\.#'
         # CI3 UTF8_ENABLED constant
@@ -46,7 +42,6 @@ parameters:
             identifier: method.notFound
             path: application/libraries/Caldav_sync.php
         # Google API uses magic __get for properties
-        - '#Google\\\\Service\\\\Calendar#'
         -
             identifier: property.notFound
             path: application/libraries/Google_sync.php
@@ -61,9 +56,6 @@ parameters:
         # EA_Controller class-name case: CI3 naming convention mismatch
         - identifier: class.nameCase
           path: application/core/EA_Controller.php
-        # EA_Migration return type (CI3 internal)
-        - identifier: return.type
-          path: application/core/EA_Migration.php
         # Test.php: ENVIRONMENT is always 'testing' during phpstan bootstrap
         -
             identifier: notIdentical.alwaysFalse
@@ -94,10 +86,8 @@ parameters:
         -
             identifier: function.alreadyNarrowedType
             path: application/helpers/array_helper.php
-        # Availability: array_values on already-list value (defensive)
-        -
-            identifier: arrayValues.list
-            path: application/libraries/Availability.php
+        # Defensive array_values calls on already-list values
+        - identifier: arrayValues.list
         # Caldav_sync: PHPDoc-based boolean negation always false
         -
             identifier: booleanNot.alwaysFalse

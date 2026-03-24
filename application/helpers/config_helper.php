@@ -24,7 +24,7 @@
  *
  * config(['version' => '1.0.0']);
  *
- * @param array|string $key Configuration key.
+ * @param string|array<string, mixed> $key Configuration key.
  * @param mixed|null $default Default value in case the requested config has no value.
  *
  * @return mixed|NULL Returns the requested value or NULL if you assign a new configuration value.
@@ -67,7 +67,7 @@ if (!function_exists('script_vars')) {
      *
      * script_vars(['version' => '1.0.0']);
      *
-     * @param array|string|null $key Configuration key.
+     * @param string|array<string, mixed>|null $key Configuration key.
      * @param mixed|null $default Default value in case the requested config has no value.
      *
      * @return mixed|NULL Returns the requested value or NULL if you assign a new configuration value.
@@ -112,7 +112,7 @@ if (!function_exists('html_vars')) {
      *
      * html_vars(['title' => 'Test Title']);
      *
-     * @param array|string|null $key Variable key.
+     * @param string|array<string, mixed>|null $key Variable key.
      * @param mixed|null $default Default value in case the requested variable has no value.
      *
      * @return mixed|NULL Returns the requested value or NULL if you assign a new configuration value.
@@ -157,7 +157,7 @@ if (!function_exists('vars')) {
      *
      * vars(['version' => '1.0.0']);
      *
-     * @param array|string|null $key Configuration key.
+     * @param string|array<string, mixed>|null $key Configuration key.
      * @param mixed|null $default Default value in case the requested config has no value.
      *
      * @return mixed|NULL Returns the requested value or NULL if you assign a new configuration value.

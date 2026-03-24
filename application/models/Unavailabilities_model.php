@@ -19,7 +19,7 @@
 class Unavailabilities_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -30,7 +30,7 @@ class Unavailabilities_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -49,7 +49,7 @@ class Unavailabilities_model extends EA_Model
     /**
      * Save (insert or update) an unavailability.
      *
-     * @param array $unavailability Associative array with the unavailability data.
+     * @param array<string, mixed> $unavailability Associative array with the unavailability data.
      *
      * @return int Returns the unavailability ID.
      *
@@ -69,7 +69,7 @@ class Unavailabilities_model extends EA_Model
     /**
      * Validate the unavailability data.
      *
-     * @param array $unavailability Associative array with the unavailability data.
+     * @param array<string, mixed> $unavailability Associative array with the unavailability data.
      *
      * @throws InvalidArgumentException
      */
@@ -135,12 +135,12 @@ class Unavailabilities_model extends EA_Model
     /**
      * Get all unavailabilities that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of unavailabilities.
+     * @return array<int, array<string, mixed>> Returns an array of unavailabilities.
      */
     public function get(
         array|string|null $where = null,
@@ -170,7 +170,7 @@ class Unavailabilities_model extends EA_Model
     /**
      * Insert a new unavailability into the database.
      *
-     * @param array $unavailability Associative array with the unavailability data.
+     * @param array<string, mixed> $unavailability Associative array with the unavailability data.
      *
      * @return int Returns the unavailability ID.
      *
@@ -194,7 +194,7 @@ class Unavailabilities_model extends EA_Model
     /**
      * Update an existing unavailability.
      *
-     * @param array $unavailability Associative array with the unavailability data.
+     * @param array<string, mixed> $unavailability Associative array with the unavailability data.
      *
      * @return int Returns the unavailability ID.
      *
@@ -228,7 +228,7 @@ class Unavailabilities_model extends EA_Model
      *
      * @param int $unavailability_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the unavailability data.
+     * @return array<string, mixed> Returns an array with the unavailability data.
      *
      * @throws InvalidArgumentException
      */
@@ -308,7 +308,7 @@ class Unavailabilities_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of unavailabilities.
+     * @return array<int, array<string, mixed>> Returns an array of unavailabilities.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -344,8 +344,8 @@ class Unavailabilities_model extends EA_Model
     /**
      * Load related resources to an unavailability.
      *
-     * @param array $unavailability Associative array with the unavailability data.
-     * @param array $resources Resource names to be attached ("service", "provider", "customer" supported).
+     * @param array<string, mixed> $unavailability Associative array with the unavailability data.
+     * @param string[] $resources Resource names to be attached ("service", "provider", "customer" supported).
      *
      * @throws InvalidArgumentException
      */
@@ -372,7 +372,7 @@ class Unavailabilities_model extends EA_Model
     /**
      * Convert the database unavailability record to the equivalent API resource.
      *
-     * @param array $unavailability Unavailability data.
+     * @param array<string, mixed> $unavailability Unavailability data.
      */
     public function api_encode(array &$unavailability): void
     {
@@ -396,8 +396,8 @@ class Unavailabilities_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database unavailability record.
      *
-     * @param array $unavailability API resource.
-     * @param array|null $base Base unavailability data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $unavailability API resource.
+     * @param array<string, mixed>|null $base Base unavailability data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$unavailability, ?array $base = null): void
     {

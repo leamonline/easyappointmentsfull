@@ -21,7 +21,7 @@
 class Admins_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -29,7 +29,7 @@ class Admins_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -52,7 +52,7 @@ class Admins_model extends EA_Model
     /**
      * Save (insert or update) an admin.
      *
-     * @param array $admin Associative array with the admin data.
+     * @param array<string, mixed> $admin Associative array with the admin data.
      *
      * @return int Returns the admin ID.
      *
@@ -73,7 +73,7 @@ class Admins_model extends EA_Model
     /**
      * Validate the admin data.
      *
-     * @param array $admin Associative array with the admin data.
+     * @param array<string, mixed> $admin Associative array with the admin data.
      *
      * @throws InvalidArgumentException
      */
@@ -185,12 +185,12 @@ class Admins_model extends EA_Model
     /**
      * Get all admins that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of admins.
+     * @return array<int, array<string, mixed>> Returns an array of admins.
      */
     public function get(
         array|string|null $where = null,
@@ -239,6 +239,8 @@ class Admins_model extends EA_Model
      *
      * @param int $admin_id Admin ID.
      *
+     * @return array<string, mixed> Returns the admin settings.
+     *
      * @throws InvalidArgumentException
      */
     public function get_settings(int $admin_id): array
@@ -253,7 +255,7 @@ class Admins_model extends EA_Model
     /**
      * Insert a new admin into the database.
      *
-     * @param array $admin Associative array with the admin data.
+     * @param array<string, mixed> $admin Associative array with the admin data.
      *
      * @return int Returns the admin ID.
      *
@@ -287,7 +289,7 @@ class Admins_model extends EA_Model
      * Save the admin settings.
      *
      * @param int $admin_id Admin ID.
-     * @param array $settings Associative array with the settings data.
+     * @param array<string, mixed> $settings Associative array with the settings data.
      *
      * @throws InvalidArgumentException
      */
@@ -326,7 +328,7 @@ class Admins_model extends EA_Model
     /**
      * Update an existing admin.
      *
-     * @param array $admin Associative array with the admin data.
+     * @param array<string, mixed> $admin Associative array with the admin data.
      *
      * @return int Returns the admin ID.
      *
@@ -391,7 +393,7 @@ class Admins_model extends EA_Model
      *
      * @param int $admin_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the admin data.
+     * @return array<string, mixed> Returns an array with the admin data.
      *
      * @throws InvalidArgumentException
      */
@@ -487,7 +489,7 @@ class Admins_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of admins.
+     * @return array<int, array<string, mixed>> Returns an array of admins.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -527,12 +529,12 @@ class Admins_model extends EA_Model
     /**
      * Load related resources to an admin.
      *
-     * @param array $admin Associative array with the admin data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $admin Associative array with the admin data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$admin, array $resources)
+    public function load(array &$admin, array $resources): void
     {
         // Admins do not currently have any related resources (settings are already part of the admins).
     }
@@ -540,7 +542,7 @@ class Admins_model extends EA_Model
     /**
      * Convert the database admin record to the equivalent API resource.
      *
-     * @param array $admin Admin data.
+     * @param array<string, mixed> $admin Admin data.
      */
     public function api_encode(array &$admin): void
     {
@@ -572,8 +574,8 @@ class Admins_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database admin record.
      *
-     * @param array $admin API resource.
-     * @param array|null $base Base admin data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $admin API resource.
+     * @param array<string, mixed>|null $base Base admin data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$admin, ?array $base = null): void
     {

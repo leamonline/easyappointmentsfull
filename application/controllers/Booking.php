@@ -23,6 +23,7 @@
  */
 class Booking extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_customer_fields = [
         'id',
         'first_name',
@@ -41,9 +42,11 @@ class Booking extends EA_Controller
         'custom_field_4',
         'custom_field_5',
     ];
+    /** @var string[] */
     public array $allowed_provider_fields = ['id', 'first_name', 'last_name', 'services', 'timezone'];
     public const ALLOWED_PET_SIZES = ['small', 'medium', 'large'];
 
+    /** @var string[] */
     public array $allowed_appointment_fields = [
         'id',
         'start_datetime',
@@ -878,7 +881,7 @@ class Booking extends EA_Controller
      *
      * @param int $service_id The requested service ID.
      *
-     * @return array Returns the ID of the provider that can provide the requested service.
+     * @return int[] Returns the ID of the provider that can provide the requested service.
      */
     protected function search_providers_by_service(int $service_id): array
     {

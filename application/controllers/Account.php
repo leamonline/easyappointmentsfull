@@ -20,6 +20,7 @@
  */
 class Account extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_user_fields = [
         'id',
         'first_name',
@@ -37,12 +38,15 @@ class Account extends EA_Controller
         'settings',
     ];
 
+    /** @var string[] */
     public array $optional_user_fields = [
         //
     ];
 
+    /** @var string[] */
     public array $allowed_user_setting_fields = ['username', 'password', 'notifications', 'calendar_view'];
 
+    /** @var string[] */
     public array $optional_user_setting_fields = [
         //
     ];

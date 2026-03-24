@@ -25,7 +25,7 @@ if (!function_exists('setting')) {
      *
      * setting(['company_name' => 'ACME Inc']);
      *
-     * @param array|string|null $key Setting key.
+     * @param string|array<string, mixed>|null $key Setting key.
      * @param mixed|null $default Default value in case the requested setting has no value.
      *
      * @return mixed|NULL Returns the requested value or NULL if you assign a new setting value.

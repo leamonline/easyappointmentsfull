@@ -44,7 +44,7 @@ class Ldap_client
      * @param string $username
      * @param string $password
      *
-     * @return array|null
+     * @return array<string, mixed>|null
      *
      * @throws Exception
      */
@@ -104,7 +104,7 @@ class Ldap_client
      *
      * @param string $keyword
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      *
      * @throws Exception
      */

@@ -20,6 +20,7 @@
  */
 class Admins extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_admin_fields = [
         'id',
         'first_name',
@@ -38,12 +39,15 @@ class Admins extends EA_Controller
         'settings',
     ];
 
+    /** @var string[] */
     public array $optional_admin_fields = [
         //
     ];
 
+    /** @var string[] */
     public array $allowed_admin_setting_fields = ['username', 'password', 'notifications', 'calendar_view'];
 
+    /** @var string[] */
     public array $optional_admin_setting_fields = [
         //
     ];

@@ -20,6 +20,7 @@
  */
 class Unavailabilities extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_unavailability_fields = [
         'id',
         'start_datetime',
@@ -30,6 +31,7 @@ class Unavailabilities extends EA_Controller
         'id_users_provider',
     ];
 
+    /** @var string[] */
     public array $optional_unavailability_fields = [
         //
     ];

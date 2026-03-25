@@ -6,192 +6,142 @@
 
 <?php if (!empty($company_color) && $company_color !== DEFAULT_COMPANY_COLOR && preg_match('/^#[0-9a-fA-F]{3,8}$/', $company_color)): ?>
     <style>
+        /* Override brand color tokens with company color */
+        :root {
+            --sd-brand: <?= $company_color ?>;
+            --sd-brand-dark: <?= $company_color ?>;
+            --sd-brand-darker: <?= $company_color ?>;
+            --sd-brand-hover: <?= $company_color ?>;
+            --sd-brand-active: <?= $company_color ?>;
+            --sd-brand-light: <?= $company_color ?>;
+            --sd-brand-lighter: <?= $company_color ?>;
+            --sd-brand-text: <?= $company_color ?>;
+            --sd-brand-subtle: <?= $company_color ?>;
+        }
+
+        /* Derived shades via filters where distinct shades are needed */
+        :root {
+            --sd-brand-dark: <?= $company_color ?>;
+            --sd-brand-hover: <?= $company_color ?>;
+            --sd-brand-active: <?= $company_color ?>;
+        }
+
+        #header #header-menu .nav-item:hover {
+            background: var(--sd-brand) !important;
+            filter: brightness(85%);
+        }
+
+        #header #header-menu .nav-item.active {
+            background: var(--sd-brand) !important;
+            filter: brightness(75%);
+        }
+
+        #header #header-logo small {
+            color: var(--sd-brand) !important;
+            filter: brightness(60%);
+        }
+
+        #book-appointment-wizard .book-step {
+            background: var(--sd-brand);
+            filter: brightness(75%);
+        }
+
+        #book-appointment-wizard .book-step strong {
+            color: var(--sd-brand);
+            filter: brightness(200%);
+        }
+
+        #book-appointment-wizard #company-name .display-selected-service,
+        #book-appointment-wizard #company-name .display-selected-provider {
+            color: var(--sd-brand);
+            border-right-color: var(--sd-brand) !important;
+            filter: brightness(35%);
+        }
+
+        #book-appointment-wizard #company-name .display-booking-selection {
+            color: var(--sd-brand);
+            border-right-color: var(--sd-brand);
+            filter: brightness(280%);
+        }
+
         /* Generic Overrides */
 
         a {
-            color: <?= $company_color ?>;
+            color: var(--sd-brand);
         }
 
         a:hover {
-            color: <?= $company_color ?>;
+            color: var(--sd-brand);
         }
 
         .btn-primary {
-            background-color: <?= $company_color ?>;
-            border-color: <?= $company_color ?>;
+            background-color: var(--sd-brand);
+            border-color: var(--sd-brand);
         }
 
         .btn-primary:hover,
         .btn-primary:active,
         .btn-primary:focus {
-            background-color: <?= $company_color ?>;
-            border-color: <?= $company_color ?>;
+            background-color: var(--sd-brand);
+            border-color: var(--sd-brand);
             filter: brightness(120%);
             outline: none;
             box-shadow: none;
         }
 
         .btn-primary:disabled, .btn-primary.disabled {
-            background-color: <?= $company_color ?>;
-            border-color: <?= $company_color ?>;
+            background-color: var(--sd-brand);
+            border-color: var(--sd-brand);
             filter: brightness(70%);
             opacity: .75;
         }
 
         .dropdown-item.active,
         .dropdown-item:active {
-            background-color: <?= $company_color ?> !important;
+            background-color: var(--sd-brand) !important;
         }
 
         .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-            background-color: <?= $company_color ?> !important;
+            background-color: var(--sd-brand) !important;
         }
 
         .nav .nav-link:not(.active) {
-            color: <?= $company_color ?> !important;
+            color: var(--sd-brand) !important;
         }
 
         .form-control:focus {
-            border-color: <?= $company_color ?> !important;
+            border-color: var(--sd-brand) !important;
             filter: brightness(120%);
             box-shadow: none;
         }
 
         .form-check-input:checked {
-            background-color: <?= $company_color ?> !important;
-            border-color: <?= $company_color ?> !important;
-        }
-
-        body .ui-datepicker .ui-slider-handle {
-            border-color: <?= $company_color ?> !important;
-            background-color: <?= $company_color ?> !important;
-        }
-
-        body .modal-header {
-            background: <?= $company_color ?> !important;
-        }
-
-        .fc-daygrid-event {
-            color: rgb(51, 51, 51) !important;
-        }
-
-        body .ui-draggable .ui-dialog-titlebar {
-            background: <?= $company_color ?> !important;
-        }
-
-        /* Booking Layout */
-
-        #book-appointment-wizard #header {
-            background: <?= $company_color ?>;
-        }
-
-        #book-appointment-wizard #company-name .display-selected-service,
-        #book-appointment-wizard #company-name .display-selected-provider {
-            color: <?= $company_color ?>;
-            border-right-color: <?= $company_color ?> !important;
-            filter: brightness(35%);
-        }
-
-        #book-appointment-wizard .book-step {
-            background: <?= $company_color ?>;
-            filter: brightness(75%);
-        }
-
-        #book-appointment-wizard .book-step strong {
-            color: <?= $company_color ?>;
-            filter: brightness(200%);
-        }
-
-        body .ui-widget.ui-widget-content {
-            border-color: <?= $company_color ?>;
-        }
-
-        body .ui-datepicker .ui-widget-header {
-            background-color: <?= $company_color ?>;
-        }
-
-        body .ui-datepicker th {
-            background-color: <?= $company_color ?>;
-        }
-
-        body .ui-datepicker .ui-datepicker-next-hover,
-        body .ui-datepicker .ui-datepicker-prev-hover {
-            background: <?= $company_color ?>;
-            border-color: <?= $company_color ?>;
-            filter: brightness(140%);
-        }
-
-        body .ui-datepicker td a, body .ui-datepicker td span {
-            color: <?= $company_color ?> !important;
-        }
-
-        html body .ui-datepicker td a.ui-state-active {
-            background: <?= $company_color ?> !important;
-        }
-
-        body .ui-datepicker td a.ui-state-highlight {
-            background: <?= $company_color ?> !important;
-            filter: brightness(140%);
-        }
-
-        #book-appointment-wizard #available-hours .selected-hour {
-            background-color: <?= $company_color ?>;
-            border-color: <?= $company_color ?>;
+            background-color: var(--sd-brand) !important;
+            border-color: var(--sd-brand) !important;
         }
 
         #frame-footer .backend-link {
-            background-color: <?= $company_color ?> !important;
+            background-color: var(--sd-brand) !important;
         }
 
         #frame-footer .backend-link:hover {
             color: #fff;
         }
 
-        /* Backend Layout */
-
-        #header {
-            background-color: <?= $company_color ?> !important;
-        }
-
-        #header #header-menu .nav-item:hover,
-        #header #header-menu .nav-item.active {
-            background: <?= $company_color ?> !important;
-        }
-
-        #header #header-logo small {
-            color: <?= $company_color ?> !important;
-            filter: brightness(60%);
-        }
-
         .backend-page .filter-records .results .entry.selected {
-            border-right-color: <?= $company_color ?> !important;
-        }
-
-        .flatpickr-calendar .flatpickr-months,
-        .flatpickr-calendar .flatpickr-months .flatpickr-month,
-        .flatpickr-calendar .flatpickr-weekdays,
-        .flatpickr-calendar .flatpickr-current-month .flatpickr-monthDropdown-months,
-        .flatpickr-calendar span.flatpickr-weekday {
-            background: <?= $company_color ?> !important;
-        }
-
-        .flatpickr-day.endRange, .flatpickr-day.endRange.inRange, .flatpickr-day.endRange.nextMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.endRange:focus, .flatpickr-day.endRange:hover, .flatpickr-day.selected, .flatpickr-day.selected.inRange, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.selected:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange, .flatpickr-day.startRange.inRange, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.startRange:focus, .flatpickr-day.startRange:hover {
-            background: <?= $company_color ?> !important;
-            border-color: <?= $company_color ?> !important;
+            border-right-color: var(--sd-brand) !important;
         }
 
         .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
-            background-color: <?= $company_color ?> !important;
+            background-color: var(--sd-brand) !important;
         }
 
         #existing-customers-list div:hover {
-            background: <?= $company_color ?> !important;
+            background: var(--sd-brand) !important;
         }
 
-        #book-appointment-wizard #company-name .display-booking-selection {
-            color: <?= $company_color ?>;
-            border-right-color: <?= $company_color ?>;
-            filter: brightness(280%);
+        .fc-daygrid-event {
+            color: rgb(51, 51, 51) !important;
         }
     </style>
 <?php endif; ?>

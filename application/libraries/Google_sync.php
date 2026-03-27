@@ -12,6 +12,7 @@
  * ---------------------------------------------------------------------------- */
 
 use Google\Service\Calendar\Event;
+use Google\Service\Calendar\EventDateTime;
 use Google\Service\Calendar\Events;
 
 /**
@@ -99,7 +100,7 @@ class Google_sync
      *
      * @param string $code
      *
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
@@ -140,11 +141,11 @@ class Google_sync
      * and the stored access token is still valid. If yes, the selected appointment record is going to be added to the
      * Google Calendar account.
      *
-     * @param array $appointment Appointment data.
-     * @param array $provider Provider data.
-     * @param array $service Service data.
-     * @param array $customer Customer data.
-     * @param array $settings Required settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings Required settings.
      *
      * @return Event Returns the Google_Event class object.
      *
@@ -164,13 +165,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($appointment['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime((new DateTime($appointment['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339));
         $event->setEnd($end);
 
@@ -198,11 +199,11 @@ class Google_sync
      * This method updates the Google Calendar event item that is connected with the provided appointment record of
      * Smarter Dog.
      *
-     * @param array $appointment Appointment data.
-     * @param array $provider Provider data.
-     * @param array $service Service data.
-     * @param array $customer Customer data.
-     * @parma array $settings Required settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings Required settings.
      *
      * @return Event Returns the Google_Service_Calendar_Event class object.
      *
@@ -226,13 +227,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($appointment['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime((new DateTime($appointment['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339));
         $event->setEnd($end);
 
@@ -256,7 +257,7 @@ class Google_sync
     /**
      * Delete an existing appointment from Google Calendar.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param string $google_event_id The Google Calendar event ID to be removed.
      *
      * @throws \Google\Service\Exception
@@ -269,8 +270,8 @@ class Google_sync
     /**
      * Add unavailability period event to Google Calendar.
      *
-     * @param array $provider Provider data.
-     * @param array $unavailability Unavailable data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $unavailability Unavailable data.
      *
      * @return Google_Service_Calendar_Event Returns the Google event.
      *
@@ -284,13 +285,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($unavailability['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime(
             (new DateTime($unavailability['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
@@ -303,8 +304,8 @@ class Google_sync
     /**
      * Update Google Calendar unavailability period event.
      *
-     * @param array $provider Provider data.
-     * @param array $unavailability Unavailability data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $unavailability Unavailability data.
      *
      * @return Google_Service_Calendar_Event Returns the Google_Service_Calendar_Event object.
      *
@@ -322,13 +323,13 @@ class Google_sync
 
         $timezone = new DateTimeZone($provider['timezone']);
 
-        $start = new Google_Service_Calendar_EventDateTime();
+        $start = new EventDateTime();
         $start->setDateTime(
             (new DateTime($unavailability['start_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
         $event->setStart($start);
 
-        $end = new Google_Service_Calendar_EventDateTime();
+        $end = new EventDateTime();
         $end->setDateTime(
             (new DateTime($unavailability['end_datetime'], $timezone))->format(DateTimeInterface::RFC3339),
         );
@@ -340,7 +341,7 @@ class Google_sync
     /**
      * Delete unavailability period event from Google Calendar.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param string $google_event_id Google Calendar event ID to be removed.
      *
      * @throws \Google\Service\Exception
@@ -353,7 +354,7 @@ class Google_sync
     /**
      * Get a Google Calendar event.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      * @param string $google_event_id Google Calendar event ID.
      *
      * @return Event Returns the Google Calendar event.
@@ -393,7 +394,7 @@ class Google_sync
      * The given user's token must already exist in db in order to get access to his
      * Google Calendar account.
      *
-     * @return array Returns an array with the available calendars.
+     * @return array<int, array<string, string>> Returns an array with the available calendars.
      *
      * @throws \Google\Service\Exception
      */

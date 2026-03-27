@@ -21,7 +21,7 @@
 class Users_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -29,7 +29,7 @@ class Users_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -52,7 +52,7 @@ class Users_model extends EA_Model
     /**
      * Save (insert or update) a user.
      *
-     * @param array $user Associative array with the user data.
+     * @param array<string, mixed> $user Associative array with the user data.
      *
      * @return int Returns the user ID.
      *
@@ -73,7 +73,7 @@ class Users_model extends EA_Model
     /**
      * Validate the user data.
      *
-     * @param array $user Associative array with the user data.
+     * @param array<string, mixed> $user Associative array with the user data.
      *
      * @throws InvalidArgumentException
      */
@@ -104,7 +104,7 @@ class Users_model extends EA_Model
     /**
      * Insert a new user into the database.
      *
-     * @param array $user Associative array with the user data.
+     * @param array<string, mixed> $user Associative array with the user data.
      *
      * @return int Returns the user ID.
      *
@@ -135,7 +135,7 @@ class Users_model extends EA_Model
      * Save the user settings.
      *
      * @param int $user_id User ID.
-     * @param array $settings Associative array with the settings data.
+     * @param array<string, mixed> $settings Associative array with the settings data.
      *
      * @throws InvalidArgumentException
      */
@@ -174,7 +174,7 @@ class Users_model extends EA_Model
     /**
      * Update an existing user.
      *
-     * @param array $user Associative array with the user data.
+     * @param array<string, mixed> $user Associative array with the user data.
      *
      * @return int Returns the user ID.
      *
@@ -223,7 +223,7 @@ class Users_model extends EA_Model
      *
      * @param int $user_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the user data.
+     * @return array<string, mixed> Returns an array with the user data.
      *
      * @throws InvalidArgumentException
      */
@@ -246,6 +246,8 @@ class Users_model extends EA_Model
      * Get the user settings.
      *
      * @param int $user_id User ID.
+     *
+     * @return array<string, mixed> Returns the user settings.
      *
      * @throws InvalidArgumentException
      */
@@ -334,7 +336,7 @@ class Users_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of settings.
+     * @return array<int, array<string, mixed>> Returns an array of settings.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -370,12 +372,12 @@ class Users_model extends EA_Model
     /**
      * Get all users that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of users.
+     * @return array<int, array<string, mixed>> Returns an array of users.
      */
     public function get(
         array|string|null $where = null,
@@ -404,12 +406,12 @@ class Users_model extends EA_Model
     /**
      * Load related resources to a user.
      *
-     * @param array $user Associative array with the user data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $user Associative array with the user data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$user, array $resources)
+    public function load(array &$user, array $resources): void
     {
         // Users do not currently have any related resources.
     }

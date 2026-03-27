@@ -20,6 +20,7 @@
  */
 class Calendar extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_customer_fields = [
         'id',
         'first_name',
@@ -42,10 +43,12 @@ class Calendar extends EA_Controller
         'strike_count',
     ];
 
+    /** @var string[] */
     public array $optional_customer_fields = [
         //
     ];
 
+    /** @var string[] */
     public array $allowed_appointment_fields = [
         'id',
         'start_datetime',
@@ -62,6 +65,7 @@ class Calendar extends EA_Controller
         'seats_required',
     ];
 
+    /** @var string[] */
     public array $optional_appointment_fields = [
         //
     ];
@@ -331,7 +335,7 @@ class Calendar extends EA_Controller
 
                 $this->appointments_model->optional($appointment, $this->optional_appointment_fields);
 
-                $appointment['id'] = $this->appointments_model->save($appointment);
+                $appointment['id'] = $this->appointments_model->save($appointment, ['is_admin' => true]);
             }
 
             if (empty($appointment['id'])) {

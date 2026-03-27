@@ -21,7 +21,7 @@
 class Customer_auth_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -32,7 +32,7 @@ class Customer_auth_model extends EA_Model
     /**
      * Save (insert or update) a customer auth record.
      *
-     * @param array $auth Associative array with the customer auth data.
+     * @param array<string, mixed> $auth Associative array with the customer auth data.
      *
      * @return int Returns the customer auth ID.
      *
@@ -52,7 +52,7 @@ class Customer_auth_model extends EA_Model
     /**
      * Validate the customer auth data.
      *
-     * @param array $auth Associative array with the customer auth data.
+     * @param array<string, mixed> $auth Associative array with the customer auth data.
      *
      * @throws InvalidArgumentException
      */
@@ -76,7 +76,7 @@ class Customer_auth_model extends EA_Model
     /**
      * Insert a new customer auth record into the database.
      *
-     * @param array $auth Associative array with the customer auth data.
+     * @param array<string, mixed> $auth Associative array with the customer auth data.
      *
      * @return int Returns the customer auth ID.
      *
@@ -97,7 +97,7 @@ class Customer_auth_model extends EA_Model
     /**
      * Update an existing customer auth record.
      *
-     * @param array $auth Associative array with the customer auth data.
+     * @param array<string, mixed> $auth Associative array with the customer auth data.
      *
      * @return int Returns the customer auth ID.
      *
@@ -119,7 +119,7 @@ class Customer_auth_model extends EA_Model
      *
      * @param int $customer_id Customer user ID.
      *
-     * @return array|null Returns an array with the auth data or null if not found.
+     * @return array<string, mixed>|null Returns an array with the auth data or null if not found.
      */
     public function find_by_customer_id(int $customer_id): ?array
     {
@@ -185,7 +185,7 @@ class Customer_auth_model extends EA_Model
      *
      * @param string $email Customer email address.
      *
-     * @return array|null Returns an array with the auth data or null if not found.
+     * @return array<string, mixed>|null Returns an array with the auth data or null if not found.
      */
     public function find_by_email(string $email): ?array
     {

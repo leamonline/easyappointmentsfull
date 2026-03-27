@@ -46,11 +46,11 @@ class Notifications
     /**
      * Send the required notifications, related to an appointment creation/modification.
      *
-     * @param array $appointment Appointment data.
-     * @param array $service Service data.
-     * @param array $provider Provider data.
-     * @param array $customer Customer data.
-     * @param array $settings Required settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings Required settings.
      * @param bool|false $manage_mode Manage mode.
      */
     public function notify_appointment_saved(
@@ -208,11 +208,11 @@ class Notifications
     /**
      * Send the required notifications, related to an appointment removal.
      *
-     * @param array $appointment Appointment data.
-     * @param array $service Service data.
-     * @param array $provider Provider data.
-     * @param array $customer Customer data.
-     * @param array $settings Required settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings Required settings.
      */
     public function notify_appointment_deleted(
         array $appointment,

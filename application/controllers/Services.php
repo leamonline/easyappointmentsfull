@@ -20,6 +20,7 @@
  */
 class Services extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_service_fields = [
         'id',
         'name',
@@ -35,6 +36,7 @@ class Services extends EA_Controller
         'id_service_categories',
         'is_walkin',
     ];
+    /** @var array<string, mixed> */
     public array $optional_service_fields = [
         'id_service_categories' => null,
     ];

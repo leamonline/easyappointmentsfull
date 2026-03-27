@@ -21,7 +21,7 @@
 class Secretaries_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -29,7 +29,7 @@ class Secretaries_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -52,7 +52,7 @@ class Secretaries_model extends EA_Model
     /**
      * Save (insert or update) a secretary.
      *
-     * @param array $secretary Associative array with the secretary data.
+     * @param array<string, mixed> $secretary Associative array with the secretary data.
      *
      * @return int Returns the secretary ID.
      *
@@ -73,7 +73,7 @@ class Secretaries_model extends EA_Model
     /**
      * Validate the secretary data.
      *
-     * @param array $secretary Associative array with the secretary data.
+     * @param array<string, mixed> $secretary Associative array with the secretary data.
      *
      * @throws InvalidArgumentException
      */
@@ -197,12 +197,12 @@ class Secretaries_model extends EA_Model
     /**
      * Get all secretaries that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of secretaries.
+     * @return array<int, array<string, mixed>> Returns an array of secretaries.
      */
     public function get(
         array|string|null $where = null,
@@ -252,6 +252,8 @@ class Secretaries_model extends EA_Model
      *
      * @param int $secretary_id Secretary ID.
      *
+     * @return array<string, mixed> Returns the secretary settings.
+     *
      * @throws InvalidArgumentException
      */
     public function get_settings(int $secretary_id): array
@@ -267,6 +269,8 @@ class Secretaries_model extends EA_Model
      * Get the secretary provider IDs.
      *
      * @param int $secretary_id Secretary ID.
+     *
+     * @return array<int, int> Returns the provider IDs.
      */
     public function get_provider_ids(int $secretary_id): array
     {
@@ -286,7 +290,7 @@ class Secretaries_model extends EA_Model
     /**
      * Insert a new secretary into the database.
      *
-     * @param array $secretary Associative array with the secretary data.
+     * @param array<string, mixed> $secretary Associative array with the secretary data.
      *
      * @return int Returns the secretary ID.
      *
@@ -323,7 +327,7 @@ class Secretaries_model extends EA_Model
      * Set the secretary settings.
      *
      * @param int $secretary_id Secretary ID.
-     * @param array $settings Associative array with the settings data.
+     * @param array<string, mixed> $settings Associative array with the settings data.
      *
      * @throws InvalidArgumentException
      */
@@ -362,7 +366,7 @@ class Secretaries_model extends EA_Model
     /**
      * Update an existing secretary.
      *
-     * @param array $secretary Associative array with the secretary data.
+     * @param array<string, mixed> $secretary Associative array with the secretary data.
      *
      * @return int Returns the secretary ID.
      *
@@ -406,7 +410,7 @@ class Secretaries_model extends EA_Model
      * Set the secretary provider IDs.
      *
      * @param int $secretary_id Secretary ID.
-     * @param array $provider_ids Provider IDs.
+     * @param array<int, int> $provider_ids Provider IDs.
      */
     public function set_provider_ids(int $secretary_id, array $provider_ids): void
     {
@@ -513,7 +517,7 @@ class Secretaries_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of secretaries.
+     * @return array<int, array<string, mixed>> Returns an array of secretaries.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -554,8 +558,8 @@ class Secretaries_model extends EA_Model
     /**
      * Load related resources to a secretary.
      *
-     * @param array $secretary Associative array with the secretary data.
-     * @param array $resources Resource names to be attached ("providers" supported).
+     * @param array<string, mixed> $secretary Associative array with the secretary data.
+     * @param string[] $resources Resource names to be attached ("providers" supported).
      *
      * @throws InvalidArgumentException
      */
@@ -584,7 +588,7 @@ class Secretaries_model extends EA_Model
     /**
      * Convert the database secretary record to the equivalent API resource.
      *
-     * @param array $secretary Secretary data.
+     * @param array<string, mixed> $secretary Secretary data.
      */
     public function api_encode(array &$secretary): void
     {
@@ -617,8 +621,8 @@ class Secretaries_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database secretary record.
      *
-     * @param array $secretary API resource.
-     * @param array|null $base Base secretary data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $secretary API resource.
+     * @param array<string, mixed>|null $base Base secretary data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$secretary, ?array $base = null): void
     {
@@ -732,7 +736,7 @@ class Secretaries_model extends EA_Model
      *
      * @param int $secretary_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the secretary data.
+     * @return array<string, mixed> Returns an array with the secretary data.
      *
      * @throws InvalidArgumentException
      */

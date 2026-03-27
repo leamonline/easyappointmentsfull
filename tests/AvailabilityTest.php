@@ -684,6 +684,92 @@ class AvailabilityTest extends TestCase
 
         $this->assertNotEmpty($hours);
     }
+
+    // ===================================================================
+    // pet_size=null Fallback
+    // ===================================================================
+
+    public function test_consider_salon_capacity_null_pet_size_calls_is_slot_available(): void
+    {
+        // consider_salon_capacity() with pet_size=null must call is_slot_available(),
+        // NOT is_slot_available_for_pet().
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturn(['available' => true, 'reason' => '']);
+        $this->ci()->salon_capacity->expects($this->never())->method('is_slot_available_for_pet');
+
+        $result = $this->lib->call_consider_salon_capacity('2026-03-16', ['09:00', '10:00'], null, null);
+
+        $this->assertEquals(['09:00', '10:00'], $result);
+    }
+
+    // ===================================================================
+    // Blocked Periods — 10:00–11:00 removes those slots
+    // ===================================================================
+
+    public function test_blocked_period_1000_to_1100_removes_those_slots(): void
+    {
+        $this->ci()->blocked_periods_model = $this->createMock(AvailStubBlockedPeriods::class);
+        $this->ci()->blocked_periods_model->method('is_entire_date_blocked')->willReturn(false);
+        $this->ci()->blocked_periods_model->method('get_for_period')->willReturn([
+            [
+                'start_datetime' => '2026-04-06 10:00:00',
+                'end_datetime'   => '2026-04-06 11:00:00',
+            ],
+        ]);
+
+        $hours = $this->lib->get_available_hours('2026-04-06', $this->service, $this->provider);
+
+        $this->assertNotContains('10:00', $hours);
+        $this->assertNotContains('10:30', $hours);
+        $this->assertContains('09:30', $hours);
+        $this->assertContains('11:00', $hours);
+    }
+
+    // ===================================================================
+    // Working Plan Exception — non-working date returns empty
+    // ===================================================================
+
+    public function test_working_plan_exception_marks_date_as_non_working(): void
+    {
+        // 2026-04-06 is normally a Monday (working day), but a working_plan_exception
+        // marks it as null (non-working).
+        $provider = $this->provider;
+        $provider['settings']['working_plan_exceptions'] = json_encode([
+            '2026-04-06' => null,
+        ]);
+
+        $hours = $this->lib->get_available_hours('2026-04-06', $this->service, $provider);
+
+        $this->assertEmpty($hours);
+    }
+
+    // ===================================================================
+    // Reschedule — exclude_appointment_id=42 makes own slot available
+    // ===================================================================
+
+    public function test_reschedule_exclude_appointment_id_makes_own_slot_available(): void
+    {
+        // When rescheduling appointment #42, passing exclude_appointment_id=42 means
+        // the capacity check must exclude that appointment, so the slot appears available.
+        // We verify this by checking that is_slot_available is invoked with excludeId=42.
+        $passedExcludeIds = [];
+        $this->ci()->salon_capacity = $this->createMock(AvailStubSalonCapacity::class);
+        $this->ci()->salon_capacity->method('is_enabled')->willReturn(true);
+        $this->ci()->salon_capacity->method('is_slot_available')
+            ->willReturnCallback(function ($date, $hour, $seats, $excludeId) use (&$passedExcludeIds) {
+                $passedExcludeIds[] = $excludeId;
+                return ['available' => true, 'reason' => ''];
+            });
+
+        $this->lib->get_available_hours('2026-04-06', $this->service, $this->provider, 42);
+
+        $this->assertNotEmpty($passedExcludeIds);
+        foreach ($passedExcludeIds as $excludeId) {
+            $this->assertEquals(42, $excludeId,
+                'consider_salon_capacity should pass exclude_appointment_id=42 to is_slot_available');
+        }
+    }
 }
 
 // -- Stub classes for Availability tests --

@@ -92,7 +92,7 @@ class EA_Controller extends CI_Controller
         rate_limit($this->input->ip_address());
     }
 
-    private function ensure_user_exists()
+    private function ensure_user_exists(): void
     {
         $user_id = session('user_id');
 
@@ -110,7 +110,7 @@ class EA_Controller extends CI_Controller
     /**
      * Configure the language.
      */
-    private function configure_language()
+    private function configure_language(): void
     {
         $session_language = session('language');
 
@@ -129,7 +129,7 @@ class EA_Controller extends CI_Controller
     /**
      * Load common script vars for all requests.
      */
-    private function load_common_html_vars()
+    private function load_common_html_vars(): void
     {
         html_vars([
             'base_url' => config('base_url'),
@@ -143,7 +143,7 @@ class EA_Controller extends CI_Controller
     /**
      * Load common script vars for all requests.
      */
-    private function load_common_script_vars()
+    private function load_common_script_vars(): void
     {
         script_vars([
             'base_url' => config('base_url'),

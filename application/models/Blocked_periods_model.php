@@ -21,14 +21,14 @@
 class Blocked_periods_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -41,7 +41,7 @@ class Blocked_periods_model extends EA_Model
     /**
      * Save (insert or update) a blocked-period.
      *
-     * @param array $blocked_period Associative array with the blocked-period data.
+     * @param array<string, mixed> $blocked_period Associative array with the blocked-period data.
      *
      * @return int Returns the blocked-period ID.
      *
@@ -62,7 +62,7 @@ class Blocked_periods_model extends EA_Model
     /**
      * Validate the blocked-period data.
      *
-     * @param array $blocked_period Associative array with the blocked-period data.
+     * @param array<string, mixed> $blocked_period Associative array with the blocked-period data.
      *
      * @throws InvalidArgumentException
      * @throws Exception
@@ -103,7 +103,7 @@ class Blocked_periods_model extends EA_Model
     /**
      * Insert a new blocked-period into the database.
      *
-     * @param array $blocked_period Associative array with the blocked-period data.
+     * @param array<string, mixed> $blocked_period Associative array with the blocked-period data.
      *
      * @return int Returns the blocked-period ID.
      *
@@ -124,7 +124,7 @@ class Blocked_periods_model extends EA_Model
     /**
      * Update an existing blocked-period.
      *
-     * @param array $blocked_period Associative array with the blocked-period data.
+     * @param array<string, mixed> $blocked_period Associative array with the blocked-period data.
      *
      * @return int Returns the blocked-period ID.
      *
@@ -158,7 +158,7 @@ class Blocked_periods_model extends EA_Model
      *
      * @param int $blocked_period_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the blocked-period data.
+     * @return array<string, mixed> Returns an array with the blocked-period data.
      *
      * @throws InvalidArgumentException
      */
@@ -228,7 +228,7 @@ class Blocked_periods_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of blocked periods.
+     * @return array<int, array<string, mixed>> Returns an array of blocked periods.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -255,12 +255,12 @@ class Blocked_periods_model extends EA_Model
     /**
      * Get all services that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of blocked periods.
+     * @return array<int, array<string, mixed>> Returns an array of blocked periods.
      */
     public function get(
         array|string|null $where = null,
@@ -288,12 +288,12 @@ class Blocked_periods_model extends EA_Model
     /**
      * Load related resources to a blocked-period.
      *
-     * @param array $blocked_period Associative array with the blocked-period data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $blocked_period Associative array with the blocked-period data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$blocked_period, array $resources)
+    public function load(array &$blocked_period, array $resources): void
     {
         // Blocked periods do not currently have any related resources.
     }
@@ -301,7 +301,7 @@ class Blocked_periods_model extends EA_Model
     /**
      * Convert the database blocked-period record to the equivalent API resource.
      *
-     * @param array $blocked_period Blocked period data.
+     * @param array<string, mixed> $blocked_period Blocked period data.
      */
     public function api_encode(array &$blocked_period): void
     {
@@ -319,8 +319,8 @@ class Blocked_periods_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database blocked-period record.
      *
-     * @param array $blocked_period API resource.
-     * @param array|null $base Base blocked-period data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $blocked_period API resource.
+     * @param array<string, mixed>|null $base Base blocked-period data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$blocked_period, ?array $base = null): void
     {
@@ -355,7 +355,7 @@ class Blocked_periods_model extends EA_Model
      * @param string $start_date
      * @param string $end_date
      *
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
     public function get_for_period(string $start_date, string $end_date): array
     {

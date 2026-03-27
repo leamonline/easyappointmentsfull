@@ -23,27 +23,33 @@
         </div>
     </div>
 
-    <div id="steps">
-        <div id="step-1" class="book-step active-step"
+    <div id="steps" role="list" aria-label="Booking steps">
+        <div id="step-1" class="book-step active-step" role="listitem"
+             aria-current="step"
              data-tippy-content="<?= lang('login') ?>">
             <strong>1</strong>
+            <span class="step-label"><?= lang('login') ?></span>
         </div>
 
-        <div id="step-2" class="book-step" data-bs-toggle="tooltip"
+        <div id="step-2" class="book-step" role="listitem"
              data-tippy-content="Your Dog">
             <strong>2</strong>
+            <span class="step-label">Dog</span>
         </div>
-        <div id="step-3" class="book-step" data-bs-toggle="tooltip"
+        <div id="step-3" class="book-step" role="listitem"
              data-tippy-content="<?= lang('service_and_provider') ?>">
             <strong>3</strong>
+            <span class="step-label"><?= lang('service') ?></span>
         </div>
-        <div id="step-4" class="book-step" data-bs-toggle="tooltip"
+        <div id="step-4" class="book-step" role="listitem"
              data-tippy-content="<?= lang('appointment_date_and_time') ?>">
             <strong>4</strong>
+            <span class="step-label">Time</span>
         </div>
-        <div id="step-5" class="book-step" data-bs-toggle="tooltip"
+        <div id="step-5" class="book-step" role="listitem"
              data-tippy-content="<?= lang('appointment_confirmation') ?>">
             <strong>5</strong>
+            <span class="step-label">Confirm</span>
         </div>
     </div>
 

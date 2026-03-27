@@ -21,7 +21,12 @@
 class Pets_model extends EA_Model
 {
     /**
-     * @var array
+     * Vaccination statuses that indicate incomplete vaccination.
+     */
+    const VACCINATION_BLOCKED_STATUSES = ['unknown', 'pending_first', 'pending_second'];
+
+    /**
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -29,7 +34,7 @@ class Pets_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -46,7 +51,7 @@ class Pets_model extends EA_Model
     /**
      * Save (insert or update) a pet.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -66,7 +71,7 @@ class Pets_model extends EA_Model
     /**
      * Validate the pet data.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @throws InvalidArgumentException
      */
@@ -98,7 +103,7 @@ class Pets_model extends EA_Model
     /**
      * Insert a new pet into the database.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -119,7 +124,7 @@ class Pets_model extends EA_Model
     /**
      * Update an existing pet.
      *
-     * @param array $pet Associative array with the pet data.
+     * @param array<string, mixed> $pet Associative array with the pet data.
      *
      * @return int Returns the pet ID.
      *
@@ -153,7 +158,7 @@ class Pets_model extends EA_Model
      *
      * @param int $pet_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the pet data.
+     * @return array<string, mixed> Returns an array with the pet data.
      */
     public function find(int $pet_id): array
     {
@@ -173,12 +178,12 @@ class Pets_model extends EA_Model
     /**
      * Get all pets that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function get(
         array|string|null $where = null,
@@ -208,7 +213,7 @@ class Pets_model extends EA_Model
      *
      * @param int $customer_id Customer ID.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function get_by_customer(int $customer_id): array
     {
@@ -223,7 +228,7 @@ class Pets_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of pets.
+     * @return array<int, array<string, mixed>> Returns an array of pets.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -256,5 +261,47 @@ class Pets_model extends EA_Model
     public function query(): CI_DB_query_builder
     {
         return $this->db->from('pets');
+    }
+
+    /**
+     * Determine whether a pet is a puppy that has not completed vaccinations.
+     *
+     * A pet is considered a puppy if its parsed age is under 6 months or its
+     * breed/age field contains the word "puppy". Returns true (blocked) only
+     * when the pet IS a puppy AND vaccination_status is not 'up_to_date'.
+     *
+     * @param array<string, mixed> $pet Pet row from the database.
+     *
+     * @return bool True if the pet should be blocked from booking.
+     */
+    public function is_puppy_needing_vaccination(array $pet): bool
+    {
+        $status = $pet['vaccination_status'] ?? 'unknown';
+
+        if ($status === 'up_to_date') {
+            return false;
+        }
+
+        $is_puppy = false;
+
+        $age_months = parse_pet_age_months($pet['age'] ?? null);
+
+        if ($age_months !== null && $age_months < 6.0) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy && stripos($pet['breed'] ?? '', 'puppy') !== false) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy && stripos($pet['age'] ?? '', 'puppy') !== false) {
+            $is_puppy = true;
+        }
+
+        if (!$is_puppy) {
+            return false;
+        }
+
+        return in_array($status, self::VACCINATION_BLOCKED_STATUSES, true);
     }
 }

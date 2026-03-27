@@ -44,7 +44,7 @@ class Accounts
      * @param string $username Username.
      * @param string $password Password (non-hashed).
      *
-     * @return array|null Returns an associative array with the PHP session data or NULL on failure.
+     * @return array<string, mixed>|null Returns an associative array with the PHP session data or NULL on failure.
      * @throws Exception
      */
     public function check_login(string $username, string $password): ?array
@@ -173,7 +173,7 @@ class Accounts
      *
      * @param string $username
      *
-     * @return array|null
+     * @return array<string, mixed>|null
      */
     public function get_user_by_username(string $username): ?array
     {

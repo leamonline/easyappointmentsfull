@@ -20,7 +20,9 @@
  */
 class Secretaries extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_provider_fields = ['id', 'first_name', 'last_name'];
+    /** @var string[] */
     public array $allowed_secretary_fields = [
         'id',
         'first_name',
@@ -42,12 +44,15 @@ class Secretaries extends EA_Controller
         'providers',
     ];
 
+    /** @var array<string, mixed> */
     public array $optional_secretary_fields = [
         'providers' => [],
     ];
 
+    /** @var string[] */
     public array $allowed_secretary_setting_fields = ['username', 'password', 'notifications', 'calendar_view'];
 
+    /** @var string[] */
     public array $optional_secretary_setting_fields = [
         //
     ];

@@ -50,7 +50,7 @@ class Salon_capacity
     /**
      * Get all slot times for the salon day.
      *
-     * @return array Returns an array of slot time strings (e.g. ['08:30', '09:00', ...]).
+     * @return array<int, string> Returns an array of slot time strings (e.g. ['08:30', '09:00', ...]).
      */
     public function get_all_slots(): array
     {
@@ -114,7 +114,7 @@ class Salon_capacity
      * @param string $date Date (Y-m-d).
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
      *
-     * @return array Associative array of slot_time => seats_used.
+     * @return array<string, int> Associative array of slot_time => seats_used.
      */
     public function get_day_occupancy(string $date, ?int $exclude_appointment_id = null): array
     {
@@ -241,7 +241,7 @@ class Salon_capacity
      * @param string $pet_size Pet size ('small', 'medium', 'large').
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
      *
-     * @return array Returns ['allowed' => bool, 'requires_approval' => bool, 'seats_required' => int, 'reason' => string].
+     * @return array{allowed: bool, requires_approval: bool, seats_required: int, reason: string} Returns the validation result.
      */
     public function validate_large_dog(
         string $date,
@@ -354,7 +354,7 @@ class Salon_capacity
      * @param bool $is_admin Whether the caller is an admin.
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
      *
-     * @return array Returns ['available' => bool, 'reason' => string].
+     * @return array{available: bool, reason: string} Returns the availability result.
      */
     public function is_slot_available_for_pet(
         string $date,
@@ -398,7 +398,7 @@ class Salon_capacity
      * @param int $seats_required Number of seats needed.
      * @param int|null $exclude_appointment_id Appointment ID to exclude.
      *
-     * @return array Returns ['available' => bool, 'reason' => string].
+     * @return array{available: bool, reason: string} Returns the availability result.
      */
     public function is_slot_available(
         string $date,
@@ -446,7 +446,7 @@ class Salon_capacity
      * @param string|null $pet_size Pet size for pet-aware filtering.
      * @param bool $is_admin Whether the caller is an admin.
      *
-     * @return array Returns an array of available slot times.
+     * @return array<int, string> Returns an array of available slot times.
      */
     public function get_alternative_slots(
         string $date,

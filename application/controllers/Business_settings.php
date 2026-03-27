@@ -20,8 +20,10 @@
  */
 class Business_settings extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_setting_fields = ['id', 'name', 'value'];
 
+    /** @var string[] */
     public array $optional_setting_fields = [
         //
     ];

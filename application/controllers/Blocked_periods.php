@@ -20,8 +20,10 @@
  */
 class Blocked_periods extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_blocked_period_fields = ['id', 'name', 'start_datetime', 'end_datetime', 'notes'];
 
+    /** @var string[] */
     public array $optional_blocked_period_fields = [
         //
     ];

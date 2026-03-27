@@ -19,7 +19,7 @@
 class Appointments_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -32,7 +32,7 @@ class Appointments_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -56,15 +56,16 @@ class Appointments_model extends EA_Model
     /**
      * Save (insert or update) an appointment.
      *
-     * @param array $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $options
      *
      * @return int Returns the appointment ID.
      *
      * @throws InvalidArgumentException
      */
-    public function save(array $appointment): int
+    public function save(array $appointment, array $options = []): int
     {
-        $this->validate($appointment);
+        $this->validate($appointment, $options);
 
         if (empty($appointment['id'])) {
             return $this->insert($appointment);
@@ -76,11 +77,12 @@ class Appointments_model extends EA_Model
     /**
      * Validate the appointment data.
      *
-     * @param array $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $options
      *
      * @throws InvalidArgumentException
      */
-    public function validate(array $appointment): void
+    public function validate(array $appointment, array $options = []): void
     {
         // If an appointment ID is provided then check whether the record really exists in the database.
         if (!empty($appointment['id'])) {
@@ -181,6 +183,19 @@ class Appointments_model extends EA_Model
                         'The pet does not belong to the appointment customer.',
                     );
                 }
+
+                // Vaccination gate: block unvaccinated puppies unless admin override.
+                $is_admin = $options['is_admin'] ?? false;
+
+                if (!$is_admin) {
+                    $this->load->model('pets_model');
+
+                    if ($this->pets_model->is_puppy_needing_vaccination($pet)) {
+                        throw new InvalidArgumentException(
+                            'Puppies must have completed their second vaccinations before booking.',
+                        );
+                    }
+                }
             }
 
             // Validate seats_required: must be 1 or 2 (defaults to 1 if missing).
@@ -197,12 +212,12 @@ class Appointments_model extends EA_Model
     /**
      * Get all appointments that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of appointments.
+     * @return array<int, array<string, mixed>> Returns an array of appointments.
      */
     public function get(
         array|string|null $where = null,
@@ -232,7 +247,7 @@ class Appointments_model extends EA_Model
     /**
      * Insert a new appointment into the database.
      *
-     * @param array $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $appointment Associative array with the appointment data.
      *
      * @return int Returns the appointment ID.
      *
@@ -255,7 +270,7 @@ class Appointments_model extends EA_Model
     /**
      * Update an existing appointment.
      *
-     * @param array $appointment Associative array with the appointment data.
+     * @param array<string, mixed> $appointment Associative array with the appointment data.
      *
      * @return int Returns the appointment ID.
      *
@@ -277,7 +292,7 @@ class Appointments_model extends EA_Model
      *
      * @param int $appointment_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the appointment data.
+     * @return array<string, mixed> Returns an array with the appointment data.
      *
      * @throws InvalidArgumentException
      */
@@ -492,7 +507,7 @@ class Appointments_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of appointments.
+     * @return array<int, array<string, mixed>> Returns an array of appointments.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -536,8 +551,8 @@ class Appointments_model extends EA_Model
     /**
      * Load related resources to an appointment.
      *
-     * @param array $appointment Associative array with the appointment data.
-     * @param array $resources Resource names to be attached ("service", "provider", "customer" supported).
+     * @param array<string, mixed> $appointment Associative array with the appointment data.
+     * @param string[] $resources Resource names to be attached ("service", "provider", "customer" supported).
      *
      * @throws InvalidArgumentException
      */
@@ -591,7 +606,7 @@ class Appointments_model extends EA_Model
     /**
      * Convert the database appointment record to the equivalent API resource.
      *
-     * @param array $appointment Appointment data.
+     * @param array<string, mixed> $appointment Appointment data.
      */
     public function api_encode(array &$appointment): void
     {
@@ -620,8 +635,8 @@ class Appointments_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database appointment record.
      *
-     * @param array $appointment API resource.
-     * @param array|null $base Base appointment data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $appointment API resource.
+     * @param array<string, mixed>|null $base Base appointment data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$appointment, ?array $base = null): void
     {
@@ -687,7 +702,7 @@ class Appointments_model extends EA_Model
     /**
      * Calculate the end date time of an appointment based on the selected service.
      *
-     * @param array $appointment Appointment data.
+     * @param array<string, mixed> $appointment Appointment data.
      *
      * @return string Returns the end date time value.
      *

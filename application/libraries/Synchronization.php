@@ -42,11 +42,11 @@ class Synchronization
     /**
      * Synchronize changes made to the appointment with external calendars.
      *
-     * @param array $appointment Appointment record.
-     * @param array $service Service record.
-     * @param array $provider Provider record.
-     * @param array $customer Customer record.
-     * @param array $settings Required settings for the notification content.
+     * @param array<string, mixed> $appointment Appointment record.
+     * @param array<string, mixed> $service Service record.
+     * @param array<string, mixed> $provider Provider record.
+     * @param array<string, mixed> $customer Customer record.
+     * @param array<string, mixed> $settings Required settings for the notification content.
      */
     public function sync_appointment_saved(
         array $appointment,
@@ -112,8 +112,8 @@ class Synchronization
     /**
      * Synchronize removal of an appointment with external calendars.
      *
-     * @param array $appointment Appointment record.
-     * @param array $provider Provider record.
+     * @param array<string, mixed> $appointment Appointment record.
+     * @param array<string, mixed> $provider Provider record.
      */
     public function sync_appointment_deleted(array $appointment, array $provider): void
     {
@@ -152,8 +152,8 @@ class Synchronization
     /**
      * Synchronize changes made to the unavailability with external calendars.
      *
-     * @param array $unavailability Unavailability record.
-     * @param array $provider Provider record.
+     * @param array<string, mixed> $unavailability Unavailability record.
+     * @param array<string, mixed> $provider Provider record.
      */
     public function sync_unavailability_saved(array $unavailability, array $provider): void
     {
@@ -205,8 +205,8 @@ class Synchronization
     /**
      * Synchronize removal of an unavailability with external calendars.
      *
-     * @param array $unavailability Unavailability record.
-     * @param array $provider Provider record.
+     * @param array<string, mixed> $unavailability Unavailability record.
+     * @param array<string, mixed> $provider Provider record.
      */
     public function sync_unavailability_deleted(array $unavailability, array $provider): void
     {
@@ -245,9 +245,11 @@ class Synchronization
     /**
      * Make sure a synced appointment is removed from Google/CalDAV Calendar, if its provider is changed.
      *
+     * @param int $appointment_id Appointment ID.
+     *
      * @throws Exception
      */
-    public function remove_appointment_on_provider_change($appointment_id): void
+    public function remove_appointment_on_provider_change(int $appointment_id): void
     {
         $existing_appointment = $this->CI->appointments_model->find($appointment_id);
 

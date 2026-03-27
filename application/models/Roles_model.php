@@ -21,7 +21,7 @@
 class Roles_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -37,7 +37,7 @@ class Roles_model extends EA_Model
     /**
      * Save (insert or update) a role.
      *
-     * @param array $role Associative array with the role data.
+     * @param array<string, mixed> $role Associative array with the role data.
      *
      * @return int Returns the role ID.
      *
@@ -57,7 +57,7 @@ class Roles_model extends EA_Model
     /**
      * Validate the role data.
      *
-     * @param array $role Associative array with the role data.
+     * @param array<string, mixed> $role Associative array with the role data.
      *
      * @throws InvalidArgumentException
      */
@@ -83,7 +83,7 @@ class Roles_model extends EA_Model
     /**
      * Insert a new role into the database.
      *
-     * @param array $role Associative array with the role data.
+     * @param array<string, mixed> $role Associative array with the role data.
      *
      * @return int Returns the role ID.
      *
@@ -104,7 +104,7 @@ class Roles_model extends EA_Model
     /**
      * Update an existing role.
      *
-     * @param array $role Associative array with the role data.
+     * @param array<string, mixed> $role Associative array with the role data.
      *
      * @return int Returns the role ID.
      *
@@ -138,7 +138,7 @@ class Roles_model extends EA_Model
      *
      * @param int $role_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the role data.
+     * @return array<string, mixed> Returns an array with the role data.
      *
      * @throws InvalidArgumentException
      */
@@ -208,7 +208,7 @@ class Roles_model extends EA_Model
      *
      * @param string $slug Role slug.
      *
-     * @return array Returns the permissions value.
+     * @return array<string, array<string, bool>> Returns the permissions value.
      */
     public function get_permissions_by_slug(string $slug): array
     {
@@ -270,7 +270,7 @@ class Roles_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of roles.
+     * @return array<int, array<string, mixed>> Returns an array of roles.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -297,12 +297,12 @@ class Roles_model extends EA_Model
     /**
      * Get all roles that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of roles.
+     * @return array<int, array<string, mixed>> Returns an array of roles.
      */
     public function get(
         array|string|null $where = null,
@@ -330,12 +330,12 @@ class Roles_model extends EA_Model
     /**
      * Load related resources to a role.
      *
-     * @param array $role Associative array with the role data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $role Associative array with the role data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$role, array $resources)
+    public function load(array &$role, array $resources): void
     {
         // Roles do not currently have any related resources.
     }

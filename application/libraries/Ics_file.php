@@ -52,10 +52,10 @@ class Ics_file
     /**
      * Get the ICS file contents for the provided arguments.
      *
-     * @param array $appointment Appointment data.
-     * @param array $service Service data.
-     * @param array $provider Provider data.
-     * @param array $customer Customer data.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $customer Customer data.
      *
      * @return string Returns the contents of the ICS file.
      *
@@ -183,6 +183,17 @@ class Ics_file
         return $calendarExport->getStream();
     }
 
+    /**
+     * Get the ICS file contents for an unavailability event.
+     *
+     * @param array<string, mixed> $unavailability Unavailability data.
+     * @param array<string, mixed> $provider Provider data.
+     *
+     * @return string Returns the contents of the ICS file.
+     *
+     * @throws CalendarEventException
+     * @throws Exception
+     */
     public function get_unavailability_stream(array $unavailability, array $provider): string
     {
         $unavailability_timezone = new DateTimeZone($provider['timezone']);

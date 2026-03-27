@@ -20,6 +20,7 @@
  */
 class Customers extends EA_Controller
 {
+    /** @var string[] */
     public array $allowed_customer_fields = [
         'id',
         'first_name',
@@ -43,6 +44,7 @@ class Customers extends EA_Controller
         'strike_count',
     ];
 
+    /** @var string[] */
     public array $optional_customer_fields = [
         //
     ];

@@ -21,7 +21,7 @@
 class Providers_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -30,7 +30,7 @@ class Providers_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -54,7 +54,7 @@ class Providers_model extends EA_Model
     /**
      * Save (insert or update) a provider.
      *
-     * @param array $provider Associative array with the provider data.
+     * @param array<string, mixed> $provider Associative array with the provider data.
      *
      * @return int Returns the provider ID.
      *
@@ -75,7 +75,7 @@ class Providers_model extends EA_Model
     /**
      * Validate the provider data.
      *
-     * @param array $provider Associative array with the provider data.
+     * @param array<string, mixed> $provider Associative array with the provider data.
      *
      * @throws InvalidArgumentException
      */
@@ -199,12 +199,12 @@ class Providers_model extends EA_Model
     /**
      * Get all providers that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions
+     * @param array<string, mixed>|string|null $where Where conditions
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of providers.
+     * @return array<int, array<string, mixed>> Returns an array of providers.
      */
     public function get(
         array|string|null $where = null,
@@ -254,6 +254,8 @@ class Providers_model extends EA_Model
      *
      * @param int $provider_id Provider ID.
      *
+     * @return array<string, mixed> Returns the provider settings.
+     *
      * @throws InvalidArgumentException
      */
     public function get_settings(int $provider_id): array
@@ -269,6 +271,8 @@ class Providers_model extends EA_Model
      * Get the provider service IDs.
      *
      * @param int $provider_id Provider ID.
+     *
+     * @return array<int, int> Returns the service IDs.
      */
     public function get_service_ids(int $provider_id): array
     {
@@ -288,7 +292,7 @@ class Providers_model extends EA_Model
     /**
      * Insert a new provider into the database.
      *
-     * @param array $provider Associative array with the provider data.
+     * @param array<string, mixed> $provider Associative array with the provider data.
      *
      * @return int Returns the provider ID.
      *
@@ -324,7 +328,7 @@ class Providers_model extends EA_Model
      * Save the provider settings.
      *
      * @param int $provider_id Provider ID.
-     * @param array $settings Associative array with the settings data.
+     * @param array<string, mixed> $settings Associative array with the settings data.
      *
      * @throws InvalidArgumentException
      */
@@ -376,7 +380,7 @@ class Providers_model extends EA_Model
     /**
      * Update an existing provider.
      *
-     * @param array $provider Associative array with the provider data.
+     * @param array<string, mixed> $provider Associative array with the provider data.
      *
      * @return int Returns the provider ID.
      *
@@ -420,7 +424,7 @@ class Providers_model extends EA_Model
      * Save the provider service IDs.
      *
      * @param int $provider_id Provider ID.
-     * @param array $service_ids Service IDs.
+     * @param array<int, int> $service_ids Service IDs.
      */
     public function set_service_ids(int $provider_id, array $service_ids): void
     {
@@ -514,7 +518,7 @@ class Providers_model extends EA_Model
      *
      * @param int $provider_id Provider ID.
      * @param string $date Working plan exception date (in YYYY-MM-DD format).
-     * @param array|null $working_plan_exception Associative array with the working plan exception data.
+     * @param array<string, mixed>|null $working_plan_exception Associative array with the working plan exception data.
      *
      * @throws Exception
      */
@@ -575,7 +579,7 @@ class Providers_model extends EA_Model
      *
      * @param int $provider_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the provider data.
+     * @return array<string, mixed> Returns an array with the provider data.
      *
      * @throws InvalidArgumentException
      */
@@ -628,7 +632,7 @@ class Providers_model extends EA_Model
      *
      * @param bool $without_private Only include the public providers.
      *
-     * @return array Returns an array of providers.
+     * @return array<int, array<string, mixed>> Returns an array of providers.
      */
     public function get_available_providers(bool $without_private = false): array
     {
@@ -676,7 +680,7 @@ class Providers_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of providers.
+     * @return array<int, array<string, mixed>> Returns an array of providers.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -717,8 +721,8 @@ class Providers_model extends EA_Model
     /**
      * Load related resources to a provider.
      *
-     * @param array $provider Associative array with the provider data.
-     * @param array $resources Resource names to be attached ("services" supported).
+     * @param array<string, mixed> $provider Associative array with the provider data.
+     * @param string[] $resources Resource names to be attached ("services" supported).
      *
      * @throws InvalidArgumentException
      */
@@ -747,7 +751,7 @@ class Providers_model extends EA_Model
     /**
      * Convert the database provider record to the equivalent API resource.
      *
-     * @param array $provider Provider data.
+     * @param array<string, mixed> $provider Provider data.
      */
     public function api_encode(array &$provider): void
     {
@@ -820,8 +824,8 @@ class Providers_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database provider record.
      *
-     * @param array $provider API resource.
-     * @param array|null $base Base provider data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $provider API resource.
+     * @param array<string, mixed>|null $base Base provider data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$provider, ?array $base = null): void
     {

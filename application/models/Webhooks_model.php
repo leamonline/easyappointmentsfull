@@ -21,7 +21,7 @@
 class Webhooks_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -30,7 +30,7 @@ class Webhooks_model extends EA_Model
     ];
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $api_resource = [
         'id' => 'id',
@@ -46,7 +46,7 @@ class Webhooks_model extends EA_Model
     /**
      * Save (insert or update) a webhook.
      *
-     * @param array $webhook Associative array with the webhook data.
+     * @param array<string, mixed> $webhook Associative array with the webhook data.
      *
      * @return int Returns the webhook ID.
      *
@@ -66,7 +66,7 @@ class Webhooks_model extends EA_Model
     /**
      * Validate the webhook data.
      *
-     * @param array $webhook Associative array with the webhook data.
+     * @param array<string, mixed> $webhook Associative array with the webhook data.
      *
      * @throws InvalidArgumentException
      */
@@ -80,7 +80,7 @@ class Webhooks_model extends EA_Model
     /**
      * Insert a new webhook into the database.
      *
-     * @param array $webhook Associative array with the webhook data.
+     * @param array<string, mixed> $webhook Associative array with the webhook data.
      *
      * @return int Returns the webhook ID.
      *
@@ -101,7 +101,7 @@ class Webhooks_model extends EA_Model
     /**
      * Update an existing webhook.
      *
-     * @param array $webhook Associative array with the webhook data.
+     * @param array<string, mixed> $webhook Associative array with the webhook data.
      *
      * @return int Returns the webhook ID.
      *
@@ -135,7 +135,7 @@ class Webhooks_model extends EA_Model
      *
      * @param int $webhook_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the webhook data.
+     * @return array<string, mixed> Returns an array with the webhook data.
      */
     public function find(int $webhook_id): array
     {
@@ -207,7 +207,7 @@ class Webhooks_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of webhooks.
+     * @return array<int, array<string, mixed>> Returns an array of webhooks.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -235,12 +235,12 @@ class Webhooks_model extends EA_Model
     /**
      * Get all webhooks that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of webhooks.
+     * @return array<int, array<string, mixed>> Returns an array of webhooks.
      */
     public function get(
         array|string|null $where = null,
@@ -268,12 +268,12 @@ class Webhooks_model extends EA_Model
     /**
      * Load related resources to a webhook.
      *
-     * @param array $webhook Associative array with the webhook data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $webhook Associative array with the webhook data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$webhook, array $resources)
+    public function load(array &$webhook, array $resources): void
     {
         // Webhooks do not currently have any related resources.
     }
@@ -281,7 +281,7 @@ class Webhooks_model extends EA_Model
     /**
      * Convert the database webhook record to the equivalent API resource.
      *
-     * @param array $webhook Webhook data.
+     * @param array<string, mixed> $webhook Webhook data.
      */
     public function api_encode(array &$webhook): void
     {
@@ -301,8 +301,8 @@ class Webhooks_model extends EA_Model
     /**
      * Convert the API resource to the equivalent database webhook record.
      *
-     * @param array $webhook API resource.
-     * @param array|null $base Base webhook data to be overwritten with the provided values (useful for updates).
+     * @param array<string, mixed> $webhook API resource.
+     * @param array<string, mixed>|null $base Base webhook data to be overwritten with the provided values (useful for updates).
      */
     public function api_decode(array &$webhook, ?array $base = null): void
     {

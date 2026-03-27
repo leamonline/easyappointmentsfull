@@ -45,7 +45,7 @@ class EA_Loader extends CI_Loader
      * Override the original view loader method so that layouts are also supported.
      *
      * @param string $view View filename.
-     * @param array $vars An associative array of data to be extracted for use in the view.
+     * @param array<string, mixed> $vars An associative array of data to be extracted for use in the view.
      * @param bool $return Whether to return the view output or leave it to the Output class.
      *
      * @return object|string

@@ -51,11 +51,11 @@ class Email_messages
     /**
      * Send an email with the appointment details.
      *
-     * @param array $appointment Appointment data.
-     * @param array $provider Provider data.
-     * @param array $service Service data.
-     * @param array $customer Customer data.
-     * @param array $settings App settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings App settings.
      * @param string $subject Email subject.
      * @param string $message Email message.
      * @param string $appointment_link Appointment unique URL.
@@ -122,11 +122,11 @@ class Email_messages
     /**
      * Send an email with the appointment removal details.
      *
-     * @param array $appointment Appointment data.
-     * @param array $provider Provider data.
-     * @param array $service Service data.
-     * @param array $customer Customer data.
-     * @param array $settings App settings.
+     * @param array<string, mixed> $appointment Appointment data.
+     * @param array<string, mixed> $provider Provider data.
+     * @param array<string, mixed> $service Service data.
+     * @param array<string, mixed> $customer Customer data.
+     * @param array<string, mixed> $settings App settings.
      * @param string $recipient_email Recipient email address.
      * @param string|null $reason Removal reason.
      * @param string|null $timezone Custom timezone.
@@ -187,7 +187,7 @@ class Email_messages
      *
      * @param string $password New password.
      * @param string $recipient_email Recipient email address.
-     * @param array $settings App settings.
+     * @param array<string, mixed> $settings App settings.
      *
      * @throws Exception
      */

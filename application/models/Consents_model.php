@@ -21,7 +21,7 @@
 class Consents_model extends EA_Model
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected array $casts = [
         'id' => 'integer',
@@ -30,7 +30,7 @@ class Consents_model extends EA_Model
     /**
      * Save (insert or update) a consent.
      *
-     * @param array $consent Associative array with the consent data.
+     * @param array<string, mixed> $consent Associative array with the consent data.
      *
      * @return int Returns the consent ID.
      *
@@ -50,7 +50,7 @@ class Consents_model extends EA_Model
     /**
      * Validate the consent data.
      *
-     * @param array $consent Associative array with the consent data.
+     * @param array<string, mixed> $consent Associative array with the consent data.
      *
      * @throws InvalidArgumentException
      */
@@ -64,7 +64,7 @@ class Consents_model extends EA_Model
     /**
      * Insert a new consent into the database.
      *
-     * @param array $consent Associative array with the consent data.
+     * @param array<string, mixed> $consent Associative array with the consent data.
      *
      * @return int Returns the consent ID.
      *
@@ -85,7 +85,7 @@ class Consents_model extends EA_Model
     /**
      * Update an existing consent.
      *
-     * @param array $consent Associative array with the consent data.
+     * @param array<string, mixed> $consent Associative array with the consent data.
      *
      * @return int Returns the consent ID.
      *
@@ -119,7 +119,7 @@ class Consents_model extends EA_Model
      *
      * @param int $consent_id The ID of the record to be returned.
      *
-     * @return array Returns an array with the consent data.
+     * @return array<string, mixed> Returns an array with the consent data.
      */
     public function find(int $consent_id): array
     {
@@ -191,7 +191,7 @@ class Consents_model extends EA_Model
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of consents.
+     * @return array<int, array<string, mixed>> Returns an array of consents.
      */
     public function search(string $keyword, ?int $limit = null, ?int $offset = null, ?string $order_by = null): array
     {
@@ -220,12 +220,12 @@ class Consents_model extends EA_Model
     /**
      * Get all consents that match the provided criteria.
      *
-     * @param array|string|null $where Where conditions.
+     * @param array<string, mixed>|string|null $where Where conditions.
      * @param int|null $limit Record limit.
      * @param int|null $offset Record offset.
      * @param string|null $order_by Order by.
      *
-     * @return array Returns an array of consents.
+     * @return array<int, array<string, mixed>> Returns an array of consents.
      */
     public function get(
         array|string|null $where = null,
@@ -253,12 +253,12 @@ class Consents_model extends EA_Model
     /**
      * Load related resources to a consent.
      *
-     * @param array $consent Associative array with the consent data.
-     * @param array $resources Resource names to be attached.
+     * @param array<string, mixed> $consent Associative array with the consent data.
+     * @param string[] $resources Resource names to be attached.
      *
      * @throws InvalidArgumentException
      */
-    public function load(array &$consent, array $resources)
+    public function load(array &$consent, array $resources): void
     {
         // Consents do not currently have any related resources.
     }

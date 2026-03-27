@@ -21,7 +21,7 @@ root {
    -------------------------------------------------------------------- */
 
 #header {
-    background-color: #429a82;
+    background-color: var(--sd-brand);
     box-shadow: none;
     border-radius: 0;
     padding: 0;
@@ -34,7 +34,7 @@ root {
 
 #header #header-logo small {
     font-size: 10.5px;
-    color: #004c39;
+    color: var(--sd-brand-subtle);
 }
 
 #header #header-logo img {
@@ -67,11 +67,11 @@ root {
 }
 
 #header #header-menu .nav-item:hover {
-    background: #3a8873;
+    background: var(--sd-brand-hover);
 }
 
 #header #header-menu .nav-item.active {
-    background: #2e6a5b;
+    background: var(--sd-brand-active);
 }
 
 #footer {
@@ -136,7 +136,7 @@ body .modal .modal-title {
 
 body .modal-header {
     padding: 20px 15px;
-    background: #429a82;
+    background: var(--sd-brand);
 }
 
 body .modal-header h3 {
@@ -146,7 +146,7 @@ body .modal-header h3 {
 }
 
 body .modal-header .close {
-    color: #12482a;
+    color: var(--sd-brand-darker);
 }
 
 body .modal-content {
@@ -243,7 +243,7 @@ body legend {
 
 .backend-page .filter-records .results .entry.selected {
     background-color: #f4f4f4;
-    border-right: 5px solid #429a82;
+    border-right: 5px solid var(--sd-brand);
 }
 
 .backend-page .filter-records .results hr {
@@ -501,7 +501,7 @@ body legend {
 }
 
 #existing-customers-list div:hover {
-    background: #429a82;
+    background: var(--sd-brand);
     font-weight: bold;
     color: #fff;
     cursor: pointer;
@@ -603,7 +603,7 @@ body .form-horizontal .controls {
 }
 
 #calendar .calendar-view .date-column .provider-column .event.unavailability {
-    background: #409482;
+    background: var(--sd-brand);
     color: #fff;
 }
 

@@ -8,19 +8,36 @@
  * @link        https://easyappointments.org
  * @since       v1.5.0
  * ---------------------------------------------------------------------------- */
+/* BRAND COLOR TOKENS
+   ---------------------------------------------------------------------------- */
+:root {
+  --sd-brand: #429a82;
+  --sd-brand-dark: #225d4d;
+  --sd-brand-darker: #12482a;
+  --sd-brand-hover: #3a8873;
+  --sd-brand-active: #2e6a5b;
+  --sd-brand-light: #80e3ad;
+  --sd-brand-lighter: #0bb98d;
+  --sd-brand-text: #1a865f;
+  --sd-brand-subtle: #004c39;
+}
+
 html {
   height: 100%;
 }
 
 select {
+  appearance: none;
   -webkit-appearance: none;
 }
 
-@-moz-document url-prefix() {
-  body .checkbox input[type=checkbox] {
-    float: left;
-  }
-}
+/* JQUERY UI & TIMEPICKER OVERRIDES
+   ---------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------
+ * jQuery UI & Timepicker Overrides
+ *
+ * Extracted from general.scss to reduce bloat and improve maintainability.
+ * ---------------------------------------------------------------------------- */
 body .ui-widget {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1.1em;
@@ -29,7 +46,6 @@ body .ui-widget {
 body .ui-widget-overlay {
   background: #000 50% 50% repeat-x;
   opacity: 0.5;
-  filter: Alpha(Opacity=50);
 }
 
 body .ui-dialog .ui-dialog-titlebar-close {
@@ -37,7 +53,7 @@ body .ui-dialog .ui-dialog-titlebar-close {
 }
 
 body .ui-draggable .ui-dialog-titlebar {
-  background: #429a82;
+  background: var(--sd-brand);
   color: #fff;
   font-size: 1.2em;
   font-weight: lighter;
@@ -72,7 +88,7 @@ body .ui-dialog #error-technical {
 }
 
 body .ui-widget.ui-widget-content {
-  border: 1px solid #429a82;
+  border: 1px solid var(--sd-brand);
   padding: 0;
 }
 
@@ -92,7 +108,7 @@ body .ui-datepicker {
 
 body .ui-datepicker .ui-widget-header {
   border: none;
-  background: #429a82;
+  background: var(--sd-brand);
   border-radius: 0;
 }
 
@@ -106,7 +122,7 @@ body .ui-datepicker .ui-datepicker-title {
 }
 
 body .ui-datepicker th {
-  background: #429a82;
+  background: var(--sd-brand);
   color: #fff;
 }
 
@@ -118,7 +134,7 @@ body .ui-datepicker td a,
 body .ui-datepicker td span {
   border: none !important;
   background: none !important;
-  color: #1a865f !important;
+  color: var(--sd-brand-text) !important;
   text-align: center !important;
   width: 32px;
   height: 32px;
@@ -128,7 +144,7 @@ body .ui-datepicker td span {
 html body .ui-datepicker td a.ui-state-active {
   color: #fff !important;
   font-weight: bold !important;
-  background: #429a82 !important;
+  background: var(--sd-brand) !important;
   border-radius: 50px;
   width: 24px;
   height: 24px;
@@ -137,7 +153,7 @@ html body .ui-datepicker td a.ui-state-active {
 }
 
 body .ui-datepicker td a.ui-state-highlight {
-  background: #80e3ad !important;
+  background: var(--sd-brand-light) !important;
   border-radius: 67px;
   color: #fff !important;
   width: 24px;
@@ -149,8 +165,8 @@ body .ui-datepicker td a.ui-state-highlight {
 body .ui-datepicker .ui-datepicker-prev-hover {
   top: 2px !important;
   left: 2px !important;
-  background: #80e1ac;
-  border-color: #80e1ac;
+  background: var(--sd-brand-light);
+  border-color: var(--sd-brand-light);
   border-radius: 0;
   cursor: pointer;
 }
@@ -158,16 +174,16 @@ body .ui-datepicker .ui-datepicker-prev-hover {
 body .ui-datepicker .ui-datepicker-next-hover {
   top: 2px !important;
   right: 2px !important;
-  background: #80e1ac;
-  border-color: #80e1ac;
+  background: var(--sd-brand-light);
+  border-color: var(--sd-brand-light);
   border-radius: 0;
   cursor: pointer;
 }
 
 body .ui-datepicker .ui-slider-handle {
   border-radius: 0;
-  border-color: #429a82;
-  background-color: #429a82;
+  border-color: var(--sd-brand);
+  background-color: var(--sd-brand);
 }
 
 body .ui-priority-primary,
@@ -186,39 +202,6 @@ body .ui-widget button {
 
 body .ui-datepicker .ui-datepicker-buttonpane button {
   padding: 6px 16px;
-}
-
-.breaks tr:hover td {
-  background: #ffffc2 !important;
-}
-
-.working-plan td {
-  vertical-align: middle;
-}
-
-.breaks td {
-  vertical-align: middle;
-}
-
-li.language {
-  cursor: pointer;
-}
-
-li.language:hover {
-  color: #005580;
-}
-
-#select-language {
-  cursor: pointer;
-  display: inline-block;
-  padding: 5px;
-}
-
-#language-list {
-  list-style: none;
-  padding-left: 0;
-  max-height: 500px;
-  overflow-y: auto;
 }
 
 /* JQUERY UI DATETIME PICKER ADDON
@@ -337,6 +320,41 @@ li.language:hover {
   display: none;
 }
 
+/* GENERAL ELEMENTS
+   ---------------------------------------------------------------------------- */
+.breaks tr:hover td {
+  background: #ffffc2 !important;
+}
+
+.working-plan td {
+  vertical-align: middle;
+}
+
+.breaks td {
+  vertical-align: middle;
+}
+
+li.language {
+  cursor: pointer;
+}
+
+li.language:hover {
+  color: #005580;
+}
+
+#select-language {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px;
+}
+
+#language-list {
+  list-style: none;
+  padding-left: 0;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
 /* LOADING SPINNER
    ------------------------------------------------------------------------- */
 .is-loading {
@@ -431,6 +449,8 @@ body .clearfix {
   clear: both;
 }
 
+/* FLATPICKR OVERRIDES
+   ---------------------------------------------------------------------------- */
 .flatpickr-wrapper {
   width: 100%;
 }
@@ -443,16 +463,16 @@ body .clearfix {
 }
 .flatpickr-calendar .flatpickr-months {
   padding: 10px 0;
-  background: #00C2FF;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  background: var(--sd-brand);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
 }
 .flatpickr-calendar .flatpickr-current-month {
   padding: 3px;
 }
 .flatpickr-calendar .flatpickr-innerContainer {
-  border-bottom-left-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
 }
 .flatpickr-calendar .dayContainer {
   padding: 10px 0;
@@ -461,8 +481,9 @@ body .clearfix {
 .flatpickr-calendar .flatpickr-weekdays,
 .flatpickr-calendar .flatpickr-current-month .flatpickr-monthDropdown-months,
 .flatpickr-calendar span.flatpickr-weekday {
-  background: #00C2FF;
+  background: var(--sd-brand);
   color: white;
+  appearance: none;
   -webkit-appearance: none;
 }
 .flatpickr-calendar .flatpickr-day.endRange,
@@ -483,23 +504,9 @@ body .clearfix {
 .flatpickr-calendar .flatpickr-day.startRange.prevMonthDay,
 .flatpickr-calendar .flatpickr-day.startRange:focus,
 .flatpickr-calendar .flatpickr-day.startRange:hover {
-  background: #E8506A;
-  border-color: #E8506A;
+  background: var(--sd-brand);
+  border-color: var(--sd-brand);
   color: white;
-}
-.flatpickr-calendar .flatpickr-day.today {
-  border-color: #FFCC00;
-  background: #FFCC00;
-  color: #2D004B;
-}
-.flatpickr-calendar .flatpickr-day.today:hover {
-  background: #E6B800;
-  border-color: #E6B800;
-  color: #2D004B;
-}
-.flatpickr-calendar .flatpickr-day:hover {
-  background: rgba(0, 194, 255, 0.12);
-  border-color: rgba(0, 194, 255, 0.12);
 }
 .flatpickr-calendar .flatpickr-day.prevMonthDay,
 .flatpickr-calendar .flatpickr-day.nextMonthDay {
